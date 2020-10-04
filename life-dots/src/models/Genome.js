@@ -184,10 +184,10 @@ export default class Genome
             {
                 newMoveWeights[i] = math.concat(newMoveWeights[i], math.zeros(newMoveWeights[i].size()[0], 1));
             }
-            else if (Math.floor(newSignalNum[i]) < Math.floor(this.signalNum[i]));
+            else if (Math.floor(newSignalNum[i]) < Math.floor(this.signalNum[i]))
             {
-                let ri = new Array(newMoveWeights[i].size()[0])
-                let ci = new Array(newMoveWeights[i].size()[1] - 1)
+                let ri = new Array(newMoveWeights[i].size()[0]);
+                let ci = new Array(newMoveWeights[i].size()[1] - 1);
                 for (let r = 0; r < ri.length; r++) {ri[r] = r;}
                 for (let c = 0; c < ci.length; c++) {ci[c] = c;}
                 newMoveWeights[i] = newMoveWeights[i].subset(math.index(ri, ci));
