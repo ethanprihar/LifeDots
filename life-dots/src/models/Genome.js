@@ -1,4 +1,4 @@
-import {} from 'mathjs'
+const math = require('mathjs')
 
 export default class Genome
 {
@@ -30,7 +30,7 @@ export default class Genome
         this.speed = speed;
         // The square radius around the dot that the dot perceives
         this.view = view;
-        // The weight matrix used in the multi-regression
+        // The weight matrix used of the multi-regression
         this.moveWeights = moveWeights;
     }
 
@@ -54,10 +54,10 @@ export default class Genome
         // Check if newSexNum violates constraints
         if (Math.floor(newSexNum) == 0){return null;}
         // Adjust other values based on newSexNum
-        else if (Math.floor(newSexNum) < this.sexNum)
+        else if (Math.floor(newSexNum) < Math.floor(this.sexNum))
         {
             newSexOdds = [];
-            for (odds in this.sexOdds.slice(0, -1))
+            for (let odds of this.sexOdds.slice(0, -1))
             {
                 newSexOdds.push(odds.slice());
             }
@@ -65,7 +65,7 @@ export default class Genome
             newSexSize = this.sexSize.slice(0, -1);
             newBabySize = this.babySize.slice(0, -1);
             newEatOdds = [];
-            for (odds in this.eatOdds.slice(0, -1))
+            for (let odds of this.eatOdds.slice(0, -1))
             {
                 newEatOdds.push(odds.slice());
             }
@@ -73,16 +73,16 @@ export default class Genome
             newSignalNum = this.signalNum.slice(0, -1);
             newView = this.view.slice(0, -1);
             newMoveWeights = [];
-            for (weights in this.moveWeights.slice(0, -1))
+            for (let weights of this.moveWeights.slice(0, -1))
             {
                 newMoveWeights.push(math.clone(weights));
             }
         }
-        else if (Math.floor(newSexNum) > this.sexNum)
+        else if (Math.floor(newSexNum) > Math.floor(this.sexNum))
         {
             let i = this.sexNum - 1;
             newSexOdds = [];
-            for (odds in this.sexOdds)
+            for (let odds of this.sexOdds)
             {
                 newSexOdds.push(odds.slice());
             }
@@ -91,7 +91,7 @@ export default class Genome
             newSexSize = this.sexSize.slice().push(this.sexSize[i]);
             newBabySize = this.babySize.slice().push(this.babySize[i]);
             newEatOdds = [];
-            for (odds in this.eatOdds)
+            for (let odds of this.eatOdds)
             {
                 newEatOdds.push(odds.slice());
             }
@@ -100,7 +100,7 @@ export default class Genome
             newSignalNum = this.signalNum.slice().push(this.signalNum[i]);
             newView = this.view.slice().push(this.view[i]);
             newMoveWeights = [];
-            for (weights in this.moveWeights)
+            for (let weights of this.moveWeights)
             {
                 newMoveWeights.push(math.clone(weights));
             }
@@ -109,7 +109,7 @@ export default class Genome
         else
         {
             newSexOdds = [];
-            for (odds in this.sexOdds)
+            for (let odds of this.sexOdds)
             {
                 newSexOdds.push(odds.slice());
             }
@@ -117,7 +117,7 @@ export default class Genome
             newSexSize = this.sexSize.slice();
             newBabySize = this.babySize.slice();
             newEatOdds = [];
-            for (odds in this.eatOdds)
+            for (let odds of this.eatOdds)
             {
                 newEatOdds.push(odds.slice());
             }
@@ -125,7 +125,7 @@ export default class Genome
             newSignalNum = this.signalNum.slice();
             newView = this.view.slice();
             newMoveWeights = [];
-            for (weights in this.moveWeights)
+            for (let weights of this.moveWeights)
             {
                 newMoveWeights.push(math.clone(weights));
             }
@@ -133,15 +133,11 @@ export default class Genome
 
         // Mutate sexMin
         newSexMin = this.geneMut(this.sexMin, maxMutPct);
-        // Check if newSexMin violates constraints
-        if (newSexMin <= 0){return null;}
 
         // Mutate sexMax
         newSexMax = this.geneMut(this.sexMax, maxMutPct);
-        // Check if newSexMax violates constraints
-        if (newSexMax <= 0){return null;}
 
-        for (let i = 0; i < newSexNum; i++)
+        for (let i = 0; i < Math.floor(newSexNum); i++)
         {
             // Mutate sexOdds
             for (let o = 0; o < newSexOdds[i].length; o++)
@@ -183,16 +179,31 @@ export default class Genome
             newSignalNum[i] = this.geneMut(newSignalNum[i], maxMutPct);
             // Check if newSignalNum violates constraints
             if (newSignalNum[i] < 0){return null;}
-            // Adjust other values based on newSexNum
+            // Adjust other values based on newSignalNum
+            if (Math.floor(newSignalNum[i]) > Math.floor(this.signalNum[i]))
+            {
+                newMoveWeights[i] = math.concat(newMoveWeights[i], math.zeros(newMoveWeights[i].size()[0], 1));
+            }
+            else if (Math.floor(newSignalNum[i]) < Math.floor(this.signalNum[i]));
+            {
+                let ri = new Array(newMoveWeights[i].size()[0])
+                let ci = new Array(newMoveWeights[i].size()[1] - 1)
+                for (let r = 0; r < ri.length; r++) {ri[r] = r;}
+                for (let c = 0; c < ci.length; c++) {ci[c] = c;}
+                newMoveWeights[i] = newMoveWeights[i].subset(math.index(ri, ci));
+            }
 
             // Mutate view
             newView[i] = this.view.slice();
             newMoveWeights = [];
-            for (weights in this.moveWeights)
+            for (let weights of this.moveWeights)
             {
                 newMoveWeights.push(math.clone(weights));
             }
         }
+        return new Genome(newSexNum, newSexMin, newSexMax, newSexOdds, 
+                          newMaxSize, newSexSize, newBabySize, newSignalNum, 
+                          newEatOdds, newSpeed, newView, newMoveWeights);
     }
 
     geneMut(gene, max)

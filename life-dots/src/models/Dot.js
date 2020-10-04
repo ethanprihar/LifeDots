@@ -49,12 +49,12 @@ export default class Dot
 
     move(row, col, grids)
     {
-        var views = grids.map(x => this.getViews(row, col, this.genome.perception, x))
-        this.signals = output.slice(9).map(x => x > 0);
-        var choice = output.slice(0, 9).map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
-        var newRow = (row - 1) + Math.floor(choice / 3);
-        var newCol = (col - 1) + (choice % 3);
-        return [newRow, newCol];
+        //var views = grids.map(x => this.getViews(row, col, this.genome.perception, x))
+        //this.signals = output.slice(9).map(x => x > 0);
+        //var choice = output.slice(0, 9).map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+        //var newRow = (row - 1) + Math.floor(choice / 3);
+        //var newCol = (col - 1) + (choice % 3);
+        //return [newRow, newCol];
         
     }
 

@@ -4,14 +4,24 @@ import './App.css';
 
 import Genome from './models/Genome.js';
 import Dot from './models/Dot.js';
-import {} from 'mathjs'
+
+const math = require('mathjs')
 
 function App() {
-  var g = new Genome([100, 200], [0.9, 0.5], [0.1, 0.2], [10, 5], [3, 0], [0.8, 0.7], [2, 1], [0, 5], [15, 10], 2, [0.5, 0.5], [math.zeros(7, 11), math.zeros(1, 10)]);
-  var d = new Dot(true, g);
-  var m = d.move(0,0,[math.ones(30, 20), math.ones(30, 20), math.ones(30, 20), math.ones(30, 20), math.ones(30, 20)]);
-  console.log(m)
-
+  let sexNum = 2.4;
+  let sexMin = -10.3;
+  let sexMax = 100.7;
+  let sexOdds = [[1.3, 1.2], [3.1, 1.1]];
+  let maxSize = [132.3, 13.2];
+  let sexSize = [0.8, 0.86];
+  let babySize = [0.8, 0.53];
+  let signalNum = [1.2, 3.1];
+  let eatOdds = [[3.1, 1.4], [1.1, 1.1]];
+  let speed = [3.2, 2.2];
+  let view = [3.1, 0.6];
+  let moveWeights = [math.zeros(Math.pow(Math.floor(view[0]) * 2 + 1, 2), Math.floor(signalNum[0]) + 9), math.zeros(Math.pow(Math.floor(view[1]) * 2 + 1, 2), Math.floor(signalNum[1]) + 9)];
+  let g = new Genome(sexNum, sexMin, sexMax, sexOdds, maxSize, sexSize, babySize, signalNum, eatOdds, speed, view, moveWeights)
+  let new_g = g.mutate(0.01);
   return (
     <div className="App">
       <header className="App-header">
