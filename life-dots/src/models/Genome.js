@@ -1,4 +1,4 @@
-const math = require('mathjs')
+const math = require('mathjs');
 
 export default class Genome
 {
@@ -193,13 +193,10 @@ export default class Genome
                 newMoveWeights[i] = newMoveWeights[i].subset(math.index(ri, ci));
             }
 
-            // Mutate view
-            newView[i] = this.view.slice();
-            newMoveWeights = [];
-            for (let weights of this.moveWeights)
-            {
-                newMoveWeights.push(math.clone(weights));
-            }
+            // TODO Mutate view
+
+            // TODO Mutate moveWeights
+            
         }
         return new Genome(newSexNum, newSexMin, newSexMax, newSexOdds, 
                           newMaxSize, newSexSize, newBabySize, newSignalNum, 

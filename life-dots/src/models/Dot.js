@@ -1,4 +1,4 @@
-import {} from 'mathjs'
+const math = require('mathjs');
 
 const SATURATION = 100;
 
@@ -8,26 +8,32 @@ export default class Dot
     {
         this.mutable = mutable;
         this.genome = genome;
-        this.sex = this.initSex(genome.sexWeights);
+        this.sex = this.initSex(genome.sexOdds);
         this.size = this.initSex(genome.maxSize[this.sex], genome.babySize[this.sex]);
         this.ticksUntilMove = genome.speed[this.sex];
         this.signals = new Array(genome.signalNum[this.sex]).fill(0);
         this.color = color == null ? this.initColor() : color;
     }
 
-    initSex(sexWeights) // fix this
+    initSex(sexOdds)
     {
-        var rand = Math.random();
+        let prodSexOdds = new Array(Math.floor(this.genome.sexNum)).fill(0);
+        
+        for (let odds of sexOdds)
+        {
+            prodSexOdds = math.dotMultiply(prodSexOdds, odds);
+        }
+        var rand = Math.random() * math.sum(prodSexOdds);
         var min = 0;
-        var max = sexWeights[0];
-        for (var i = 0; i < sexWeights.length; i++)
+        var max = sexOdds[0];
+        for (var i = 0; i < sexOdds.length; i++)
         {
             if (rand >= min && rand < max)
             {
                 return i;
             }
-            min += sexWeights[i];
-            max += sexWeights[i+1];
+            min += sexOdds[i];
+            max += sexOdds[i+1];
         }
     }
 

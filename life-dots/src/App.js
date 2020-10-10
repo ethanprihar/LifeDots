@@ -20,8 +20,9 @@ function App() {
   let speed = [3.2, 2.2];
   let view = [3.1, 0.6];
   let moveWeights = [math.zeros(Math.pow(Math.floor(view[0]) * 2 + 1, 2), Math.floor(signalNum[0]) + 9), math.zeros(Math.pow(Math.floor(view[1]) * 2 + 1, 2), Math.floor(signalNum[1]) + 9)];
-  let g = new Genome(sexNum, sexMin, sexMax, sexOdds, maxSize, sexSize, babySize, signalNum, eatOdds, speed, view, moveWeights)
+  let g = new Genome(sexNum, sexMin, sexMax, sexOdds, maxSize, sexSize, babySize, signalNum, eatOdds, speed, view, moveWeights);
   let new_g = g.mutate(0.01);
+  let d = new Dot(true, new_g)
   return (
     <div className="App">
       <header className="App-header">
