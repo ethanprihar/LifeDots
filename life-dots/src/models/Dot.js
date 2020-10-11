@@ -1,21 +1,15 @@
-const math = require('mathjs');
+var ndarray = require("ndarray");
+var gemm = require("ndarray-gemm");
 
 export default class Dot
 {
-    constructor(mutable, genome, color=null)
+    constructor(start_size, genome, color=null)
     {
-        this.mutable = mutable;
+        this.size = start_size;
         this.genome = genome;
-        this.size = this.initSize(genome.max_size, genome.baby_frac);
-        this.ticks_until_move = genome.speed;
-        this.signal = 0
         this.color = color == null ? this.initColor() : color;
-    }
-
-    initSize(max_size, baby_frac)
-    {
-        let min_size = max_size * baby_frac;
-        return Math.random() * (max_size - minSize) + min_size;
+        this.signal = 0;
+        this.ticks_until_move = genome.speed;
     }
 
     initColor()
@@ -29,20 +23,25 @@ export default class Dot
         return color;
     }
 
-    move(row, col, grids)
+    move(input)
     {
-        //let views = grids.map(x => this.getViews(row, col, this.genome.perception, x))
-        //this.signals = output.slice(9).map(x => x > 0);
-        //let choice = output.slice(0, 9).map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
-        //let newRow = (row - 1) + Math.floor(choice / 3);
-        //let newCol = (col - 1) + (choice % 3);
-        //return [newRow, newCol];
-        
+        let output = ndarray(new Float64Array(10), [1, 10]);
+        gemm(output, input, this.genome.weights);
+        this.signal = output.get(0,9);
+        return output;
     }
-
+    
     split()
     {
-
+        let spawn = []
+        while(this.size > this.genome.max_size)
+        {
+            let ss = this.genome.max_size * this.genome.baby_frac;
+            let g = this.genome.mutate();
+            this.size -= ss;
+            if (g != null) {spawn.push(new Dot(ss, g, this.color))};
+        }
+        return spawn;
     }
 
 }
