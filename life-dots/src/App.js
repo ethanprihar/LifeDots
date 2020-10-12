@@ -4,6 +4,9 @@ import './App.css';
 
 import Genome from './models/Genome';
 import Dot from './models/Dot';
+import RandomRain from './models/FoodPlacers/RandomRain';
+import Border from './models/WallPlacers/Border';
+import CenterPit from './models/TrapPlacers/CenterPit';
 
 var ndarray = require("ndarray");
 var ops = require("ndarray-ops");
@@ -36,6 +39,35 @@ function App() {
   d.size += 10000;
   console.log(d.split());
   console.log(d);
+  
+  console.log('RandomRain Test');
+  let tbr = 10;
+  let dpr = 50;
+  let fpd = 1;
+  let rr = new RandomRain(tbr, dpr, fpd);
+  let fgrid = rr.init(6, 7);
+  console.log(ops.sum(fgrid));
+  for (let i = 0; i < 100; i++)
+  {
+    rr.update(fgrid);
+  }
+  console.log(ops.sum(fgrid));
+
+  console.log('CenterPit Test')
+  let cp = new CenterPit(2, 10);
+  let cpgrid = cp.init(6, 7, fgrid);
+  cp.update(cpgrid, fgrid);
+  console.log(ops.sum(cpgrid));
+  console.log(ops.sum(fgrid));
+
+  console.log('Border Test')
+  let b = new Border();
+  let bgrid = b.init(6, 7, cpgrid, fgrid);
+  b.update(bgrid, cpgrid, fgrid)
+  console.log(ops.sum(bgrid));
+  console.log(ops.sum(cpgrid));
+  console.log(ops.sum(fgrid));
+
 
   return (
     <div className="App">
