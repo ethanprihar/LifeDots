@@ -1,4 +1,5 @@
 var ndarray = require("ndarray");
+var ops = require("ndarray-ops");
 var gemm = require("ndarray-gemm");
 
 export default class Dot
@@ -28,8 +29,9 @@ export default class Dot
         let output = ndarray(new Float64Array(10), [1, 10]);
         gemm(output, input, this.genome.weights);
         this.signal = output.get(0,9);
-        output = ndarray(output.data.subarray(0,9), [9])
-        return output;
+        output = ndarray(output.data.subarray(0,9), [9]);
+        let max_pos = ops.argmax(output);
+        return [Math.floor(max_pos / 3) - 1, (max_pos % 3) - 1];
     }
     
     split()

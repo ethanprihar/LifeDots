@@ -29,13 +29,13 @@ export default class RandomStart
 
     init(rows, cols)
     {
-        let grid = [];
+        let dot_grid = [];
         for (let r = 0; r < rows; r++)
         {
-            grid[r] = [];
+            dot_grid[r] = [];
             for (let c = 0; c < cols; c++)
             {
-                grid[r][c] = [];
+                dot_grid[r][c] = [];
             }
         }
         for (let i = 0; i < this.dot_num; i++)
@@ -43,9 +43,9 @@ export default class RandomStart
             let genome = this.rand_genome(rows, cols);
             let r = Math.floor(Math.random() * rows);
             let c = Math.floor(Math.random() * cols);
-            grid[r][c].push(new Dot(genome.max_size, genome));
+            dot_grid[r][c].push(new Dot(genome.max_size, genome));
         }
-        return grid;
+        return dot_grid;
     }
 
     rand_genome(rows, cols)
@@ -65,8 +65,5 @@ export default class RandomStart
         return new Genome(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
     }
 
-    update(grid)
-    {
-        
-    }
+    update(dot_grid){}
 }

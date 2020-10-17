@@ -21,7 +21,7 @@ function App() {
   let baby_frac = 0.8;
   let eat_ratio = 0.5;
   let speed = 4.2;
-  let view = 1.1;
+  let view = 1;
   let max_mut_pct = 0.1;
   let weights = ndarray(new Float64Array((view * 2 + 1) * (view * 2 + 1) * 5 * 10), [(view * 2 + 1) * (view * 2 + 1) * 5, 10]);
   let g1 = new Genome(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct);
@@ -40,7 +40,7 @@ function App() {
   console.log(d.split());
   console.log(d);
 
-  console.log('RandomStart Test');
+  console.log('RandomStart Init Test');
   let rs = new RandomStart(20,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1)
   let dgrid = rs.init(6, 7)
   console.log(dgrid)
@@ -72,6 +72,9 @@ function App() {
   console.log(ops.sum(bgrid));
   console.log(ops.sum(cpgrid));
   console.log(ops.sum(fgrid));
+
+  console.log('RandomStart Update Test')
+  rs.update(dgrid, bgrid, cpgrid, fgrid)
 
   return (
     <div className="App">
