@@ -12,18 +12,18 @@ export default class RandomRain
 
     init(rows, cols)
     {
-        let grid = ndarray(new Float64Array(rows * cols), [rows, cols]);
+        let food_grid = ndarray(new Float64Array(rows * cols), [rows, cols]);
         for (let i = 0; i < this.drops_per_rain; i++)
         {
-            let r = Math.floor(Math.random() * (rows - 1));
-            let c = Math.floor(Math.random() * (cols - 1));
-            grid.set(r, c, grid.get(r, c) + this.food_per_drop);
+            let r = Math.floor(Math.random() * rows);
+            let c = Math.floor(Math.random() * cols);
+            food_grid.set(r, c, food_grid.get(r, c) + this.food_per_drop);
         }
         this.ticks_until_rain = this.ticks_between_rain;
-        return grid;
+        return food_grid;
     }
 
-    update(grid)
+    update(food_grid)
     {
         if (this.ticks_until_rain > 0)
         {
@@ -33,9 +33,9 @@ export default class RandomRain
         {
             for (let i = 0; i < this.drops_per_rain; i++)
             {
-                let r = Math.floor(Math.random() * (grid.shape[0] - 1));
-                let c = Math.floor(Math.random() * (grid.shape[1] - 1));
-                grid.set(r, c, grid.get(r, c) + this.food_per_drop);
+                let r = Math.floor(Math.random() * food_grid.shape[0]);
+                let c = Math.floor(Math.random() * food_grid.shape[1]);
+                food_grid.set(r, c, food_grid.get(r, c) + this.food_per_drop);
             }
             this.ticks_until_rain = this.ticks_between_rain;
         }

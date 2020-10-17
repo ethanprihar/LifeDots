@@ -3,7 +3,7 @@ var ops = require("ndarray-ops");
 
 export default class Genome
 {
-    constructor(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, weights, max_mut_pct)
+    constructor(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
     {
         // The minimum value of the range which determines which dots are allies.
         this.ally_min = ally_min;
@@ -21,6 +21,8 @@ export default class Genome
         this.weights = weights;
         // The max mutation percentage for the genes
         this.max_mut_pct = max_mut_pct;
+        // The view radius a dot has of its surroundings
+        this.view = view;
     }
 
     mutate()
@@ -42,7 +44,7 @@ export default class Genome
         ops.subseq(rand, 0.5);
         ops.mulseq(rand, 2 * this.max_mut_pct);
         ops.addeq(new_weights, rand);
-        return new Genome(new_ally_min, new_ally_max, new_max_size, new_baby_frac, new_eat_ratio, new_speed, new_weights, this.max_mut_pct);
+        return new Genome(new_ally_min, new_ally_max, new_max_size, new_baby_frac, new_eat_ratio, new_speed, this.view, new_weights, this.max_mut_pct);
     }
 
     pct_mut(gene)

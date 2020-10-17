@@ -9,29 +9,18 @@ export default class Border
         this.size = size;
     }
 
-    init(rows, cols, food_grid)
+    init(rows, cols)
     {
-        let grid = ndarray(new Float64Array(rows * cols), [rows, cols]);
+        let trap_grid = ndarray(new Float64Array(rows * cols), [rows, cols]);
         for (let r = this.edge; r < rows - this.edge; r++)
         {
             for (let c = this.edge; c < cols - this.edge; c++)
             {
-                grid.set(r, c, this.size);
-                food_grid.set(r, c, 0);
+                trap_grid.set(r, c, this.size);
             }
         }
-        return grid;
+        return trap_grid;
     }
 
-    update(grid, food_grid)
-    {
-        for (let r = this.edge; r < grid.shape[0] - this.edge; r++)
-        {
-            for (let c = this.edge; c < grid.shape[1] - this.edge; c++)
-            {
-                grid.set(r, c, this.size);
-                food_grid.set(r, c, 0);
-            }
-        }
-    }
+    update(trap_grid){}
 }
