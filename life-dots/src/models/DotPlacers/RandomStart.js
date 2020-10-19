@@ -58,10 +58,12 @@ export default class RandomStart
         let speed = Math.random() * (this.max_speed - this.min_speed) + this.min_speed;
         let view = Math.random() * (this.max_view - this.min_view) + this.min_view;
         let max_mut_pct = Math.random() * (this.max_max_mut_pct - this.min_max_mut_pct) + this.min_max_mut_pct;
-        let weights = ndarray(new Float64Array(rows * cols), [rows, cols]);
+        let view_dim = Math.floor(view) * 2 + 1;
+        let weight_dim = view_dim * view_dim * 5;
+        let weights = ndarray(new Float64Array(weight_dim * 10), [weight_dim, 10]);
         ops.random(weights);
         ops.subseq(weights, 0.5);
-        ops.mulseq(weights, 2 * this.max_mut_pct);
+        ops.mulseq(weights, 2);
         return new Genome(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
     }
 
