@@ -45,7 +45,7 @@ export default class RandomStart
             let genome = this.rand_genome(rows, cols);
             let r = Math.floor(Math.random() * rows);
             let c = Math.floor(Math.random() * cols);
-            dot_grid[r][c].push(new Dot(genome.max_size, genome));
+            dot_grid[r][c].push(new Dot(genome.max_size, genome, null));
         }
         return dot_grid;
     }

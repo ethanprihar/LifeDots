@@ -1,10 +1,18 @@
-var ndarray = require("ndarray");
-var ops = require("ndarray-ops");
+import Genome from "./Genome"
+
+import ndarray from "ndarray";
+import ops from "ndarray-ops";
 var gemm = require("ndarray-gemm");
 
 export default class Dot
 {
-    constructor(start_size, genome, color=null)
+    size: number;
+    genome: Genome;
+    color: number[];
+    signal: number;
+    ticks_until_move: number;
+    
+    constructor(start_size: number, genome: Genome, color: number[] | null)
     {
         this.size = start_size;
         this.genome = genome;

@@ -48,7 +48,7 @@ export default class Genome
         this.max_mut_pct = max_mut_pct;
     }
 
-    mutate(): Genome
+    mutate(): Genome | null
     {
         let new_max_size: number = this.pct_mut(this.max_size);
         if (new_max_size <= 0) {return null;}
@@ -69,7 +69,16 @@ export default class Genome
         ops.subseq(rand, 0.5);
         ops.mulseq(rand, 2 * this.max_mut_pct);
         ops.addeq(new_weights, rand);
-        return new Genome(new_ally_min, new_ally_max, new_team_num, new_max_size, new_baby_frac, new_eat_ratio, new_speed, this.view, new_weights, new_max_mut_pct);
+        return new Genome(new_ally_min, 
+                          new_ally_max, 
+                          new_team_num, 
+                          new_max_size, 
+                          new_baby_frac, 
+                          new_eat_ratio, 
+                          new_speed, 
+                          this.view, 
+                          new_weights, 
+                          new_max_mut_pct);
     }
 
     pct_mut(gene: number): number
