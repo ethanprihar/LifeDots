@@ -1,5 +1,5 @@
 import ndarray from "ndarray";
-var ops = require("ndarray-ops");
+import ops from "ndarray-ops";
 
 export default class Genome
 {
@@ -48,7 +48,7 @@ export default class Genome
         this.max_mut_pct = max_mut_pct;
     }
 
-    mutate()
+    mutate(): Genome
     {
         let new_max_size: number = this.pct_mut(this.max_size);
         if (new_max_size <= 0) {return null;}
@@ -72,13 +72,13 @@ export default class Genome
         return new Genome(new_ally_min, new_ally_max, new_team_num, new_max_size, new_baby_frac, new_eat_ratio, new_speed, this.view, new_weights, new_max_mut_pct);
     }
 
-    pct_mut(gene: number)
+    pct_mut(gene: number): number
     {
         let rand: number = Math.random() * 2 - 1;
         return gene + rand * gene * this.max_mut_pct;
     }
 
-    fix_mut(gene: number)
+    fix_mut(gene: number): number
     {
         let rand: number = Math.random() * 2 - 1;
         return gene + rand * this.max_mut_pct;
