@@ -3,12 +3,14 @@ var ops = require("ndarray-ops");
 
 export default class Genome
 {
-    constructor(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
+    constructor(ally_min, ally_max, team_num, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
     {
         // The minimum value of the range which determines which dots are allies.
         this.ally_min = ally_min;
         // The maximum value of the range which determines which dots are allies.
         this.ally_max = ally_max;
+        // The team number of the dot when fighting
+        this.team_num = team_num;
         // The maximum size a dot can become, at which point it will split
         this.max_size = max_size;
         // The fraction of a dot's max size it will split off of itself

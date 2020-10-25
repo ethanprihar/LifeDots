@@ -6,13 +6,15 @@ var ops = require("ndarray-ops");
 
 export default class RandomStart
 {
-    constructor(dot_num, min_ally_min, max_ally_min, min_ally_max, max_ally_max, min_max_size, max_max_size, min_baby_frac, max_baby_frac, min_eat_ratio, max_eat_ratio, min_speed, max_speed, min_view, max_view, min_max_mut_pct, max_max_mut_pct)
+    constructor(dot_num, min_ally_min, max_ally_min, min_ally_max, max_ally_max, min_team_num, max_team_num, min_max_size, max_max_size, min_baby_frac, max_baby_frac, min_eat_ratio, max_eat_ratio, min_speed, max_speed, min_view, max_view, min_max_mut_pct, max_max_mut_pct)
     {
         this.dot_num = dot_num;
         this.min_ally_min = min_ally_min;
         this.max_ally_min = max_ally_min;
         this.min_ally_max = min_ally_max;
         this.max_ally_max = max_ally_max;
+        this.min_team_num = min_team_num;
+        this.max_team_num = max_team_num;
         this.min_max_size = min_max_size;
         this.max_max_size = max_max_size;
         this.min_baby_frac = min_baby_frac;
@@ -52,6 +54,7 @@ export default class RandomStart
     {
         let ally_min = Math.random() * (this.max_ally_min - this.min_ally_min) + this.min_ally_min;
         let ally_max = Math.random() * (this.max_ally_max - this.min_ally_max) + this.min_ally_max;
+        let team_num = Math.random() * (this.max_team_num - this.min_team_num) + this.min_team_num;
         let max_size = Math.random() * (this.max_max_size - this.min_max_size) + this.min_max_size;
         let baby_frac = Math.random() * (this.max_baby_frac - this.min_baby_frac) + this.min_baby_frac;
         let eat_ratio = Math.random() * (this.max_eat_ratio - this.min_eat_ratio) + this.min_eat_ratio;
@@ -64,7 +67,7 @@ export default class RandomStart
         ops.random(weights);
         ops.subseq(weights, 0.5);
         ops.mulseq(weights, 2);
-        return new Genome(ally_min, ally_max, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
+        return new Genome(ally_min, ally_max, team_num, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct)
     }
 
     update(dot_grid){}

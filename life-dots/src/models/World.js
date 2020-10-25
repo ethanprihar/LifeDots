@@ -48,7 +48,7 @@ export default class World
                 for (let dot of this.dot_grid[r][c])
                 {
                     max_size_grid.set(r, c, max_size_grid.get(r, c) + dot.genome.max_size);
-                    signal_grid.set(r, c, signal_grid.get(r, c) + dot.genome.max_size);
+                    signal_grid.set(r, c, signal_grid.get(r, c) + dot.signal);
                 }
             }
         }
@@ -85,7 +85,7 @@ export default class World
                             dot.size -= move_cost;
                             let move = dot.move(input);
                             dot.size -= this.trap_grid.get(r + move[0], c + move[1])
-                            if ((dot.size - move_cost) > 0)
+                            if (dot.size > 0)
                             {
                                 if (this.wall_grid.get(r + move[0], c + move[1]) == 0)
                                 {
@@ -106,7 +106,36 @@ export default class World
 
     fight()
     {
-
+        for (let r = 0; r < this.dot_grid.length; r++)
+        {
+            for (let c = 0; c < this.dot_grid[0].length; c++)
+            {
+                if (this.dot_grid[r][c].length >= 2)
+                {
+                    let num_teams = 0;
+                    let total_size = 0;
+                    let team_dots = {};
+                    let team_size = {};
+                    for (let dot of this.dot_grid[r][c])
+                    {
+                        let team = Math.floor(dot.genome.team_num);
+                        total_size += dot.genome.max_size;
+                        if (team in team_dots)
+                        {
+                            team_dots[team].push(dot);
+                            team_size[team] += dot.genome.max_size;
+                        }
+                        else
+                        {
+                            team_dots[team] = [dot];
+                            team_size[team] = dot.genome.max_size;
+                            num_teams++;
+                        }
+                    }
+                    // NOW WE PICK A RANDOM NUMBER AND SEE WHICH TEAM WINS
+                }
+            }
+        }
     }
 
 
