@@ -1,7 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
+import ndarray from "ndarray";
+//var ndarray = require("ndarray");
+//var ops = require("ndarray-ops");
+//var gemm = require("ndarray-gemm");
 
-function App() {
+function App()
+{
+  let a = ndarray(new Float64Array(100), [10,10]);
+  console.log(a)
   return (
     <div className="App">
       <header className="App-header">
