@@ -1,5 +1,5 @@
-import ndarray from "ndarray";
-import ops from "ndarray-ops";
+var ndarray = require("ndarray");
+var ops = require("ndarray-ops");
 
 export default class Genome
 {
@@ -11,17 +11,17 @@ export default class Genome
     team_num: number;
     // The maximum size a dot can become, at which point it will split.
     max_size: number;
-    // The fraction of a dot's max size it will split off of itself
+    // The fraction of a dot's max size it will split off of itself.
     baby_frac: number;
     // The efficiency of food consumption; the inverse of dot consumption efficiency.
     eat_ratio: number;
-    // The number of ticks between dot moves
+    // The number of ticks between dot moves.
     speed: number;
-    // The view radius a dot has of its surroundings
+    // The view radius a dot has of its surroundings.
     view: number;
-    // The weight matrix used of the multi-regression
-    weights: ndarray;
-    // The max mutation percentage for the genes
+    // The weight matrix used of the multi-regression.
+    weights: any;
+    // The max mutation percentage for the genes.
     max_mut_pct: number;
 
     constructor(ally_min: number, 
@@ -32,7 +32,7 @@ export default class Genome
                 eat_ratio: number, 
                 speed: number, 
                 view: number, 
-                weights: ndarray, 
+                weights: any, 
                 max_mut_pct: number)
     {
         
@@ -62,8 +62,8 @@ export default class Genome
         let new_team_num: number = this.fix_mut(this.team_num);
         let new_max_mut_pct: number = this.pct_mut(this.max_mut_pct);
         let new_eat_ratio: number = Math.min(Math.max(this.fix_mut(this.eat_ratio), 0), 1);
-        let new_weights: ndarray = ndarray(new Float64Array(this.weights.size), this.weights.shape);
-        let rand: ndarray = ndarray(new Float64Array(this.weights.size), this.weights.shape);
+        let new_weights: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
+        let rand: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
         ops.assign(new_weights, this.weights);
         ops.random(rand);
         ops.subseq(rand, 0.5);

@@ -1,9 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+
+var ndarray = require("ndarray");
 //var gemm = require("ndarray-gemm");
 
 function App()
 {
+  let test = ndarray(new Float64Array(10), [1, 10]);
+  console.log(test)
+  console.log(test.data.subarray(0,9))
+  /*
   console.log('World Test')
   let dot_num = 500;
   let min_ally_min = 0;
@@ -44,6 +50,8 @@ function App()
   let end_time = new Date().getTime();
   console.log(end_time - start_time);
   console.log(world);
+  */
+
   return (
     <div className="App">
       <header className="App-header">
