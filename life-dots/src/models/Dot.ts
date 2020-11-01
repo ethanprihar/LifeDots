@@ -37,7 +37,7 @@ export default class Dot
         return color;
     }
 
-    move(input: any): number[] | null
+    move(input: any): number[]
     {
         let output: any = ndarray(new Float64Array(10), [1, 10]);
         gemm(output, input, this.genome.weights);
@@ -45,7 +45,6 @@ export default class Dot
         if (this.ticks_until_move <= 0)
         {
             this.size -= this.genome.max_size * Math.floor(this.genome.view) / 100;
-            if (this.size <= 0){return null;}
             this.ticks_until_move = this.genome.speed;
             output = ndarray(output.data.subarray(0,9), [9]);
             let max_pos: number = ops.argmax(output);
@@ -56,6 +55,11 @@ export default class Dot
             this.ticks_until_move--;
             return [0, 0];
         }
+    }
+
+    trap(trap: number): void
+    {
+        this.size -= trap;
     }
     
     split(): Dot[]

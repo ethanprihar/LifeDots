@@ -1,10 +1,42 @@
+import DotPlacer from "./DotPlacer";
+import FoodPlacer from "./FoodPlacer";
+import TrapPlacer from "./TrapPlacer";
+import WallPlacer from "./WallPlacer";
+import Dot from "./Dot"
+
 var ndarray = require("ndarray");
 var ops = require("ndarray-ops");
 var gemm = require("ndarray-gemm");
 
 export default class World
 {
-    constructor(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
+    // The number of rows in the world.
+    rows: number;
+    // The number of columns in the world.
+    cols: number;
+    // The dot placer for the world.
+    dot_placer: DotPlacer;
+    // The food placer for the world.
+    food_placer: FoodPlacer;
+    // The trap placer for the world.
+    trap_placer: TrapPlacer;
+    // The wall placer for the world.
+    wall_placer: WallPlacer;
+    // The dot grid for the world.
+    dot_grid: Dot[][][];
+    // The food grid for the world.
+    food_grid: any;
+    // The trap grid for the world.
+    trap_grid: any;
+    // The wall grid for the world.
+    wall_grid: any;
+    
+    constructor(rows: number, 
+                cols: number, 
+                dot_placer: DotPlacer, 
+                food_placer: FoodPlacer, 
+                trap_placer: TrapPlacer, 
+                wall_placer: WallPlacer)
     {
         this.rows = rows;
         this.cols = cols;
@@ -12,35 +44,40 @@ export default class World
         this.food_placer = food_placer;
         this.trap_placer = trap_placer;
         this.wall_placer = wall_placer;
-    }
-
-    init()
-    {
         this.dot_grid = this.dot_placer.init(this.rows, this.cols);
         this.food_grid = this.food_placer.init(this.rows, this.cols);
         this.trap_grid = this.trap_placer.init(this.rows, this.cols);
         this.wall_grid = this.wall_placer.init(this.rows, this.cols, this.dot_grid, this.food_grid, this.trap_grid);
     }
 
-    // (x)place_dots (x)place_food (x)place_traps (x)place_walls  (x)move (x)trap ()fight ()feed ()breed
     update()
     {      
+        // Update the dot grid with the dot placer.
         this.dot_placer.update(this.dot_grid);
+        // Update the food grid with the food placer.
         this.food_placer.update(this.food_grid);
+        // Update the trap grid with the trap placer.
         this.trap_placer.update(this.trap_grid);
+        // Update all the grids with the wall placer.
         this.wall_placer.update(this.dot_grid, this.food_grid, this.trap_grid, this.wall_grid);
-        this.move(this.dot_grid, this.food_grid, this.trap_grid, this.wall_grid);
+        // Move all the dots, subtract size from trapped dots, and remove resulting dead dots.
+        this.move_trap();
+        // Simulate combat for all dots, reward the victors with nourishment, remove resulting dead dots, 
+        // consume food, and breed.
+        this.fight_feed_breed();
     }
 
-    move()
+    move_trap(): void
     {
-        let new_dot_grid = [];
-        let max_size_grid = ndarray(new Float64Array(this.rows * this.cols), [this.rows, this.cols]);
-        let signal_grid = ndarray(new Float64Array(this.rows * this.cols), [this.rows, this.cols]);
-        for (let r = 0; r < this.dot_grid.length; r++)
+        // The new dot grid for the results of moving and trapping.
+        let new_dot_grid: Dot[][][] = [];
+        // Create a max dot size grid and dot signal grid for creating the move input.
+        let max_size_grid: any = ndarray(new Float64Array(this.rows * this.cols), [this.rows, this.cols]);
+        let signal_grid: any = ndarray(new Float64Array(this.rows * this.cols), [this.rows, this.cols]);
+        for (let r: number = 0; r < this.dot_grid.length; r++)
         {
             new_dot_grid[r] = [];
-            for (let c = 0; c < this.dot_grid[0].length; c++)
+            for (let c: number = 0; c < this.dot_grid[0].length; c++)
             {
                 new_dot_grid[r][c] = [];
                 max_size_grid.set(r, c, 0);
@@ -52,25 +89,25 @@ export default class World
                 }
             }
         }
+        // Create the move input
+        let grids: any[] = [max_size_grid, signal_grid, this.food_grid, this.trap_grid, this.wall_grid];
 
-        let grids = [max_size_grid, signal_grid, this.food_grid, this.trap_grid, this.wall_grid];
-
-        for (let r = 0; r < this.dot_grid.length; r++)
+        for (let r: number = 0; r < this.dot_grid.length; r++)
         {
-            for (let c = 0; c < this.dot_grid[0].length; c++)
+            for (let c: number = 0; c < this.dot_grid[0].length; c++)
             {
                 if (this.dot_grid[r][c].length != 0)
                 {
                     for (let dot of this.dot_grid[r][c])
                     {
-                        let view_dim = Math.floor(dot.genome.view);
-                        let input_length = (view_dim * 2 + 1) * (view_dim * 2 + 1) * 5;
-                        let input_shape = [1, input_length];
-                        let input = ndarray(new Float64Array(input_length), input_shape);
-                        let count = 0;
-                        for (let dr = -Math.floor(dot.genome.view); dr <= Math.floor(dot.genome.view); dr++)
+                        let view_dim: number = Math.floor(dot.genome.view);
+                        let input_length: number = (view_dim * 2 + 1) * (view_dim * 2 + 1) * 5;
+                        let input_shape: number[] = [1, input_length];
+                        let input: any = ndarray(new Float64Array(input_length), input_shape);
+                        let count: number = 0;
+                        for (let dr: number = -Math.floor(dot.genome.view); dr <= Math.floor(dot.genome.view); dr++)
                         {
-                            for (let dc = -Math.floor(dot.genome.view); dc <= Math.floor(dot.genome.view); dc++)
+                            for (let dc: number = -Math.floor(dot.genome.view); dc <= Math.floor(dot.genome.view); dc++)
                             {
                                 for (let grid of grids)
                                 {
@@ -79,46 +116,50 @@ export default class World
                                 }
                             }
                         }
-                        let move_cost = dot.genome.max_size * Math.floor(dot.genome.view) / 100
-                        if ((dot.size - move_cost) > 0)
+                        // Get the dots' moves
+                        let move: number[] = dot.move(input);
+                        // Trap the dots
+                        dot.trap(this.trap_grid.get(r + move[0], c + move[1]))
+                        // Move the dots to the new dot grid if they haven't died
+                        if (dot.size > 0)
                         {
-                            dot.size -= move_cost;
-                            let move = dot.move(input);
-                            dot.size -= this.trap_grid.get(r + move[0], c + move[1])
-                            if (dot.size > 0)
+                            if (this.wall_grid.get(r + move[0], c + move[1]) == 0)
                             {
-                                if (this.wall_grid.get(r + move[0], c + move[1]) == 0)
-                                {
-                                    new_dot_grid[r + move[0]][c + move[1]].push(dot);
-                                }
-                                else
-                                {
-                                    new_dot_grid[r][c].push(dot);
-                                }
+                                new_dot_grid[r + move[0]][c + move[1]].push(dot);
+                            }
+                            else
+                            {
+                                new_dot_grid[r][c].push(dot);
                             }
                         }
                     }
                 }
             }
         }
+        // Replace the old dot grid with the new dot grid
         this.dot_grid = new_dot_grid;
     }
 
-    fight()
+    fight_feed_breed(): void
     {
-        for (let r = 0; r < this.dot_grid.length; r++)
+        // The new dot grid for the results of fighting, feeding, and splitting.
+        let new_dot_grid: Dot[][][] = [];
+        for (let r: number = 0; r < this.dot_grid.length; r++)
         {
-            for (let c = 0; c < this.dot_grid[0].length; c++)
+            new_dot_grid[r] = [];
+            for (let c: number = 0; c < this.dot_grid[0].length; c++)
             {
-                if (this.dot_grid[r][c].length >= 2)
+                new_dot_grid[r][c] = [];
+                if (this.dot_grid[r][c].length > 1)
                 {
-                    let num_teams = 0;
-                    let total_size = 0;
-                    let team_dots = {};
-                    let team_size = {};
+                    // Determine the teams and their stats.
+                    let num_teams: number = 0;
+                    let total_size: number = 0;
+                    let team_dots: Record<number, Dot[]> = {};
+                    let team_size: Record<number, number> = {};
                     for (let dot of this.dot_grid[r][c])
                     {
-                        let team = Math.floor(dot.genome.team_num);
+                        let team: number = Math.floor(dot.genome.team_num);
                         total_size += dot.genome.max_size;
                         if (team in team_dots)
                         {
@@ -132,11 +173,45 @@ export default class World
                             num_teams++;
                         }
                     }
-                    // NOW WE PICK A RANDOM NUMBER AND SEE WHICH TEAM WINS
+                    // Determine which team won the fight.
+                    let lottery: number = Math.random() * total_size;
+                    let sum: number = 0;
+                    for (let t in team_size)
+                    {
+                        if ((lottery >= sum) && (lottery < (sum + team_size[t])))
+                        {
+                            this.dot_grid[r][c] = team_dots[t];
+                            for (let dot of this.dot_grid[r][c])
+                            {
+                                // Reward the victors with sustinance.
+                                let food_spoils: number = this.food_grid.get(r,c) / this.dot_grid[r][c].length;
+                                let dot_spoils: number = (total_size - team_size[t]) / this.dot_grid[r][c].length;
+                                dot.size += food_spoils * (dot.genome.eat_ratio);
+                                dot.size += dot_spoils * (1 - dot.genome.eat_ratio);
+                                // Split the dots.
+                                let baby_dots: Dot[] = dot.split();
+                                // Add the dots to the new dot grid.
+                                new_dot_grid[r][c].push(dot);
+                                new_dot_grid[r][c].concat(baby_dots);
+                            }
+                            break;
+                        }
+                        sum += team_size[t];
+                    }
+                }
+                else if (this.dot_grid[r][c].length == 1)
+                {
+                    // Feed the dot.
+                    this.dot_grid[r][c][0].size += this.food_grid.get(r,c) * this.dot_grid[r][c][0].genome.eat_ratio;
+                    // Split the dot.
+                    let baby_dots: Dot[] = this.dot_grid[r][c][0].split();
+                    // Add the dots to the new dot grid.
+                    new_dot_grid[r][c].push(this.dot_grid[r][c][0]);
+                    new_dot_grid[r][c].concat(baby_dots);
                 }
             }
         }
+        // Replace the old dot grid with the new dot grid
+        this.dot_grid = new_dot_grid;
     }
-
-
 }
