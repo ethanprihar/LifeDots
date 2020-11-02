@@ -9,14 +9,6 @@ export default class RandomStart extends DotPlacer
 {
     // The number of dots generated at the start
     dot_num: number;
-    // The minimum ally range minimum of the random dots.
-    min_ally_min: number;
-    // The maximum ally range minimum of the random dots.
-    max_ally_min: number;
-    // the minimum ally range maximum of the random dots.
-    min_ally_max: number;
-    // the maximum ally range maximum of the random dots.
-    max_ally_max: number;
     // the minimum team number of the random dots.
     min_team_num: number;
     // the maximum team number of the random dots.
@@ -47,10 +39,6 @@ export default class RandomStart extends DotPlacer
     max_max_mut_pct: number;
     
     constructor(dot_num: number, 
-                min_ally_min: number, 
-                max_ally_min: number, 
-                min_ally_max: number, 
-                max_ally_max: number, 
                 min_team_num: number, 
                 max_team_num: number, 
                 min_max_size: number, 
@@ -68,10 +56,6 @@ export default class RandomStart extends DotPlacer
     {
         super();
         this.dot_num = dot_num;
-        this.min_ally_min = min_ally_min;
-        this.max_ally_min = max_ally_min;
-        this.min_ally_max = min_ally_max;
-        this.max_ally_max = max_ally_max;
         this.min_team_num = min_team_num;
         this.max_team_num = max_team_num;
         this.min_max_size = min_max_size;
@@ -111,8 +95,6 @@ export default class RandomStart extends DotPlacer
 
     rand_genome(): Genome
     {
-        let ally_min: number = Math.random() * (this.max_ally_min - this.min_ally_min) + this.min_ally_min;
-        let ally_max: number = Math.random() * (this.max_ally_max - this.min_ally_max) + this.min_ally_max;
         let team_num: number = Math.random() * (this.max_team_num - this.min_team_num) + this.min_team_num;
         let max_size: number = Math.random() * (this.max_max_size - this.min_max_size) + this.min_max_size;
         let baby_frac: number = Math.random() * (this.max_baby_frac - this.min_baby_frac) + this.min_baby_frac;
@@ -126,6 +108,6 @@ export default class RandomStart extends DotPlacer
         ops.random(weights);
         ops.subseq(weights, 0.5);
         ops.mulseq(weights, 2);
-        return new Genome(ally_min, ally_max, team_num, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct);
+        return new Genome(team_num, max_size, baby_frac, eat_ratio, speed, view, weights, max_mut_pct);
     }
 }

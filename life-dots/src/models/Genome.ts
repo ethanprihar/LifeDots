@@ -3,10 +3,6 @@ var ops = require("ndarray-ops");
 
 export default class Genome
 {
-    // The minimum value of the range which determines which dots are allies.
-    ally_min: number;
-    // The maximum value of the range which determines which dots are allies.
-    ally_max: number;
     // The team number of the dot when fighting.
     team_num: number;
     // The maximum size a dot can become, at which point it will split.
@@ -24,9 +20,7 @@ export default class Genome
     // The max mutation percentage for the genes.
     max_mut_pct: number;
 
-    constructor(ally_min: number, 
-                ally_max: number, 
-                team_num: number, 
+    constructor(team_num: number, 
                 max_size: number, 
                 baby_frac: number, 
                 eat_ratio: number, 
@@ -35,9 +29,6 @@ export default class Genome
                 weights: any, 
                 max_mut_pct: number)
     {
-        
-        this.ally_min = ally_min;
-        this.ally_max = ally_max;
         this.team_num = team_num;
         this.max_size = max_size;
         this.baby_frac = baby_frac;
@@ -56,9 +47,6 @@ export default class Genome
         if ((new_baby_frac <= 0) || (new_baby_frac >= 1)) {return null;}
         let new_speed: number = this.pct_mut(this.speed);
         if (new_speed <= 0) {return null;}
-        let new_ally_min: number = this.pct_mut(this.ally_min);
-        let new_ally_max: number = this.pct_mut(this.ally_max);
-        if (new_ally_min >= new_ally_max) {return null;}
         let new_team_num: number = this.fix_mut(this.team_num);
         let new_max_mut_pct: number = this.pct_mut(this.max_mut_pct);
         let new_eat_ratio: number = Math.min(Math.max(this.fix_mut(this.eat_ratio), 0), 1);
@@ -69,9 +57,7 @@ export default class Genome
         ops.subseq(rand, 0.5);
         ops.mulseq(rand, 2 * this.max_mut_pct);
         ops.addeq(new_weights, rand);
-        return new Genome(new_ally_min, 
-                          new_ally_max, 
-                          new_team_num, 
+        return new Genome(new_team_num, 
                           new_max_size, 
                           new_baby_frac, 
                           new_eat_ratio, 
