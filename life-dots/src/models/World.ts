@@ -182,6 +182,7 @@ export default class World
                             {
                                 // Reward the victors with sustinance.
                                 let food_spoils: number = this.food_grid.get(r,c) / this.dot_grid[r][c].length;
+                                this.food_grid.set(r,c,0);
                                 let dot_spoils: number = (total_size - team_size[t]) / this.dot_grid[r][c].length;
                                 dot.size += food_spoils * (dot.genome.eat_ratio);
                                 dot.size += dot_spoils * (1 - dot.genome.eat_ratio);
@@ -200,6 +201,7 @@ export default class World
                 {
                     // Feed the dot.
                     this.dot_grid[r][c][0].size += this.food_grid.get(r,c) * this.dot_grid[r][c][0].genome.eat_ratio;
+                    this.food_grid.set(r,c,0);
                     // Split the dot.
                     let baby_dots: Dot[] = this.dot_grid[r][c][0].split();
                     // Add the dots to the new dot grid.
