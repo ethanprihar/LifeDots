@@ -5,8 +5,6 @@ import WallPlacer from "./WallPlacer";
 import Dot from "./Dot"
 
 var ndarray = require("ndarray");
-var ops = require("ndarray-ops");
-var gemm = require("ndarray-gemm");
 
 export default class World
 {
@@ -51,7 +49,7 @@ export default class World
     }
 
     update()
-    {      
+    {
         // Update the dot grid with the dot placer.
         this.dot_placer.update(this.dot_grid);
         // Update the food grid with the food placer.
@@ -63,8 +61,8 @@ export default class World
         // Move all the dots, subtract size from trapped dots, and remove resulting dead dots.
         this.move_trap();
         // Simulate combat for all dots, reward the victors with nourishment, remove resulting dead dots, 
-        // consume food, and breed.
-        this.fight_feed_breed();
+        // consume food, and split.
+        this.fight_feed_split();
     }
 
     move_trap(): void
@@ -91,7 +89,7 @@ export default class World
         }
         // Create the move input
         let grids: any[] = [max_size_grid, signal_grid, this.food_grid, this.trap_grid, this.wall_grid];
-
+        var new_dot_count = 0;
         for (let r: number = 0; r < this.dot_grid.length; r++)
         {
             for (let c: number = 0; c < this.dot_grid[0].length; c++)
@@ -131,6 +129,7 @@ export default class World
                             {
                                 new_dot_grid[r][c].push(dot);
                             }
+                            new_dot_count++;
                         }
                     }
                 }
@@ -140,7 +139,7 @@ export default class World
         this.dot_grid = new_dot_grid;
     }
 
-    fight_feed_breed(): void
+    fight_feed_split(): void
     {
         // The new dot grid for the results of fighting, feeding, and splitting.
         let new_dot_grid: Dot[][][] = [];
@@ -153,7 +152,6 @@ export default class World
                 if (this.dot_grid[r][c].length > 1)
                 {
                     // Determine the teams and their stats.
-                    let num_teams: number = 0;
                     let total_size: number = 0;
                     let team_dots: Record<number, Dot[]> = {};
                     let team_size: Record<number, number> = {};
@@ -170,7 +168,6 @@ export default class World
                         {
                             team_dots[team] = [dot];
                             team_size[team] = dot.genome.max_size;
-                            num_teams++;
                         }
                     }
                     // Determine which team won the fight.
