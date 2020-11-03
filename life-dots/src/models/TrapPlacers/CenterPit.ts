@@ -2,7 +2,7 @@ import TrapPlacer from "../TrapPlacer";
 
 var ndarray = require("ndarray");
 
-export default class Border extends TrapPlacer
+export default class CenterPit extends TrapPlacer
 {
     // The number of cells around the center that are not trapped.
     edge: number;

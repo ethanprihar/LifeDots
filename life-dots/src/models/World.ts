@@ -89,7 +89,6 @@ export default class World
         }
         // Create the move input
         let grids: any[] = [max_size_grid, signal_grid, this.food_grid, this.trap_grid, this.wall_grid];
-        var new_dot_count = 0;
         for (let r: number = 0; r < this.dot_grid.length; r++)
         {
             for (let c: number = 0; c < this.dot_grid[0].length; c++)
@@ -129,7 +128,6 @@ export default class World
                             {
                                 new_dot_grid[r][c].push(dot);
                             }
-                            new_dot_count++;
                         }
                     }
                 }
