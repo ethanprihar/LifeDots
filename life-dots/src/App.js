@@ -9,6 +9,7 @@ import Border from "./models/WallPlacers/Border";
 import World from "./models/World";
 
 import MainMenu from "./views/MainMenu";
+import About from "./views/About";
 
 const default_style = 
 {
@@ -22,15 +23,19 @@ const default_style =
   marginRight : 'auto',
 }
 
-class App extends React.Component
+export default class App extends React.Component
 {
   constructor(props)
   {
     super(props);
-    this.page = <MainMenu page={this.page}/>;
+    this.state = 
+    {
+      page: <MainMenu setPage={this.setPage} />
+    }
   }
-
-  render()
+  
+  
+  world_test()
   {
     console.log('World Test')
     let dot_num = 20;
@@ -77,13 +82,34 @@ class App extends React.Component
     end_time = new Date().getTime();
     console.log(end_time - start_time);
     console.log(world);
-    
+  }
+
+  setPage = (page) => 
+  {
+    switch(page)
+    {
+      case "MainMenu":
+        this.setState({page: <MainMenu setPage={this.setPage} />});
+      break;
+      case "About":
+        this.setState({page: <About setPage={this.setPage} />});
+      break;
+      default:
+        alert("HOW DID YOU GET HERE");
+    }
+  }
+
+  componentDidMount()
+  {
+    this.world_test();
+  }
+  
+  render()
+  {
     return (
       <div style={default_style}>
-        <MainMenu/>
+        {this.state.page}
       </div>
     );
   }
 }
-
-export default App;

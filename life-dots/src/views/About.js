@@ -33,7 +33,7 @@ export default class About extends React.Component
         <div style={about_style}>
             <span style={text_style}>Life dots are life dots</span>
             <br></br>
-            <button style={button_style}>
+            <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
                 Main Menu
             </button>
             <button style={button_style}>

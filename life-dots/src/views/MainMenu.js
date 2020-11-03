@@ -1,5 +1,4 @@
 import React from "react";
-import {Redirect} from 'react-router-dom'
 
 const main_menu_style = 
 {
@@ -29,27 +28,14 @@ const button_style =
 export default class MainMenu extends React.Component
 {   
     state = {redirect: false}
-
-    setRedirect = () => {
-    this.setState({
-        redirect: true
-    })
-    }
-
-    renderRedirect = () => {
-    if (this.state.redirect) {
-        return <Redirect to='/About'/>
-    }
-    }
     
     render()
     {
         return (
         <div style={main_menu_style}>
-            {this.renderRedirect()}
             <span style={text_style}>Life Dots</span>
             <br></br>
-            <button style={button_style} onClick={this.setRedirect}>
+            <button style={button_style} onClick={() => this.props.setPage("About")}>
                 About
             </button>
             <button style={button_style}>

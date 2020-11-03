@@ -93,7 +93,7 @@ export default class World
         {
             for (let c: number = 0; c < this.dot_grid[0].length; c++)
             {
-                if (this.dot_grid[r][c].length != 0)
+                if (this.dot_grid[r][c].length !== 0)
                 {
                     for (let dot of this.dot_grid[r][c])
                     {
@@ -120,7 +120,7 @@ export default class World
                         // Move the dots to the new dot grid if they haven't died
                         if (dot.size > 0)
                         {
-                            if (this.wall_grid.get(r + move[0], c + move[1]) == 0)
+                            if (this.wall_grid.get(r + move[0], c + move[1]) === 0)
                             {
                                 new_dot_grid[r + move[0]][c + move[1]].push(dot);
                             }
@@ -195,7 +195,7 @@ export default class World
                         sum += team_size[t];
                     }
                 }
-                else if (this.dot_grid[r][c].length == 1)
+                else if (this.dot_grid[r][c].length === 1)
                 {
                     // Feed the dot.
                     this.dot_grid[r][c][0].size += this.food_grid.get(r,c) * this.dot_grid[r][c][0].genome.eat_ratio;
