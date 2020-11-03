@@ -25,3 +25,27 @@ yarn-error.log*
 
 .vscode
 *.vscode
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+life-dots/node_modules
+life-dots/.pnp
+life-dots/.pnp.js
+
+# testing
+life-dots/coverage
+
+# production
+life-dots/build
+
+# misc
+life-dots/.DS_Store
+life-dots/.env.local
+life-dots/.env.development.local
+life-dots/.env.test.local
+life-dots/.env.production.local
+
+life-dots/npm-debug.log*
+life-dots/yarn-debug.log*
+life-dots/yarn-error.log*
