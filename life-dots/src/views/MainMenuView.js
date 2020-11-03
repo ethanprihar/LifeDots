@@ -25,10 +25,8 @@ const button_style =
     border: "2px solid #b3b3b3",
 }
 
-export default class MainMenu extends React.Component
+export default class MainMenuView extends React.Component
 {   
-    state = {redirect: false}
-    
     render()
     {
         return (
@@ -38,7 +36,7 @@ export default class MainMenu extends React.Component
             <button style={button_style} onClick={() => this.props.setPage("About")}>
                 About
             </button>
-            <button style={button_style}>
+            <button style={button_style} onClick={() => this.props.setPage("Start")}>
                 Start
             </button>
         </div>

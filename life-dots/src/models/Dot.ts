@@ -32,7 +32,7 @@ export default class Dot
         let color: number[] = [];
         for (let i: number = 0; i < 3; i++)
         {
-            color.push(Math.floor(Math.random() * (256-SATURATION)) + SATURATION);
+            color.push(Math.floor(Math.random() * (255-SATURATION)) + SATURATION);
         }
         return color;
     }
