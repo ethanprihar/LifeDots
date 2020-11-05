@@ -17,10 +17,11 @@ export default class DotView extends React.Component
         {
             top: (this.props.dot_row * this.props.dot_size) + "px",
             left: (this.props.dot_col * this.props.dot_size) + "px",
-            hieght: this.props.dot_size + "px",
+            height: this.props.dot_size + "px",
             width: this.props.dot_size + "px",
             backgroundColor: color,
             borderRadius: "50%",
+            position: "absolute",
         }
 
         return (<div style={dot_style}></div>);

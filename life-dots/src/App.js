@@ -4,6 +4,7 @@ import "./App.css";
 
 import MainMenuView from "./views/MainMenuView";
 import AboutView from "./views/AboutView";
+import WorldView from "./views/WorldView";
 
 const default_style = 
 {
@@ -38,14 +39,12 @@ export default class App extends React.Component
       case "About":
         this.setState({page: <AboutView setPage={this.setPage} />});
       break;
+      case "Start":
+        this.setState({page: <WorldView setPage={this.setPage} />});
+      break;
       default:
         alert("HOW DID YOU GET HERE");
     }
-  }
-
-  componentDidMount()
-  {
-
   }
   
   render()
