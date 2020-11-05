@@ -8,7 +8,7 @@ export default class Genome
     // The maximum size a dot can become, at which point it will split.
     max_size: number;
     // The fraction of a dot's max size it will split off of itself.
-    baby_frac: number;
+    split_frac: number;
     // The efficiency of food consumption; the inverse of dot consumption efficiency.
     eat_ratio: number;
     // The number of ticks between dot moves.
@@ -22,7 +22,7 @@ export default class Genome
 
     constructor(team_num: number, 
                 max_size: number, 
-                baby_frac: number, 
+                split_frac: number, 
                 eat_ratio: number, 
                 speed: number, 
                 view: number, 
@@ -31,7 +31,7 @@ export default class Genome
     {
         this.team_num = team_num;
         this.max_size = max_size;
-        this.baby_frac = baby_frac;
+        this.split_frac = split_frac;
         this.eat_ratio = eat_ratio;
         this.speed = speed;
         this.view = view;
@@ -43,8 +43,8 @@ export default class Genome
     {
         let new_max_size: number = this.pct_mut(this.max_size);
         if (new_max_size <= 0) {return null;}
-        let new_baby_frac: number = this.pct_mut(this.baby_frac);
-        if ((new_baby_frac <= 0) || (new_baby_frac >= 1)) {return null;}
+        let new_split_frac: number = this.pct_mut(this.split_frac);
+        if ((new_split_frac <= 0) || (new_split_frac >= 1)) {return null;}
         let new_speed: number = this.pct_mut(this.speed);
         if (new_speed <= 0) {return null;}
         let new_team_num: number = this.fix_mut(this.team_num);
@@ -59,7 +59,7 @@ export default class Genome
         ops.addeq(new_weights, rand);
         return new Genome(new_team_num, 
                           new_max_size, 
-                          new_baby_frac, 
+                          new_split_frac, 
                           new_eat_ratio, 
                           new_speed, 
                           this.view, 

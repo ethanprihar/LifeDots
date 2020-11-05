@@ -62,16 +62,18 @@ export default class Dot
         this.size -= trap;
     }
     
-    split(): Dot[]
+    split(): Dot | null
     {
-        let spawn: Dot[] = [];
-        let ss: number = this.genome.max_size * this.genome.baby_frac;
-        while(this.size > this.genome.max_size)
+        let bs: number = this.genome.max_size * this.genome.split_frac;
+        if (this.size >= this.genome.max_size)
         {
+            this.size = Math.min(this.genome.max_size, this.size - bs);
             let g: Genome | null = this.genome.mutate();
-            this.size -= ss;
-            if (g != null) {spawn.push(new Dot(ss, g, this.color));}
+            if (g != null)
+            {
+                return new Dot(bs, g, this.color);
+            }
         }
-        return spawn;
+        return null;
     }
 }

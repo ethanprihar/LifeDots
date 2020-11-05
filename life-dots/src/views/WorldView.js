@@ -1,12 +1,14 @@
 import React from "react";
 
-import CellView from "./CellView";
 import DotView from "./DotView";
+import FoodView from "./FoodView";
+import TrapView from "./TrapView";
+import WallView from "./WallView";
 
-import RandomStart from "../models/DotPlacers/RandomStart"
-import RandomRain from "../models/FoodPlacers/RandomRain"
-import CenterPit from "../models/TrapPlacers/CenterPit"
-import Border from "../models/WallPlacers/Border"
+import RandomDots from "../models/placers/RandomDots"
+import RandomFood from "../models/placers/RandomFood"
+import CenterTrap from "../models/placers/CenterTrap"
+import BorderWall from "../models/placers/BorderWall"
 import World from "../models/World"
 
 export default class WorldView extends React.Component
@@ -35,19 +37,19 @@ export default class WorldView extends React.Component
         let max_view = 1;
         let min_max_mut_pct = 0.01;
         let max_max_mut_pct = 0.1;
-        let dot_placer = new RandomStart(dot_num, 
-                                         min_ally_min, max_ally_min, 
-                                         min_ally_max, max_ally_max, 
-                                         min_team_num, max_team_num, 
-                                         min_max_size, max_max_size, 
-                                         min_baby_frac, max_baby_frac, 
-                                         min_eat_ratio, max_eat_ratio, 
-                                         min_speed, max_speed, 
-                                         min_view, max_view, 
-                                         min_max_mut_pct, max_max_mut_pct);
-        let food_placer = new RandomRain(20, 5, 50);
-        let trap_placer = new CenterPit(Math.floor(Math.min(rows, cols) * 0.45), 10);
-        let wall_placer = new Border(1);
+        let dot_placer = new RandomDots(dot_num, 
+                                        min_ally_min, max_ally_min, 
+                                        min_ally_max, max_ally_max, 
+                                        min_team_num, max_team_num, 
+                                        min_max_size, max_max_size, 
+                                        min_baby_frac, max_baby_frac, 
+                                        min_eat_ratio, max_eat_ratio, 
+                                        min_speed, max_speed, 
+                                        min_view, max_view, 
+                                        min_max_mut_pct, max_max_mut_pct);
+        let food_placer = new RandomFood(20, 5, 50);
+        let trap_placer = new CenterTrap(Math.floor(Math.min(rows, cols) * 0.45), 10);
+        let wall_placer = new BorderWall(1);
         let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
         this.state = 
         {
@@ -74,30 +76,36 @@ export default class WorldView extends React.Component
     render()
     {
         let components = [];
-        for (let r = 0; r < this.state.world.rows; r++)
+        for (let pos in this.state.world.wall_map)
         {
-            for (let c = 0; c < this.state.world.cols; c++)
-            {
-                let wall_value = this.state.world.wall_grid.get(r,c);
-                let trap_value = this.state.world.trap_grid.get(r,c);
-                let food_value = this.state.world.food_grid.get(r,c);
-                components.push(<CellView wall_value={wall_value} 
-                                    trap_value={trap_value} 
-                                    food_value={food_value}
-                                    cell_row={r}
-                                    cell_col={c}
-                                    cell_size={30}/>);
-                for (let dot of this.state.world.dot_grid[r][c])
-                {
-                    let dot_color = dot.color;
-                    components.push(<DotView dot_color={dot_color}
-                                             dot_row={r}
-                                             dot_col={c}
-                                             dot_size={30}/>);
-                }
-            }
+            let [r, c] = pos.split(",").map(Number);
+            components.push(<WallView cell_row={r}
+                                      cell_col={c}
+                                      cell_size={30}/>);
         }
-        
+        for (let pos in this.state.world.trap_map)
+        {
+            let [r, c] = pos.split(",").map(Number);
+            components.push(<TrapView cell_row={r}
+                                      cell_col={c}
+                                      cell_size={30}/>);
+        }
+        for (let pos in this.state.world.food_map)
+        {
+            let [r, c] = pos.split(",").map(Number);
+            components.push(<FoodView cell_row={r}
+                                      cell_col={c}
+                                      cell_size={30}/>);
+        }
+        for (let pos in this.state.world.dot_map)
+        {
+            let [r, c] = pos.split(",").map(Number);
+            let dot_color = this.state.world.dot_map[pos].color;
+            components.push(<DotView dot_color={dot_color}
+                                        dot_row={r}
+                                        dot_col={c}
+                                        dot_size={30}/>);
+        }
         return (<div>{components}</div>);
     }
 }
