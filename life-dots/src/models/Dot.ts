@@ -37,11 +37,12 @@ export default class Dot
         return color;
     }
 
-    move(input: any): number[]
+    move(raw_input: number[]): number[]
     {
+        let input = ndarray(new Float64Array(raw_input), [1, raw_input.length])
         let output: any = ndarray(new Float64Array(10), [1, 10]);
         gemm(output, input, this.genome.weights);
-        this.signal = output.get(0,9);
+        this.signal = Math.min(Math.max(output.get(0,9), -1), 1);
         if (this.ticks_until_move <= 0)
         {
             this.size -= this.genome.max_size * Math.floor(this.genome.view) / 100;
@@ -65,12 +66,16 @@ export default class Dot
     split(): Dot | null
     {
         let bs: number = this.genome.max_size * this.genome.split_frac;
-        if (this.size >= this.genome.max_size)
+        if (this.size > this.genome.max_size)
         {
             this.size = Math.min(this.genome.max_size, this.size - bs);
             let g: Genome | null = this.genome.mutate();
             if (g != null)
             {
+                console.log("++++++++++++++++")
+                console.log(ops.sum(this.genome.weights))
+                console.log(ops.sum(g.weights))
+                console.log("++++++++++++++++")
                 return new Dot(bs, g, this.color);
             }
         }

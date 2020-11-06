@@ -1,8 +1,6 @@
 import Placer from "./Placer";
 import Dot from "./Dot"
 
-var ndarray = require("ndarray");
-
 export default class World
 {
     // The number of rows in the world.
@@ -126,30 +124,26 @@ export default class World
             // Create the dot move input.
             let [r, c]: number[] = pos.split(",").map(Number);
             let dot: Dot = this.dot_map[pos];
-            let view_dim: number = Math.floor(dot.genome.view);
-            let input_length: number = (view_dim * 2 + 1) * (view_dim * 2 + 1) * 5;
-            let input_shape: number[] = [1, input_length];
-            let input: any = ndarray(new Float64Array(input_length), input_shape);
-            let count: number = 0;
+            let raw_input: number[] = [];
             for (let dr: number = -Math.floor(dot.genome.view); dr <= Math.floor(dot.genome.view); dr++)
             {
                 for (let dc: number = -Math.floor(dot.genome.view); dc <= Math.floor(dot.genome.view); dc++)
                 {
-                    let new_pos: string = this.get_new_pos(r + dr, c + dc)
-                    let values: (number | undefined)[] = [this.dot_map[new_pos].signal,
-                                                          this.dot_map[new_pos].genome.max_size,
-                                                          this.food_map[new_pos],
-                                                          this.trap_map[new_pos],
-                                                          this.wall_map[new_pos]]
-                    for (let value of values)
-                    {
-                        input.set(1, count, value === undefined ? 0 : value);
-                        count++;
-                    }
+                    let new_pos: string = this.get_new_pos(r + dr, c + dc);
+                    let no_dot: boolean = this.dot_map[new_pos] === undefined;
+                    let no_food: boolean = this.food_map[new_pos] === undefined;
+                    let no_trap: boolean = this.trap_map[new_pos] === undefined;
+                    let no_wall: boolean = this.wall_map[new_pos] === undefined;
+                    let values: number[] = [no_dot ? 0 : this.dot_map[new_pos].signal,
+                                                          no_dot ? 0 : this.dot_map[new_pos].genome.max_size,
+                                                          no_food ? 0 : this.food_map[new_pos],
+                                                          no_trap ? 0 : this.trap_map[new_pos],
+                                                          no_wall ? 0 : this.wall_map[new_pos]]
+                    raw_input = raw_input.concat(values);
                 }
             }
             // Get the dot's move
-            let [dr, dc]: number[] = dot.move(input);
+            let [dr, dc]: number[] = dot.move(raw_input);
             let new_pos = this.get_new_pos(r + dr, c + dc)
             // Check if the dot can move
             if (new_pos in this.wall_map)

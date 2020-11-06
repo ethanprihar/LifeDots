@@ -6,9 +6,6 @@ import MainMenuView from "./views/MainMenuView";
 import AboutView from "./views/AboutView";
 import WorldView from "./views/WorldView";
 
-import BorderWall from "./models/placers/BorderWall"
-import CenterTrap from "./models/placers/CenterTrap"
-
 const default_style = 
 {
   width: '100vw',
@@ -51,16 +48,7 @@ export default class App extends React.Component
   }
   
   render()
-  {
-    let bw = new BorderWall(1);
-    bw.init(4,4);
-    console.log(bw)
-
-    let ct = new CenterTrap(1,10);
-    ct.init(4,4);
-    console.log(ct)
-
-    
+  {  
     return (
       <div style={default_style}>
         {this.state.page}
