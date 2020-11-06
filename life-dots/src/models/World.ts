@@ -163,12 +163,14 @@ export default class World
                 let split_dot: Dot | null = dot.split();
                 if (split_dot != null)
                 {
+                    const dr: number[] = [-1, -1, -1, 0, 0, 1, 1, 1]
+                    const dc: number[] = [-1, 0, 1, -1, 1, -1, 0, 1]
                     let options: string[] = []
-                    for (let dr = -1; dr <= 1; dr++)
+                    for (let i: number = 0; i < 8; i++)
                     {
-                        for (let dc = -1; dc <= 1; dc++)
+                        let split_opt: string = this.get_new_pos(r + dr[i], c + dc[i]);
+                        if (this.wall_map[split_opt] === undefined)
                         {
-                            let split_opt: string = this.get_new_pos(r + dr, c + dc);
                             options.push(split_opt)
                         }
                     }

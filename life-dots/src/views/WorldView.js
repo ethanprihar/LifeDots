@@ -17,11 +17,9 @@ export default class WorldView extends React.Component
     constructor(props)
     {
         super(props)
-        let rows = 30;
-        let cols = 30;
+        let rows = 66;
+        let cols = 170;
         let dot_num = 20;
-        let min_team_num = 0;
-        let max_team_num = 10;
         let min_max_size = 10;
         let max_max_size = 100;
         let min_split_frac = 0.1;
@@ -34,17 +32,16 @@ export default class WorldView extends React.Component
         let max_view = 5;
         let min_max_mut_pct = 0.01;
         let max_max_mut_pct = 0.1;
-        let dot_placer = new RandomDots(dot_num, 
-                                        min_team_num, max_team_num, 
+        let dot_placer = new RandomDots(dot_num,  
                                         min_max_size, max_max_size, 
                                         min_split_frac, max_split_frac, 
                                         min_eat_ratio, max_eat_ratio, 
                                         min_speed, max_speed, 
                                         min_view, max_view, 
                                         min_max_mut_pct, max_max_mut_pct);
-        let food_placer = new RandomFood(20, 50, 50);
-        let trap_placer = new CenterTrap(Math.floor(Math.min(rows, cols) * 0.45), 10);
-        let wall_placer = new BorderWall(1);
+        let food_placer = new RandomFood(25, 200, 50);
+        let trap_placer = new Placer() //new CenterTrap(Math.floor(Math.min(rows, cols) * 0.45), 10);
+        let wall_placer = new Placer() //BorderWall(1);
         let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
         this.state = 
         {
@@ -70,39 +67,91 @@ export default class WorldView extends React.Component
     
     render()
     {
+        const cell_size = 15;
+
+        let trap_min = Infinity;
+        let trap_max = 0;
+        let food_min = Infinity;
+        let food_max = 0;
+        let dot_min = Infinity;
+        let dot_max = 0;
+        for (let pos in this.state.world.trap_map)
+        {
+            if (this.state.world.trap_map[pos] < trap_min)
+            {
+                trap_min = this.state.world.trap_map[pos];
+            }
+            if (this.state.world.trap_map[pos] > trap_max)
+            {
+                trap_max = this.state.world.trap_map[pos];
+            }
+        }
+        for (let pos in this.state.world.food_map)
+        {
+            if (this.state.world.food_map[pos] < food_min)
+            {
+                food_min = this.state.world.food_map[pos];
+            }
+            if (this.state.world.food_map[pos] > food_max)
+            {
+                food_max = this.state.world.food_map[pos];
+            }
+        }
+        for (let pos in this.state.world.dot_map)
+        {
+            if (this.state.world.dot_map[pos].genome.max_size < dot_min)
+            {
+                dot_min = this.state.world.dot_map[pos].genome.max_size;
+            }
+            if (this.state.world.dot_map[pos].genome.max_size > dot_max)
+            {
+                dot_max = this.state.world.dot_map[pos].genome.max_size;
+            }
+        }
+        
         let components = [];
         for (let pos in this.state.world.wall_map)
         {
             let [r, c] = pos.split(",").map(Number);
-            components.push(<WallView cell_row={r}
-                                      cell_col={c}
-                                      cell_size={30}
+            components.push(<WallView row={r}
+                                      col={c}
+                                      cell_size={cell_size}
                                       key={"wall" + pos}/>);
         }
         for (let pos in this.state.world.trap_map)
         {
             let [r, c] = pos.split(",").map(Number);
-            components.push(<TrapView cell_row={r}
-                                      cell_col={c}
-                                      cell_size={30}
+            components.push(<TrapView row={r}
+                                      col={c}
+                                      trap_min={trap_min}
+                                      trap_max={trap_max}
+                                      trap_size={this.state.world.trap_map[pos]}
+                                      cell_size={cell_size}
                                       key={"trap" + pos}/>);
         }
         for (let pos in this.state.world.food_map)
         {
             let [r, c] = pos.split(",").map(Number);
-            components.push(<FoodView cell_row={r}
-                                      cell_col={c}
-                                      cell_size={30}
+            components.push(<FoodView row={r}
+                                      col={c}
+                                      food_min={food_min}
+                                      food_max={food_max}
+                                      food_size={this.state.world.food_map[pos]}
+                                      cell_size={cell_size}
                                       key={"food" + pos}/>);
         }
         for (let pos in this.state.world.dot_map)
         {
             let [r, c] = pos.split(",").map(Number);
-            let dot_color = this.state.world.dot_map[pos].color;
+            let dot_color = this.state.world.dot_map[pos].genome.color;
             components.push(<DotView dot_color={dot_color}
-                                        dot_row={r}
-                                        dot_col={c}
-                                        dot_size={30}
+                                        row={r}
+                                        col={c}
+                                        dot_min={dot_min}
+                                        dot_max={dot_max}
+                                        dot_size={this.state.world.dot_map[pos].genome.max_size}
+                                        dot_signal={this.state.world.dot_map[pos].signal}
+                                        cell_size={cell_size}
                                         key={"dot" + pos}/>);
         }
         return (<div>{components}</div>);

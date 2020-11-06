@@ -6,8 +6,8 @@ export default class WallView extends React.Component
     {
         const cell_style = 
         {
-            top: (this.props.cell_row * this.props.cell_size) + "px",
-            left: (this.props.cell_col * this.props.cell_size) + "px",
+            top: (this.props.row * this.props.cell_size) + "px",
+            left: (this.props.col * this.props.cell_size) + "px",
             height: this.props.cell_size + "px",
             width: this.props.cell_size + "px",
             backgroundColor: "rgb(25, 25, 25)",
