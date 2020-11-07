@@ -9,7 +9,9 @@ export default class RandomWall extends Placer
     // The width of the border wall.
     density: number;
 
-    constructor(section_rows: number, section_cols: number, density: number)
+    constructor(section_rows: number, 
+                section_cols: number, 
+                density: number)
     {
         super();
         this.section_rows = section_rows;
