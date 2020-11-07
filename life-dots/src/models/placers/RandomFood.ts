@@ -12,14 +12,26 @@ export default class RandomFood extends Placer
     ticks_between_rain: number;
     // The number of food pieces that drop per rain.
     drops_per_rain: number;
-    // The amount of food in each food piece.
-    food_per_drop: number;
+    // The minimum size of each food drop.
+    min_drop_size: number;
+    // The maximum size of each food drop.
+    max_drop_size: number;
+    // The minimum amount of food in each food piece.
+    min_food_per_drop: number;
+    // The maximum amount of food in each food piece.
+    max_food_per_drop: number;
     // The change in ticks between rain after every rain in a phase.
     delta_ticks_between_rain: number;
     // The change in drops per rain after every rain in a phase.
     delta_drops_per_rain: number;
-    // The change in food per drop after every rain in a phase.
-    delta_food_per_drop: number;
+    // The change in minimum size of each food drop after every rain in a phase.
+    delta_min_drop_size: number;
+    // The change in maximum size of each food drop after every rain in a phase.
+    delta_max_drop_size: number;
+    // The change in minimum food per drop after every rain in a phase.
+    delta_min_food_per_drop: number;
+    // The change in maximum food per drop after every rain in a phase.
+    delta_max_food_per_drop: number;
     // The length of a phase.
     phase_length: number;
     // Whether or not the rain cycles or plateaus.
@@ -34,10 +46,16 @@ export default class RandomFood extends Placer
     constructor(uniform: boolean,
                 ticks_between_rain: number, 
                 drops_per_rain: number, 
-                food_per_drop: number,
+                min_drop_size: number, 
+                max_drop_size: number,
+                min_food_per_drop: number, 
+                max_food_per_drop: number, 
                 delta_ticks_between_rain: number, 
                 delta_drops_per_rain: number, 
-                delta_food_per_drop: number, 
+                delta_min_drop_size: number, 
+                delta_max_drop_size: number, 
+                delta_min_food_per_drop: number, 
+                delta_max_food_per_drop: number, 
                 phase_length: number, 
                 will_cycle: boolean)
     {
@@ -45,10 +63,16 @@ export default class RandomFood extends Placer
         this.uniform = uniform;
         this.ticks_between_rain = ticks_between_rain;
         this.drops_per_rain = drops_per_rain;
-        this.food_per_drop = food_per_drop;
+        this.min_drop_size = min_drop_size; 
+        this.max_drop_size = max_drop_size;
+        this.min_food_per_drop = min_food_per_drop;
+        this.max_food_per_drop = max_food_per_drop;
         this.delta_ticks_between_rain = delta_ticks_between_rain;
         this.delta_drops_per_rain = delta_drops_per_rain;
-        this.delta_food_per_drop = delta_food_per_drop;
+        this.delta_min_drop_size = delta_min_drop_size;
+        this.delta_max_drop_size = delta_max_drop_size;
+        this.delta_min_food_per_drop = delta_min_food_per_drop;
+        this.delta_max_food_per_drop = delta_max_food_per_drop;
         this.phase_length = phase_length;
         this.will_cycle = will_cycle;
     }
@@ -85,21 +109,35 @@ export default class RandomFood extends Placer
                     r = Math.floor(((Math.random() + Math.random() + Math.random() + Math.random()) / 4) * this.rows);
                     c = Math.floor(((Math.random() + Math.random() + Math.random() + Math.random()) / 4) * this.cols);
                 }
-                const pos: string = r + "," + c;
-                map[pos] = pos in map ? map[pos] + this.food_per_drop : this.food_per_drop;
+                let drop_size: number = Math.random() * (this.max_drop_size - this.min_drop_size) + this.min_drop_size;
+                for (let dr: number = 0; dr < drop_size; dr++)
+                {
+                    for (let dc: number = 0; dc < drop_size; dc++)
+                    {
+                        const pos: string = this.get_new_pos(r + dr, c + dc);
+                        const food_amount: number = Math.random() * (this.max_food_per_drop - this.min_food_per_drop) + this.min_food_per_drop;
+                        map[pos] = pos in map ? map[pos] + food_amount : food_amount;
+                    }
+                }
             }
             // Adjust rain quantities based on phase
             if (this.phase_side === 1)
             {
                 this.ticks_between_rain += this.delta_ticks_between_rain;
                 this.drops_per_rain += this.delta_drops_per_rain;
-                this.food_per_drop += this.delta_food_per_drop;
+                this.min_drop_size += this.delta_min_drop_size; 
+                this.max_drop_size += this.delta_max_drop_size;
+                this.min_food_per_drop += this.delta_min_food_per_drop;
+                this.max_food_per_drop += this.delta_max_food_per_drop;
             }
-            else if (this.will_cycle == true)
+            else if (this.will_cycle)
             {
                 this.ticks_between_rain -= this.delta_ticks_between_rain;
                 this.drops_per_rain -= this.delta_drops_per_rain;
-                this.food_per_drop -= this.delta_food_per_drop;
+                this.min_drop_size -= this.delta_min_drop_size; 
+                this.max_drop_size -= this.delta_max_drop_size;
+                this.min_food_per_drop -= this.delta_min_food_per_drop;
+                this.max_food_per_drop -= this.delta_max_food_per_drop;
             }
             // Reset the rain tick count and increment the phase
             this.ticks_until_rain = this.ticks_between_rain;
@@ -114,5 +152,26 @@ export default class RandomFood extends Placer
                 }
             }
         }
+    }
+
+    get_new_pos(r: number, c: number): string
+    {
+        if (r < 0)
+        {
+            r += this.rows;
+        }
+        else if (r >= this.rows)
+        {
+            r -= this.rows;
+        }
+        if (c < 0)
+        {
+            c += this.cols;
+        }
+        else if (c >= this.cols)
+        {
+            c -= this.cols;
+        }
+        return(r + "," + c);
     }
 }

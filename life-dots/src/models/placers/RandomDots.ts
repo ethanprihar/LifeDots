@@ -9,30 +9,32 @@ export default class RandomDots extends Placer
 {
     // The number of dots generated at the start
     dot_num: number;
-    // the minimum maximum size of the random dots.
+    // The minimum maximum size of the random dots.
     min_max_size: number;
-    // the maximum maximum size of the random dots.
+    // The maximum maximum size of the random dots.
     max_max_size: number;
-    // the minimum split size fraction of the random dots.
+    // The minimum split size fraction of the random dots.
     min_split_frac: number;
-    // the maximum split size fraction of the random dots.
+    // The maximum split size fraction of the random dots.
     max_split_frac: number;
-    // the minimum food to dot absorbtion ratio of the random dots.
+    // The minimum food to dot absorbtion ratio of the random dots.
     min_eat_ratio: number;
-    // the maximum food to dot absorbtion ratio of the random dots.
+    // The maximum food to dot absorbtion ratio of the random dots.
     max_eat_ratio: number;
-    // the minimum ticks between moves of the random dots.
+    // The minimum ticks between moves of the random dots.
     min_speed: number;
-    // the maximum ticks between moves of the random dots.
+    // The maximum ticks between moves of the random dots.
     max_speed: number;
-    // the minimum view of the random dots.
+    // The minimum view of the random dots.
     min_view: number;
-    // the maximum view of the random dots.
+    // The maximum view of the random dots.
     max_view: number;
-    // the minimum maximum mutation percentage of the random dots.
+    // The minimum maximum mutation percentage of the random dots.
     min_max_mut_pct: number;
-    // the maximum maximum mutation percentage of the random dots.
+    // The maximum maximum mutation percentage of the random dots.
     max_max_mut_pct: number;
+    // Whether or not to add more dots if all the dots die
+    reset_on_extinction: boolean;
     // the number of rows
     rows: number;
     // the number of columns
@@ -50,7 +52,8 @@ export default class RandomDots extends Placer
                 min_view: number, 
                 max_view: number, 
                 min_max_mut_pct: number, 
-                max_max_mut_pct: number)
+                max_max_mut_pct: number, 
+                reset_on_extinction: boolean)
     {
         super();
         this.dot_num = dot_num;
@@ -66,6 +69,7 @@ export default class RandomDots extends Placer
         this.max_view = max_view;
         this.min_max_mut_pct = min_max_mut_pct;
         this.max_max_mut_pct = max_max_mut_pct;
+        this.reset_on_extinction = reset_on_extinction;
         this.rows = -1;
         this.cols = -1;
     }
@@ -87,7 +91,7 @@ export default class RandomDots extends Placer
 
     update(map: Record<string, any>): void
     {
-        if (Object.keys(map).length === 0)
+        if (this.reset_on_extinction && (Object.keys(map).length === 0))
         {
             for (let i: number = 0; i < this.dot_num; i++)
             {

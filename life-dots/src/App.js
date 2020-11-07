@@ -1,15 +1,17 @@
 import React from "react";
+import {Helmet} from 'react-helmet';
 
 import "./App.css";
 
 import MainMenuView from "./views/MainMenuView";
 import AboutView from "./views/AboutView";
+import SetupView from "./views/SetupView";
 import WorldView from "./views/WorldView";
 
 const default_style = 
 {
-  width: '100vw',
-  height: '100vh',
+  //width: '100vw',
+  //height: '100vh',
   color: '#b3b3b3',
   backgroundColor: '#000000',
   margin: 0,
@@ -39,6 +41,9 @@ export default class App extends React.Component
       case "About":
         this.setState({page: <AboutView setPage={this.setPage} />});
       break;
+      case "Setup":
+        this.setState({page: <SetupView setPage={this.setPage} />});
+      break;
       case "Start":
         this.setState({page: <WorldView setPage={this.setPage} />});
       break;
@@ -51,6 +56,9 @@ export default class App extends React.Component
   {  
     return (
       <div style={default_style}>
+        <Helmet>
+          <style>{'body {background-color: #000000;}'}</style>
+        </Helmet>
         {this.state.page}
       </div>
     );
