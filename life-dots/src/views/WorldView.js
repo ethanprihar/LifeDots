@@ -7,19 +7,16 @@ import WallView from "./WallView";
 
 import RandomDots from "../models/placers/RandomDots"
 import RandomFood from "../models/placers/RandomFood"
-import CenterTrap from "../models/placers/CenterTrap"
-import BorderWall from "../models/placers/BorderWall"
+import RandomTrap from "../models/placers/RandomTrap"
+import RandomWall from "../models/placers/RandomWall"
 import World from "../models/World"
-import Placer from "../models/Placer";
 
 export default class WorldView extends React.Component
 {   
     constructor(props)
     {
         super(props)
-        let rows = 66;
-        let cols = 170;
-        let dot_num = 20;
+        let dot_num = 100;
         let min_max_size = 10;
         let max_max_size = 100;
         let min_split_frac = 0.1;
@@ -39,9 +36,31 @@ export default class WorldView extends React.Component
                                         min_speed, max_speed, 
                                         min_view, max_view, 
                                         min_max_mut_pct, max_max_mut_pct);
-        let food_placer = new RandomFood(25, 200, 50);
-        let trap_placer = new Placer() //new CenterTrap(Math.floor(Math.min(rows, cols) * 0.45), 10);
-        let wall_placer = new Placer() //BorderWall(1);
+        let uniform = false;
+        let ticks_between_rain = 10; 
+        let drops_per_rain = 50;
+        let food_per_drop = 1;
+        let delta_ticks_between_rain = 10;
+        let delta_drops_per_rain = 10;
+        let delta_food_per_drop = 1;
+        let phase_length = 3;
+        let will_cycle = true;
+        let food_placer = new RandomFood(uniform, 
+                                         ticks_between_rain, 
+                                         drops_per_rain, 
+                                         food_per_drop, 
+                                         delta_ticks_between_rain, 
+                                         delta_drops_per_rain, 
+                                         delta_food_per_drop, 
+                                         phase_length, 
+                                         will_cycle);
+        let trap_num = 100;
+        let trap_size = 10;
+        let trap_placer = new RandomTrap(trap_num, trap_size);
+        let density = 0.5
+        let wall_placer = new RandomWall(density);
+        let rows = 66;
+        let cols = 66;
         let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
         this.state = 
         {
@@ -57,7 +76,7 @@ export default class WorldView extends React.Component
 
     componentDidMount()
     {
-        this.interval = setInterval(() => this.setState({world: this.update_world()}), 1);
+        this.interval = setInterval(() => this.setState({world: this.update_world()}), 100);
     }
 
     componentWillUnmount()
