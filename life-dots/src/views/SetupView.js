@@ -32,7 +32,7 @@ const table_style =
 {
     width: "90vw",
     margin: "auto",
-    fontSize: "2vh",
+    fontSize: "20px",
 }
 
 const label_entry = 
@@ -44,6 +44,7 @@ const label_entry =
 const input_entry = 
 {
     textAlign: "left",
+    width: "25vw"
 }
 
 const input_style = 
@@ -129,19 +130,25 @@ export default class SetupView extends React.Component
     {
         const name = event.target.name;
         const value = event.target.value;
-        this.setState({[name]: value});
-        if (name.startsWith("min_") && (this.state["max" + name.substring(3)] < value))
+        const min = event.target.min;
+        const max = event.target.max;
+        if(((min === undefined) || (min <= value)) && ((max === undefined) || (max >= value)))
         {
-            this.setState({["max" + name.substring(3)]: value});
-        }
-        if (name.startsWith("max_") && (this.state["min" + name.substring(3)] > value))
-        {
-            this.setState({["min" + name.substring(3)]: value});
+            this.setState({[name]: value});
+            if (name.startsWith("min_") && (this.state["max" + name.substring(3)] < value))
+            {
+                this.setState({["max" + name.substring(3)]: value});
+            }
+            if (name.startsWith("max_") && (this.state["min" + name.substring(3)] > value))
+            {
+                this.setState({["min" + name.substring(3)]: value});
+            }
         }
     }
 
     key_press(event)
     {
+        // Do nothing when enter is pressed.
         if (event.which === 13)
         {
             event.preventDefault();
