@@ -5,90 +5,11 @@ import FoodView from "./FoodView";
 import TrapView from "./TrapView";
 import WallView from "./WallView";
 
-import RandomDots from "../models/placers/RandomDots"
-import RandomFood from "../models/placers/RandomFood"
-import RandomTrap from "../models/placers/RandomTrap"
-import RandomWall from "../models/placers/RandomWall"
-import World from "../models/World"
-
 export default class WorldView extends React.Component
 {   
     constructor(props)
     {
         super(props)
-        let dot_num = 100;
-        let min_max_size = 10;
-        let max_max_size = 100;
-        let min_split_frac = 0.1;
-        let max_split_frac = 0.9;
-        let min_eat_ratio = 0;
-        let max_eat_ratio = 1;
-        let min_speed = 0;
-        let max_speed = 10;
-        let min_view = 1;
-        let max_view = 5;
-        let min_max_mut_pct = 0.01;
-        let max_max_mut_pct = 0.1;
-        let reset_on_extinction = true;
-        let dot_placer = new RandomDots(dot_num,  
-                                        min_max_size, max_max_size, 
-                                        min_split_frac, max_split_frac, 
-                                        min_eat_ratio, max_eat_ratio, 
-                                        min_speed, max_speed, 
-                                        min_view, max_view, 
-                                        min_max_mut_pct, max_max_mut_pct, 
-                                        reset_on_extinction);
-        let funiform = true;
-        let ticks_between_rain = 25;
-        let drops_per_rain = 50;
-        let min_drop_size = 0;
-        let max_drop_size = 1;
-        let min_food_per_drop = 10;
-        let max_food_per_drop = 50;
-        let delta_ticks_between_rain = 10;
-        let delta_drops_per_rain = -0.9;
-        let delta_min_drop_size = 0.1;
-        let delta_max_drop_size = 0.2;
-        let delta_min_food_per_drop = 0.25
-        let delta_max_food_per_drop = 2
-        let phase_length = 50;
-        let will_cycle = true;
-        let food_placer = new RandomFood(funiform,
-                                         ticks_between_rain, 
-                                         drops_per_rain, 
-                                         min_drop_size, 
-                                         max_drop_size,
-                                         min_food_per_drop, 
-                                         max_food_per_drop, 
-                                         delta_ticks_between_rain, 
-                                         delta_drops_per_rain, 
-                                         delta_min_drop_size, 
-                                         delta_max_drop_size, 
-                                         delta_min_food_per_drop, 
-                                         delta_max_food_per_drop, 
-                                         phase_length, 
-                                         will_cycle);
-        let tuniform = true;
-        let trap_num = 30;
-        let min_trap_size = 0;
-        let max_trap_size = 3;
-        let min_trap_damage = 1;
-        let max_trap_damage = 25;
-        let trap_placer = new RandomTrap(tuniform, 
-                                         trap_num, 
-                                         min_trap_size, 
-                                         max_trap_size, 
-                                         min_trap_damage, 
-                                         max_trap_damage)
-        let section_rows = 2;
-        let section_cols = 2;
-        let density = 0.75;
-        let wall_placer = new RandomWall(section_rows, 
-                                         section_cols, 
-                                         density);
-        let rows = 66*3;
-        let cols = 170*3;
-        let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
         this.state = 
         {
             world: world

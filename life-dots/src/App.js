@@ -31,7 +31,7 @@ export default class App extends React.Component
     }
   }
 
-  setPage = (page) => 
+  setPage = (page, tick_time=null, cell_size=null, world=null) => 
   {
     switch(page)
     {
