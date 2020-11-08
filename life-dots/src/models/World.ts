@@ -42,6 +42,7 @@ export default class World
         this.trap_map = this.trap_placer.init(this.rows, this.cols);
         this.wall_map = this.wall_placer.init(this.rows, this.cols);
         this.remove_objects_in_walls();
+        console.log(this)
     }
 
     update()

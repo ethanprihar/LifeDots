@@ -4,8 +4,8 @@ const about_style =
 {
     textAlign: "center",
     paddingTop: "5vh",
+    marginBottom: "20vh",
 }
-
 
 const title_style = 
 {
@@ -20,18 +20,31 @@ const text_style =
     margin: "auto",
 }
 
+const footer_style = 
+{
+    color: "#b3b3b3",
+    backgroundColor: "#000000",
+    borderTop: "2px solid #b3b3b3",
+    position: "fixed",
+    left: "0",
+    bottom: "0",
+    paddingTop: "2.5vh",
+    width: "100vw",
+    height: "12.5vh",
+    overflow: "auto",
+}
+
 const button_style = 
 {
     borderRadius: "1vh",
-    height: "15vh",
+    height: "10vh",
     width: "30vh",
-    marginTop: "5vh",
-    marginBottom: "5vh",
-    marginLeft: "5vh",
-    marginRight: "5vh",
+    marginLeft: "2.5vh",
+    marginRight: "2.5vh",
+    marginBottom: "2.5vh",
     color: "#b3b3b3",
     backgroundColor: "#000000",
-    fontSize: "5vh",
+    fontSize: "4vh",
     border: "2px solid #b3b3b3",
 }
 
@@ -50,9 +63,16 @@ export default class AboutView extends React.Component
                 <h1>How do Dots “Think”?</h1>
                 <p>Each dot can perceive the size and signal values of all dots, the amount of food, the size of traps, and the presence of walls in a fixed radius around itself determined by its genetic code. All these values are sent as input to a multi-variate regression, the coefficients of which are determined by the dot’s genetic code. The regression produces ten outputs. Nine of the outputs correspond to the eight adjacent cells and the cell the dot is currently in. Of these nine outputs, the output with highest value determines which cell the dot moves to. The tenth output is bounded between negative one and one and is used as the dot’s signal value.</p>
             </div>
-            <button style={button_style} onClick={() => this.props.setPage("Setup")}>
-                Setup
-            </button>
+            <div>
+                <div style={footer_style}>
+                    <button style={button_style} onClick={() => this.props.setPage("Setup")}>
+                        Setup
+                    </button>
+                    <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
+                        Main Menu
+                    </button>
+                </div>
+            </div>
         </div>
         );
     }
