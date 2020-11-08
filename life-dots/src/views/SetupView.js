@@ -95,12 +95,12 @@ export default class SetupView extends React.Component
             reset_on_extinction: true,
 
             funiform: true,
-            ticks_between_rain: 0, 
-            drops_per_rain: 100, 
+            ticks_between_rain: 10, 
+            drops_per_rain: 20, 
             min_drop_size: 1, 
             max_drop_size: 1,
             min_food_per_drop: 1, 
-            max_food_per_drop: 100, 
+            max_food_per_drop: 10, 
             delta_ticks_between_rain: 1, 
             delta_drops_per_rain: -0.1, 
             delta_min_drop_size: 0.1, 
@@ -150,14 +150,21 @@ export default class SetupView extends React.Component
 
     submit = (event) =>
     {   
-        
+        const rows = Math.floor(window.innerHeight / this.state.cell_size)
+        const cols = Math.floor(window.innerWidth / this.state.cell_size)
         let dot_placer = new RandomDots(this.state.dot_num,  
-                                        this.state.min_max_size, max_max_size, 
-                                        this.state.min_split_frac, max_split_frac, 
-                                        this.state.min_eat_ratio, max_eat_ratio, 
-                                        this.state.min_speed, max_speed, 
-                                        this.state.min_view, max_view, 
-                                        this.state.min_max_mut_pct, max_max_mut_pct, 
+                                        this.state.min_max_size, 
+                                        this.state.max_max_size, 
+                                        this.state.min_split_frac, 
+                                        this.state.max_split_frac, 
+                                        this.state.min_eat_ratio, 
+                                        this.state.max_eat_ratio, 
+                                        this.state.min_speed, 
+                                        this.state.max_speed, 
+                                        this.state.min_view, 
+                                        this.state.max_view, 
+                                        this.state.min_max_mut_pct, 
+                                        this.state.max_max_mut_pct, 
                                         this.state.reset_on_extinction);
         let food_placer = new RandomFood(this.state.funiform,
                                          this.state.ticks_between_rain, 

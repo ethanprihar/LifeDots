@@ -45,7 +45,10 @@ export default class App extends React.Component
         this.setState({page: <SetupView setPage={this.setPage} />});
       break;
       case "Start":
-        this.setState({page: <WorldView setPage={this.setPage} />});
+        this.setState({page: <WorldView setPage={this.setPage} 
+                                        tick_time={tick_time} 
+                                        cell_size={cell_size} 
+                                        world={world}/>});
       break;
       default:
         alert("HOW DID YOU GET HERE");

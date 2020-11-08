@@ -211,8 +211,15 @@ export default class World
             // Feed the dot.
             if (pos in this.food_map)
             {
-                dot.size += this.food_map[pos] * dot.genome.eat_ratio;
-                delete this.food_map[pos];
+                dot.size += Math.min(dot.genome.max_size, this.food_map[pos]) * dot.genome.eat_ratio;
+                if (this.food_map[pos] > dot.genome.max_size)
+                {
+                    this.food_map[pos] -= dot.genome.max_size;
+                }
+                else
+                {
+                    delete this.food_map[pos];
+                }
             }
             // Add the dot to the new dot map.
             new_dot_map[pos] = dot;

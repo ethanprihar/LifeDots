@@ -52,9 +52,9 @@ export default class Dot
     split(): Dot | null
     {
         let bs: number = this.genome.max_size * this.genome.split_frac;
-        if (this.size > this.genome.max_size)
+        while (this.size > this.genome.max_size)
         {
-            this.size = Math.min(this.genome.max_size, this.size - bs);
+            this.size = Math.min(this.genome.max_size, this.genome.max_size - bs);
             let g: Genome | null = this.genome.mutate();
             if (g != null)
             {

@@ -12,7 +12,9 @@ export default class WorldView extends React.Component
         super(props)
         this.state = 
         {
-            world: world
+            tick_time: props.tick_time,
+            cell_size: props.cell_size,
+            world: props.world,
         }
     }
 
@@ -24,7 +26,7 @@ export default class WorldView extends React.Component
 
     componentDidMount()
     {
-        this.interval = setInterval(() => this.setState({world: this.update_world()}), 100);
+        this.interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
     }
 
     componentWillUnmount()
@@ -34,8 +36,6 @@ export default class WorldView extends React.Component
     
     render()
     {
-        const cell_size = 5;
-
         let trap_min = Infinity;
         let trap_max = 0;
         let food_min = Infinity;
@@ -82,7 +82,7 @@ export default class WorldView extends React.Component
             let [r, c] = pos.split(",").map(Number);
             components.push(<WallView row={r}
                                       col={c}
-                                      cell_size={cell_size}
+                                      cell_size={this.state.cell_size}
                                       key={"wall" + pos}/>);
         }
         for (let pos in this.state.world.trap_map)
@@ -93,7 +93,7 @@ export default class WorldView extends React.Component
                                       trap_min={trap_min}
                                       trap_max={trap_max}
                                       trap_size={this.state.world.trap_map[pos]}
-                                      cell_size={cell_size}
+                                      cell_size={this.state.cell_size}
                                       key={"trap" + pos}/>);
         }
         for (let pos in this.state.world.food_map)
@@ -104,7 +104,7 @@ export default class WorldView extends React.Component
                                       food_min={food_min}
                                       food_max={food_max}
                                       food_size={this.state.world.food_map[pos]}
-                                      cell_size={cell_size}
+                                      cell_size={this.state.cell_size}
                                       key={"food" + pos}/>);
         }
         for (let pos in this.state.world.dot_map)
@@ -118,7 +118,7 @@ export default class WorldView extends React.Component
                                         dot_max={dot_max}
                                         dot_size={this.state.world.dot_map[pos].genome.max_size}
                                         dot_signal={this.state.world.dot_map[pos].signal}
-                                        cell_size={cell_size}
+                                        cell_size={this.state.cell_size}
                                         key={"dot" + pos}/>);
         }
         return (<div>{components}</div>);
