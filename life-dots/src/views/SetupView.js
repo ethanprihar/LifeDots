@@ -129,20 +129,27 @@ export default class SetupView extends React.Component
     change_input(event)
     {
         const name = event.target.name;
-        const value = event.target.value;
-        const min = event.target.min;
-        const max = event.target.max;
-        if(((min === undefined) || (min <= value)) && ((max === undefined) || (max >= value)))
+        let value = event.target.value;
+        if (value === "true")
         {
-            this.setState({[name]: value});
-            if (name.startsWith("min_") && (this.state["max" + name.substring(3)] < value))
-            {
-                this.setState({["max" + name.substring(3)]: value});
-            }
-            if (name.startsWith("max_") && (this.state["min" + name.substring(3)] > value))
-            {
-                this.setState({["min" + name.substring(3)]: value});
-            }
+            value = true;
+        }
+        else if (value === "false")
+        {
+            value = false
+        }
+        else
+        {
+            value = parseFloat(value);
+        }
+        this.setState({[name]: value});
+        if (name.startsWith("min_") && (this.state["max" + name.substring(3)] < value))
+        {
+            this.setState({["max" + name.substring(3)]: value});
+        }
+        if (name.startsWith("max_") && (this.state["min" + name.substring(3)] > value))
+        {
+            this.setState({["min" + name.substring(3)]: value});
         }
     }
 
