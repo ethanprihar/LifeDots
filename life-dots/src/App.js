@@ -10,8 +10,6 @@ import WorldView from "./views/WorldView";
 
 const default_style = 
 {
-  //width: '100vw',
-  //height: '100vh',
   color: '#b3b3b3',
   backgroundColor: '#000000',
   margin: 0,
