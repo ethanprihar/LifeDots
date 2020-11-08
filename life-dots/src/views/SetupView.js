@@ -33,7 +33,6 @@ const config_button_style =
     borderRadius: "1vh",
     height: "10vh",
     width: "30vh",
-    marginTop: "5vh",
     marginLeft: "2vh",
     marginRight: "2vh",
     color: "#b3b3b3",
@@ -403,6 +402,7 @@ export default class SetupView extends React.Component
                     </tr>
                 </table>
 
+                <p style={subtitle_style}>Preset Configurations</p>
                 <button style={config_button_style} onClick={this.gentle_rain}>
                     Gentle Rain
                 </button>
