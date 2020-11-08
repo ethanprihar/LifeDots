@@ -36,45 +36,12 @@ export default class WorldView extends React.Component
     
     render()
     {
-        let trap_min = Infinity;
-        let trap_max = 0;
-        let food_min = Infinity;
-        let food_max = 0;
-        let dot_min = Infinity;
-        let dot_max = 0;
-        for (let pos in this.state.world.trap_map)
-        {
-            if (this.state.world.trap_map[pos] < trap_min)
-            {
-                trap_min = this.state.world.trap_map[pos];
-            }
-            if (this.state.world.trap_map[pos] > trap_max)
-            {
-                trap_max = this.state.world.trap_map[pos];
-            }
-        }
-        for (let pos in this.state.world.food_map)
-        {
-            if (this.state.world.food_map[pos] < food_min)
-            {
-                food_min = this.state.world.food_map[pos];
-            }
-            if (this.state.world.food_map[pos] > food_max)
-            {
-                food_max = this.state.world.food_map[pos];
-            }
-        }
-        for (let pos in this.state.world.dot_map)
-        {
-            if (this.state.world.dot_map[pos].genome.max_size < dot_min)
-            {
-                dot_min = this.state.world.dot_map[pos].genome.max_size;
-            }
-            if (this.state.world.dot_map[pos].genome.max_size > dot_max)
-            {
-                dot_max = this.state.world.dot_map[pos].genome.max_size;
-            }
-        }
+        const trap_min = this.state.world.trap_placer.min_trap_damage;
+        const trap_max = this.state.world.trap_placer.max_trap_damage * 2;
+        const food_min = this.state.world.food_placer.min_food_per_drop;
+        const food_max = this.state.world.food_placer.max_food_per_drop * 2;
+        const dot_min = this.state.world.dot_placer.min_max_size;
+        const dot_max = this.state.world.dot_placer.max_max_size;
         
         let components = [];
         for (let pos in this.state.world.wall_map)

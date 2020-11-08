@@ -4,12 +4,13 @@ export default class FoodView extends React.Component
 {    
     render()
     {
-        const scaled_size = this.props.food_max === this.props.food_min ? 
+        let scaled_size = this.props.food_max === this.props.food_min ? 
                             this.props.cell_size : 
                            (this.props.food_size - this.props.food_min) / 
                            (this.props.food_max - this.props.food_min) * 
                             this.props.cell_size * 0.5 + 
                             this.props.cell_size * 0.5;
+        scaled_size = Math.min(Math.max(scaled_size, this.props.cell_size / 2), this.props.cell_size);
         const scaled_offset = (this.props.cell_size - scaled_size) / 2;
         const cell_style = 
         {

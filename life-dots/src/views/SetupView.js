@@ -28,6 +28,20 @@ const form_style =
     marginBottom: "7vh",
 }
 
+const config_button_style = 
+{
+    borderRadius: "1vh",
+    height: "10vh",
+    width: "30vh",
+    marginTop: "5vh",
+    marginLeft: "2vh",
+    marginRight: "2vh",
+    color: "#b3b3b3",
+    backgroundColor: "#000000",
+    fontSize: "5vh",
+    border: "2px solid #b3b3b3",
+}
+
 const table_style = 
 {
     width: "90vw",
@@ -81,46 +95,46 @@ export default class SetupView extends React.Component
             tick_time: 100,
             
             dot_num: 100, 
-            min_max_size: 10, 
-            max_max_size: 1000, 
+            min_max_size: 50, 
+            max_max_size: 200, 
             min_split_frac: 0, 
             max_split_frac: 1, 
             min_eat_ratio: 0, 
             max_eat_ratio: 1, 
-            min_speed: 0, 
+            min_speed: 1, 
             max_speed: 10, 
             min_view: 1, 
-            max_view: 5, 
+            max_view: 1, 
             min_max_mut_pct: 0.01, 
             max_max_mut_pct: 0.1, 
             reset_on_extinction: true,
 
-            funiform: true,
+            funiform: false,
             ticks_between_rain: 10, 
             drops_per_rain: 20, 
             min_drop_size: 1, 
             max_drop_size: 1,
-            min_food_per_drop: 1, 
-            max_food_per_drop: 10, 
-            delta_ticks_between_rain: 1, 
-            delta_drops_per_rain: -0.1, 
-            delta_min_drop_size: 0.1, 
-            delta_max_drop_size: 0.1, 
-            delta_min_food_per_drop: 1, 
-            delta_max_food_per_drop: 1, 
-            phase_length: 1000, 
+            min_food_per_drop: 10, 
+            max_food_per_drop: 100, 
+            delta_ticks_between_rain: 0, 
+            delta_drops_per_rain: 0, 
+            delta_min_drop_size: 0, 
+            delta_max_drop_size: 0, 
+            delta_min_food_per_drop: 0, 
+            delta_max_food_per_drop: 0, 
+            phase_length: 0, 
             will_cycle: false,
 
             tuniform: true, 
-            trap_num: 10, 
-            min_trap_size: 2, 
-            max_trap_size: 5, 
-            min_trap_damage: 1, 
-            max_trap_damage: 1,
+            trap_num: 5, 
+            min_trap_size: 3, 
+            max_trap_size: 3, 
+            min_trap_damage: 100, 
+            max_trap_damage: 100,
 
-            section_rows: 2, 
-            section_cols: 2, 
-            density: 0.9,
+            section_rows: 1, 
+            section_cols: 1, 
+            density: 0,
         }
 
         this.change_input = this.change_input.bind(this);
@@ -162,6 +176,156 @@ export default class SetupView extends React.Component
         }
     }
 
+    gentle_rain = (event) =>
+    {
+        event.preventDefault()
+        this.setState(
+            {
+                dot_num: 100, 
+                min_max_size: 50, 
+                max_max_size: 200, 
+                min_split_frac: 0, 
+                max_split_frac: 1, 
+                min_eat_ratio: 0, 
+                max_eat_ratio: 1, 
+                min_speed: 1, 
+                max_speed: 10, 
+                min_view: 1, 
+                max_view: 1, 
+                min_max_mut_pct: 0.01, 
+                max_max_mut_pct: 0.1, 
+                reset_on_extinction: true,
+
+                funiform: false,
+                ticks_between_rain: 10, 
+                drops_per_rain: 20, 
+                min_drop_size: 1, 
+                max_drop_size: 1,
+                min_food_per_drop: 10, 
+                max_food_per_drop: 100, 
+                delta_ticks_between_rain: 0, 
+                delta_drops_per_rain: 0, 
+                delta_min_drop_size: 0, 
+                delta_max_drop_size: 0, 
+                delta_min_food_per_drop: 0, 
+                delta_max_food_per_drop: 0, 
+                phase_length: 0, 
+                will_cycle: false,
+
+                tuniform: true, 
+                trap_num: 5, 
+                min_trap_size: 3, 
+                max_trap_size: 3, 
+                min_trap_damage: 100, 
+                max_trap_damage: 100,
+
+                section_rows: 1, 
+                section_cols: 1, 
+                density: 0,
+            }
+        );
+    }
+
+    flash_flood = (event) =>
+    {
+        event.preventDefault()
+        this.setState(
+            {
+                dot_num: 100, 
+                min_max_size: 50, 
+                max_max_size: 200, 
+                min_split_frac: 0, 
+                max_split_frac: 1, 
+                min_eat_ratio: 0, 
+                max_eat_ratio: 1, 
+                min_speed: 1, 
+                max_speed: 10, 
+                min_view: 1, 
+                max_view: 1, 
+                min_max_mut_pct: 0.01, 
+                max_max_mut_pct: 0.1, 
+                reset_on_extinction: true,
+
+                funiform: true,
+                ticks_between_rain: 500, 
+                drops_per_rain: 1, 
+                min_drop_size: 100, 
+                max_drop_size: 100,
+                min_food_per_drop: 100, 
+                max_food_per_drop: 100, 
+                delta_ticks_between_rain: 0, 
+                delta_drops_per_rain: 0, 
+                delta_min_drop_size: 0, 
+                delta_max_drop_size: 0, 
+                delta_min_food_per_drop: 0, 
+                delta_max_food_per_drop: 0, 
+                phase_length: 0, 
+                will_cycle: false,
+
+                tuniform: true, 
+                trap_num: 5, 
+                min_trap_size: 1, 
+                max_trap_size: 5, 
+                min_trap_damage: 100, 
+                max_trap_damage: 100,
+
+                section_rows: 1, 
+                section_cols: 1, 
+                density: 1,
+            }
+        );
+    }
+
+    quadrants = (event) =>
+    {
+        event.preventDefault()
+        this.setState(
+            {
+                dot_num: 100, 
+                min_max_size: 10, 
+                max_max_size: 1000, 
+                min_split_frac: 0, 
+                max_split_frac: 1, 
+                min_eat_ratio: 0, 
+                max_eat_ratio: 1, 
+                min_speed: 1, 
+                max_speed: 10, 
+                min_view: 1, 
+                max_view: 5, 
+                min_max_mut_pct: 0.01, 
+                max_max_mut_pct: 0.1, 
+                reset_on_extinction: true,
+
+                funiform: true,
+                ticks_between_rain: 10, 
+                drops_per_rain: 20, 
+                min_drop_size: 1, 
+                max_drop_size: 1,
+                min_food_per_drop: 1, 
+                max_food_per_drop: 10, 
+                delta_ticks_between_rain: 1, 
+                delta_drops_per_rain: -0.1, 
+                delta_min_drop_size: 0.1, 
+                delta_max_drop_size: 0.1, 
+                delta_min_food_per_drop: 1, 
+                delta_max_food_per_drop: 1, 
+                phase_length: 1000, 
+                will_cycle: false,
+
+                tuniform: true, 
+                trap_num: 10, 
+                min_trap_size: 2, 
+                max_trap_size: 5, 
+                min_trap_damage: 1, 
+                max_trap_damage: 1,
+
+                section_rows: 2, 
+                section_cols: 2, 
+                density: 0.9,
+            }
+        );
+    }
+    
     submit = (event) =>
     {   
         const rows = Math.floor(window.innerHeight / this.state.cell_size)
@@ -238,6 +402,16 @@ export default class SetupView extends React.Component
                         </td>
                     </tr>
                 </table>
+
+                <button style={config_button_style} onClick={this.gentle_rain}>
+                    Gentle Rain
+                </button>
+                <button style={config_button_style} onClick={this.flash_flood}>
+                    Flash Flood
+                </button>
+                <button style={config_button_style} onClick={this.quadrants}>
+                    Quadrants
+                </button>
                 
                 <p style={subtitle_style}>Dot Configuration</p>
                 <table style={table_style}>
@@ -331,7 +505,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} 
                             name="min_speed" 
                             value={this.state.min_speed} 
-                            type="number" min="0" required/>
+                            type="number" min="1" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Speed:

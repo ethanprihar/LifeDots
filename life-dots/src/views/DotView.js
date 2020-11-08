@@ -16,12 +16,13 @@ export default class DotView extends React.Component
             signal_color += HEXTABLE[(sig_col_val / 16) | 0];
             signal_color += HEXTABLE[(sig_col_val % 16) | 0];
         }
-        const scaled_size = this.props.dot_max === this.props.dot_min ? 
+        let scaled_size = this.props.dot_max === this.props.dot_min ? 
                             this.props.cell_size : 
                            (this.props.dot_size - this.props.dot_min) / 
                            (this.props.dot_max - this.props.dot_min) * 
                             this.props.cell_size * 0.5 + 
                             this.props.cell_size * 0.5;
+        scaled_size = Math.min(Math.max(scaled_size, this.props.cell_size / 2), this.props.cell_size);
         const scaled_offset = (this.props.cell_size - scaled_size) / 2;
         const dot_style = 
         {

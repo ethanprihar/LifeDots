@@ -82,6 +82,7 @@ export default class RandomFood extends Placer
         this.rows = rows;
         this.cols = cols;
         let map: Record<string, number> = {};
+        this.update(map);
         return map;
     }
 
@@ -120,6 +121,19 @@ export default class RandomFood extends Placer
                     }
                 }
             }
+            // Adjust the cycle if the end of the phase is reached
+            if (this.phase_count === this.phase_length)
+            {
+                this.phase_count = 0;
+                if (this.phase_side === 1 || this.will_cycle)
+                {
+                    this.phase_side *= -1;
+                }
+            }
+            else
+            {
+                this.phase_count++;
+            }
             // Adjust rain quantities based on phase
             if (this.phase_side === 1)
             {
@@ -141,36 +155,18 @@ export default class RandomFood extends Placer
             }
             // Reset the rain tick count and increment the phase
             this.ticks_until_rain = this.ticks_between_rain;
-            this.phase_count++;
-            // Adjust the cycle if the end of the phase is reached
-            if (this.phase_count === this.phase_length)
-            {
-                this.phase_count = 0;
-                if (this.phase_side === 1 || this.will_cycle)
-                {
-                    this.phase_side *= -1;
-                }
-            }
         }
     }
 
     get_new_pos(r: number, c: number): string
     {
-        if (r < 0)
+        if ((r < 0) || (r >= this.rows))
         {
-            r += this.rows;
+            r = r % this.rows;
         }
-        else if (r >= this.rows)
+        if ((c < 0) || (c >= this.cols))
         {
-            r -= this.rows;
-        }
-        if (c < 0)
-        {
-            c += this.cols;
-        }
-        else if (c >= this.cols)
-        {
-            c -= this.cols;
+            c = c % this.cols;
         }
         return(r + "," + c);
     }
