@@ -86,8 +86,8 @@ export default class WorldView extends React.Component
         let wall_placer = new RandomWall(section_rows, 
                                          section_cols, 
                                          density);
-        let rows = 66;
-        let cols = 66;
+        let rows = 66*3;
+        let cols = 170*3;
         let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
         this.state = 
         {
@@ -113,7 +113,7 @@ export default class WorldView extends React.Component
     
     render()
     {
-        const cell_size = 15;
+        const cell_size = 5;
 
         let trap_min = Infinity;
         let trap_max = 0;

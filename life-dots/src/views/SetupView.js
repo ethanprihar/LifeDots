@@ -137,9 +137,7 @@ export default class SetupView extends React.Component
                             name="cell_size" 
                             value={this.state.cell_size} 
                             onChange={this.change_input} 
-                            type="number" 
-                            min="5" 
-                            required/>
+                            type="number" min="5" required/>
                         </td>
                         <td style={label_entry}>
                             Minimum Tick Time (Milliseconds):
@@ -149,9 +147,7 @@ export default class SetupView extends React.Component
                             name="tick_time" 
                             value={this.state.tick_time} 
                             onChange={this.change_input} 
-                            type="number" 
-                            min="1" 
-                            required/>
+                            type="number" min="1" required/>
                         </td>
                     </tr>
                 </table>
@@ -167,9 +163,7 @@ export default class SetupView extends React.Component
                             name="dot_num" 
                             value={this.state.dot_num} 
                             onChange={this.change_input} 
-                            type="number" 
-                            min="1" 
-                            required/>
+                            type="number" min="1" required/>
                         </td>
                         <td style={label_entry}>
                             Spawn More Dots Upon Extinction:
@@ -177,7 +171,7 @@ export default class SetupView extends React.Component
                         <td style={input_entry}>
                             <select style={input_style}
                             name="reset_on_extinction" 
-                            value={this.state.reset_on_extinction}
+                            value={this.state.reset_on_extinction} 
                             onChange={this.change_input}>
                                 <option value={true}>Yes</option>
                                 <option value={false}>No</option>
@@ -190,15 +184,20 @@ export default class SetupView extends React.Component
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
-                            type="number" 
-                            min="0" 
-                            required/>
+                            name="min_max_size" 
+                            value={this.state.min_max_size} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Dot Size:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="max_max_size" 
+                            value={this.state.max_max_size} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -206,13 +205,21 @@ export default class SetupView extends React.Component
                             Minimum Split Fraction:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" max="1" step="0.1" required/>
+                            <input style={input_style} 
+                            name="min_split_frac" 
+                            value={this.state.min_split_frac} 
+                            onChange={this.change_input} 
+                            type="number" min="0" max="1" step="0.1" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Split Fraction:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" max="1" step="0.1" required/>
+                            <input style={input_style} 
+                            name="max_split_frac" 
+                            value={this.state.max_split_frac} 
+                            onChange={this.change_input} 
+                            type="number" min="0" max="1" step="0.1" required/>
                         </td>
                     </tr>
                     <tr>
@@ -220,13 +227,21 @@ export default class SetupView extends React.Component
                             Minimum Food Absorbtion:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" max="1" step="0.1" required/>
+                            <input style={input_style} 
+                            name="min_eat_ratio" 
+                            value={this.state.min_eat_ratio} 
+                            onChange={this.change_input} 
+                            type="number" min="0" max="1" step="0.1" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Food Absorbtion:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" max="1" step="0.1" required/>
+                            <input style={input_style} 
+                            name="max_eat_ratio" 
+                            value={this.state.max_eat_ratio} 
+                            onChange={this.change_input} 
+                            type="number" min="0" max="1" step="0.1" required/>
                         </td>
                     </tr>
                     <tr>
@@ -234,13 +249,21 @@ export default class SetupView extends React.Component
                             Minimum Speed:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="min_speed" 
+                            value={this.state.min_speed} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Speed:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="max_speed" 
+                            value={this.state.max_speed} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -248,13 +271,21 @@ export default class SetupView extends React.Component
                             Minimum Perception:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="1" required/>
+                            <input style={input_style} 
+                            name="min_view" 
+                            value={this.state.min_view} 
+                            onChange={this.change_input} 
+                            type="number" min="1" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Perception:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="1" required/>
+                            <input style={input_style} 
+                            name="max_view" 
+                            value={this.state.max_view} 
+                            onChange={this.change_input} 
+                            type="number" min="1" required/>
                         </td>
                     </tr>
                     <tr>
@@ -262,13 +293,21 @@ export default class SetupView extends React.Component
                             Minimum Mutation Rate:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number"  min="0" step="0.1" required/>
+                            <input style={input_style} 
+                            name="min_max_mut_pct" 
+                            value={this.state.min_max_mut_pct} 
+                            onChange={this.change_input} 
+                            type="number"  min="0" step="0.1" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Mutation Rate:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number"  min="0" step="0.1" required/>
+                            <input style={input_style} 
+                            name="max_max_mut_pct" 
+                            value={this.state.max_max_mut_pct} 
+                            onChange={this.change_input} 
+                            type="number"  min="0" step="0.1" required/>
                         </td>
                     </tr>
                 </table>
@@ -280,7 +319,10 @@ export default class SetupView extends React.Component
                             Distribution:
                         </td>
                         <td style={input_entry}>
-                            <select style={input_style}>
+                            <select style={input_style}
+                            name="funiform" 
+                            value={this.state.funiform} 
+                            onChange={this.change_input}>
                                 <option value={true}>Uniform</option>
                                 <option value={false}>Normal</option>
                             </select>
@@ -289,7 +331,10 @@ export default class SetupView extends React.Component
                             Food Distribution Cycle:
                         </td>
                         <td style={input_entry}>
-                            <select style={input_style}>
+                            <select style={input_style}
+                            name="will_cycle" 
+                            value={this.state.will_cycle} 
+                            onChange={this.change_input}>
                                 <option value={true}>On</option>
                                 <option value={false}>Off</option>
                             </select>
@@ -300,13 +345,21 @@ export default class SetupView extends React.Component
                             Ticks Between Spawn:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="ticks_between_rain" 
+                            value={this.state.ticks_between_rain} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Drops Per Spawn:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="drops_per_rain" 
+                            value={this.state.drops_per_rain} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -314,13 +367,21 @@ export default class SetupView extends React.Component
                             Minimum Spawn Size:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="min_drop_size" 
+                            value={this.state.min_drop_size} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
-                            Minimum Spawn Size:
+                            Maximum Spawn Size:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="max_drop_size" 
+                            value={this.state.max_drop_size} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -328,13 +389,21 @@ export default class SetupView extends React.Component
                             Minimum Food Per Spawn:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="min_food_per_drop" 
+                            value={this.state.min_food_per_drop} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Food Per Spawn:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="max_food_per_drop" 
+                            value={this.state.max_food_per_drop} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -342,7 +411,11 @@ export default class SetupView extends React.Component
                             Spawns Per Phase:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="phase_length" 
+                            value={this.state.phase_length} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -350,13 +423,21 @@ export default class SetupView extends React.Component
                             Ticks Between Spawn Change:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" required/>
+                            <input style={input_style} 
+                            name="delta_ticks_between_rain" 
+                            value={this.state.delta_ticks_between_rain} 
+                            onChange={this.change_input} 
+                            type="number" required/>
                         </td>
                         <td style={label_entry}>
                             Drops Per Spawn Change:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" required/>
+                            <input style={input_style} 
+                            name="delta_drops_per_rain" 
+                            value={this.state.delta_drops_per_rain} 
+                            onChange={this.change_input} 
+                            type="number" required/>
                         </td>
                     </tr>
                     <tr>
@@ -364,13 +445,21 @@ export default class SetupView extends React.Component
                             Minimum Spawn Size Change:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" required/>
+                            <input style={input_style} 
+                            name="delta_min_drop_size" 
+                            value={this.state.delta_min_drop_size} 
+                            onChange={this.change_input} 
+                            type="number" required/>
                         </td>
                         <td style={label_entry}>
-                            Minimum Spawn Size Change:
+                            Maximum Spawn Size Change:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" required/>
+                            <input style={input_style} 
+                            name="delta_max_drop_size" 
+                            value={this.state.delta_max_drop_size} 
+                            onChange={this.change_input} 
+                            type="number" required/>
                         </td>
                     </tr>
                     <tr>
@@ -378,13 +467,21 @@ export default class SetupView extends React.Component
                             Minimum Food Per Spawn Change:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" required/>
+                            <input style={input_style} 
+                            name="delta_min_food_per_drop" 
+                            value={this.state.delta_min_food_per_drop} 
+                            onChange={this.change_input} 
+                            type="number" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Food Per Spawn Change:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" required/>
+                            <input style={input_style} 
+                            name="delta_max_food_per_drop" 
+                            value={this.state.delta_max_food_per_drop} 
+                            onChange={this.change_input} 
+                            type="number" required/>
                         </td>
                     </tr>
                 </table>
@@ -396,13 +493,20 @@ export default class SetupView extends React.Component
                             Trap Number:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="trap_num" 
+                            value={this.state.trap_num} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Distribution:
                         </td>
                         <td style={input_entry}>
-                            <select style={input_style}>
+                            <select style={input_style}
+                            name="tuniform" 
+                            value={this.state.tuniform} 
+                            onChange={this.change_input}>
                                 <option value={true}>Uniform</option>
                                 <option value={false}>Normal</option>
                             </select>
@@ -413,13 +517,21 @@ export default class SetupView extends React.Component
                             Minimum Trap Size:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="min_trap_size" 
+                            value={this.state.min_trap_size} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Trap Size:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="max_trap_size" 
+                            value={this.state.max_trap_size} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                     <tr>
@@ -427,13 +539,21 @@ export default class SetupView extends React.Component
                             Minimum Trap Damage:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="min_trap_damage" 
+                            value={this.state.min_trap_damage} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                         <td style={label_entry}>
                             Maximum Trap Damage:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" required/>
+                            <input style={input_style} 
+                            name="max_trap_damage" 
+                            value={this.state.max_trap_damage} 
+                            onChange={this.change_input} 
+                            type="number" min="0" required/>
                         </td>
                     </tr>
                 </table>
@@ -445,7 +565,11 @@ export default class SetupView extends React.Component
                             Wall Density:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="0" max="1" step="0.1" required/>
+                            <input style={input_style} 
+                            name="density" 
+                            value={this.state.density} 
+                            onChange={this.change_input} 
+                            type="number" min="0" max="1" step="0.1" required/>
                         </td>
                     </tr>
                     <tr>
@@ -453,13 +577,21 @@ export default class SetupView extends React.Component
                             Partition Rows:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="1" required/>
+                            <input style={input_style} 
+                            name="section_rows" 
+                            value={this.state.section_rows} 
+                            onChange={this.change_input} 
+                            type="number" min="1" required/>
                         </td>
                         <td style={label_entry}>
                             Partition Columns:
                         </td>
                         <td style={input_entry}>
-                            <input style={input_style} type="number" min="1" required/>
+                            <input style={input_style} 
+                            name="section_cols" 
+                            value={this.state.section_cols} 
+                            onChange={this.change_input} 
+                            type="number" min="1" required/>
                         </td>
                     </tr>
                 </table>
