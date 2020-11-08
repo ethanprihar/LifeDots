@@ -75,11 +75,19 @@ export default class World
 
     get_new_pos(r: number, c: number): string
     {
-        if ((r < 0) || (r >= this.rows))
+        if (r < 0)
+        {
+            r = this.rows - (-r % this.rows);
+        }
+        else if (r >= this.rows)
         {
             r = r % this.rows;
         }
-        if ((c < 0) || (c >= this.cols))
+        if (c < 0)
+        {
+            c = this.cols - (-c % this.cols);
+        }
+        else if (c >= this.cols)
         {
             c = c % this.cols;
         }

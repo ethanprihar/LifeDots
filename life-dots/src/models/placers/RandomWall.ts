@@ -26,11 +26,15 @@ export default class RandomWall extends Placer
         for (let c: number = 0; c < cols; c++)
         {
             let r: number = 0
-            while (r < rows)
+            while (r < rows-1)
             {
                 if (Math.random() < this.density)
                 {
                     map[Math.floor(r) + "," + c] = 1;
+                    if (r === 0)
+                    {
+                        map[(rows-1) + "," + c] = 1;
+                    }
                 }
                 r += (rows - 1) / this.section_rows;
             }
@@ -39,11 +43,15 @@ export default class RandomWall extends Placer
         for (let r: number = 0; r < rows; r++)
         {
             let c: number = 0
-            while (c < cols)
+            while (c < cols-1)
             {
                 if (Math.random() < this.density)
                 {
                     map[r + "," + Math.floor(c)] = 1;
+                    if (c === 0)
+                    {
+                        map[r + "," + (cols-1)] = 1;
+                    }
                 }
                 c += (cols - 1) / this.section_cols;
             }

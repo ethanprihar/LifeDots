@@ -65,11 +65,19 @@ export default class RandomTrap extends Placer
 
     get_new_pos(rows: number, cols: number, r: number, c: number): string
     {
-        if ((r < 0) || (r >=rows))
+        if (r < 0)
+        {
+            r = rows - (-r % rows);
+        }
+        else if (r >= rows)
         {
             r = r % rows;
         }
-        if ((c < 0) || (c >= cols))
+        if (c < 0)
+        {
+            c = cols - (-c % cols);
+        }
+        else if (c >= cols)
         {
             c = c % cols;
         }
