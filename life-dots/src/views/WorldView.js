@@ -17,6 +17,7 @@ export default class WorldView extends React.Component
             world: props.world,
         }
         this.local_storage = window.localStorage;
+        this.warned = "no";
         this.auto_save()
     }
 
@@ -40,7 +41,16 @@ export default class WorldView extends React.Component
 
     auto_save()
     {
-        this.local_storage.setItem("world_2.0", JSON.stringify(this.state))
+        let save_string = JSON.stringify(this.state);
+        if (save_string.length < 5000000)
+        {
+            this.local_storage.setItem("world_2.0", JSON.stringify(this.state));
+        }
+        else if (this.warned === "no")
+        {
+            alert("This world is currently too large to save in local storage. Every 30 seconds another save will be attempted, but this will be your only alert.");
+            this.warned = "yes";
+        }
     }
     
     render()

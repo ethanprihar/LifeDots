@@ -298,7 +298,7 @@ export default class SetupView extends React.Component
         );
     }
 
-    quadrants = (event) =>
+    office_space = (event) =>
     {
         event.preventDefault()
         this.setState(
@@ -434,8 +434,8 @@ export default class SetupView extends React.Component
                 <button style={config_button_style} onClick={this.flash_flood}>
                     Flash Flood
                 </button>
-                <button style={config_button_style} onClick={this.quadrants}>
-                    Quadrants
+                <button style={config_button_style} onClick={this.office_space}>
+                    Office Space
                 </button>
                 
                 <p style={subtitle_style}>Dot Configuration</p>
