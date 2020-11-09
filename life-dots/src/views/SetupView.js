@@ -10,7 +10,7 @@ const setup_style =
 {
     textAlign: "center",
     paddingTop: "5vh",
-    marginBottom: "20vh",
+    marginBottom: "25vh",
 }
 
 const title_style = 
@@ -95,11 +95,20 @@ const footer_style =
     position: "fixed",
     left: "0",
     bottom: "0",
-    paddingTop: "2.5vh",
+    paddingTop: "1vh",
     width: "100vw",
-    height: "12.5vh",
+    height: "18vh",
     overflowY: "scroll",
     overflowX: "auto",
+}
+
+const warning_style = 
+{
+    color: "#b3b3b3",
+    backgroundColor: "#000000",
+    fontSize: "3vh",
+    textAlign: "center",
+    paddingBottom: "1.5vh",
 }
 
 export default class SetupView extends React.Component
@@ -342,8 +351,8 @@ export default class SetupView extends React.Component
     submit = (event) =>
     {   
         event.preventDefault();
-        const rows = Math.floor(window.innerHeight / this.state.cell_size)
-        const cols = Math.floor(window.innerWidth / this.state.cell_size)
+        const rows = Math.floor(window.innerHeight / this.state.cell_size);
+        const cols = Math.floor(window.innerWidth / this.state.cell_size);
         let dot_placer = new RandomDots(this.state.dot_num,  
                                         this.state.min_max_size, 
                                         this.state.max_max_size, 
@@ -382,8 +391,9 @@ export default class SetupView extends React.Component
         let wall_placer = new RandomWall(this.state.section_rows, 
                                          this.state.section_cols, 
                                          this.state.density);
-        let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer)
-        this.props.setPage("Start", this.state.tick_time, this.state.cell_size, world)
+        let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer);
+        world.init();
+        this.props.setPage("Start", this.state.tick_time, this.state.cell_size, world);
     }
     
     render()
@@ -835,6 +845,9 @@ export default class SetupView extends React.Component
                 </table>
             </form>
             <div style={footer_style}>
+                <div style={warning_style}>
+                    Pressing start will overwrite any existing local world saves.
+                </div>
                 <button form="config" style={button_style} type="submit" value="Submit">
                     Start
                 </button>

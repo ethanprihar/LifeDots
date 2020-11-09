@@ -16,6 +16,8 @@ export default class WorldView extends React.Component
             cell_size: props.cell_size,
             world: props.world,
         }
+        this.local_storage = window.localStorage;
+        this.auto_save()
     }
 
     update_world()
@@ -26,12 +28,19 @@ export default class WorldView extends React.Component
 
     componentDidMount()
     {
-        this.interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
+        this.world_interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
+        this.save_interval = setInterval(() => this.auto_save(), 30000);
     }
 
     componentWillUnmount()
     {
-        clearInterval(this.interval);
+        clearInterval(this.world_interval);
+        clearInterval(this.save_interval);
+    }
+
+    auto_save()
+    {
+        this.local_storage.setItem("world_2.0", JSON.stringify(this.state))
     }
     
     render()

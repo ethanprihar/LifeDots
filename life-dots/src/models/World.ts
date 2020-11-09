@@ -16,13 +16,13 @@ export default class World
     // The wall placer for the world.
     wall_placer: Placer;
     // The dot map for the world.
-    dot_map: Record<string, Dot>;
+    dot_map: Record<string, Dot> = {};
     // The food map for the world.
-    food_map: Record<string, number>;
+    food_map: Record<string, number> = {};
     // The trap map for the world.
-    trap_map: Record<string, number>;
+    trap_map: Record<string, number> = {};
     // The wall map for the world.
-    wall_map: Record<string, number>;
+    wall_map: Record<string, number> = {};
     
     constructor(rows: number, 
                 cols: number, 
@@ -37,12 +37,15 @@ export default class World
         this.food_placer = food_placer;
         this.trap_placer = trap_placer;
         this.wall_placer = wall_placer;
+    }
+
+    init()
+    {
         this.dot_map = this.dot_placer.init(this.rows, this.cols);
         this.food_map = this.food_placer.init(this.rows, this.cols);
         this.trap_map = this.trap_placer.init(this.rows, this.cols);
         this.wall_map = this.wall_placer.init(this.rows, this.cols);
         this.remove_objects_in_walls();
-        console.log(this)
     }
 
     update()
