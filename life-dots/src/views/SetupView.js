@@ -162,8 +162,7 @@ export default class SetupView extends React.Component
             section_rows: 1, 
             section_cols: 1, 
             density: 0,
-        }
-
+        };
         this.change_input = this.change_input.bind(this);
     }
 

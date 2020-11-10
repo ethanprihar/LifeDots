@@ -8,6 +8,8 @@ import RandomWall from "../models/placers/RandomWall"
 import Dot from "../models/Dot"
 import Genome from "../models/Genome"
 var ndarray = require("ndarray");
+var LZString = require("lz-string")
+var localforage = require("localforage")
 
 const main_menu_style = 
 {
@@ -51,13 +53,24 @@ const disabled_style =
 
 export default class MainMenuView extends React.Component
 {   
-    render()
+    constructor(props)
     {
-        let local_storage = window.localStorage;
-        let saved_state = local_storage.getItem("world_2.0");
-        if (saved_state != null)
+        super(props);
+        this.state = 
         {
-            saved_state = JSON.parse(saved_state);
+            loading: "init", 
+            tick_time: -1,
+            cell_size: -1,
+            world: "",
+        };
+        this.load_world = this.load_world.bind(this);
+    }
+    
+    load_world(err, value)
+    {
+        try
+        {
+            let saved_state = JSON.parse(LZString.decompressFromUTF16(value));
             let world = Object.assign(new World(), saved_state.world);
             world.dot_placer = Object.assign(new RandomDots(), world.dot_placer);
             world.food_placer = Object.assign(new RandomFood(), world.food_placer);
@@ -65,11 +78,32 @@ export default class MainMenuView extends React.Component
             world.wall_placer = Object.assign(new RandomWall(), world.wall_placer);
             for (let pos in world.dot_map)
             {
-                world.dot_map[pos] = Object.assign(new Dot(0, new Genome()), world.dot_map[pos]);
+                world.dot_map[pos] = Object.assign(new Dot(), world.dot_map[pos]);
                 world.dot_map[pos].genome = Object.assign(new Genome(), world.dot_map[pos].genome);
                 world.dot_map[pos].genome.weights = ndarray(new Float64Array(Object.values(world.dot_map[pos].genome.weights.data)), world.dot_map[pos].genome.weights.shape);
             }
-            return (
+            this.setState({loading: "complete",
+                           tick_time: saved_state.tick_time, 
+                           cell_size: saved_state.cell_size,               
+                           world: world,});
+        }
+        catch
+        {
+            this.setState({loading: "failed",});
+        }
+    }
+
+    componentDidMount()
+    {
+        this.setState({loading: "true"})
+        localforage.getItem('world', this.load_world);
+    }
+    
+    render()
+    {
+        if (this.state.loading === "complete")
+        {
+            return(
                 <div style={main_menu_style}>
                     <p style={text_style}>Life Dots</p>
                     <br></br>
@@ -80,27 +114,30 @@ export default class MainMenuView extends React.Component
                         Setup
                     </button>
                     <br></br>
-                    <button style={button_style} onClick={() => this.props.setPage("Start", saved_state.tick_time, saved_state.cell_size, world)}>
+                    <button style={button_style} onClick={() => this.props.setPage("Start", this.state.tick_time, this.state.cell_size, this.state.world)}>
                         Resume
                     </button>
                 </div>
             );
         }
-        return (
-        <div style={main_menu_style}>
-            <p style={text_style}>Life Dots</p>
-            <br></br>
-            <button style={button_style} onClick={() => this.props.setPage("About")}>
-                About
-            </button>
-            <button style={button_style} onClick={() => this.props.setPage("Setup")}>
-                Setup
-            </button>
-            <br></br>
-            <button style={disabled_style}>
-                Resume
-            </button>
-        </div>
-        );
+        else
+        {
+            return(
+                <div style={main_menu_style}>
+                    <p style={text_style}>Life Dots</p>
+                    <br></br>
+                    <button style={button_style} onClick={() => this.props.setPage("About")}>
+                        About
+                    </button>
+                    <button style={button_style} onClick={() => this.props.setPage("Setup")}>
+                        Setup
+                    </button>
+                    <br></br>
+                    <button style={disabled_style}>
+                        Resume
+                    </button>
+                </div>
+            );
+        }
     }
 }

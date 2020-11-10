@@ -20,17 +20,17 @@ export default class Dot
         this.size = start_size;
         this.genome = genome;
         this.signal = 0;
-        this.ticks_until_move = genome.speed;
+        this.ticks_until_move = 0;
     }
 
     move(raw_input: number[]): number[]
     {
-        let input = ndarray(new Float64Array(raw_input), [1, raw_input.length])
-        let output: any = ndarray(new Float64Array(10), [1, 10]);
-        gemm(output, input, this.genome.weights);
-        this.signal = Math.min(Math.max(output.get(0,9), -1), 1);
         if (this.ticks_until_move <= 0)
         {
+            let input = ndarray(new Float64Array(raw_input), [1, raw_input.length])
+            let output: any = ndarray(new Float64Array(10), [1, 10]);
+            gemm(output, input, this.genome.weights);
+            this.signal = Math.min(Math.max(output.get(0,9), -1), 1);
             this.size -= this.genome.max_size * Math.floor(this.genome.view) / 100;
             this.ticks_until_move = this.genome.speed;
             output = ndarray(output.data.subarray(0,9), [9]);

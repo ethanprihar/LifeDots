@@ -5,20 +5,23 @@ import FoodView from "./FoodView";
 import TrapView from "./TrapView";
 import WallView from "./WallView";
 
+var LZString = require("lz-string")
+var localforage = require("localforage")
+
 export default class WorldView extends React.Component
 {   
     constructor(props)
     {
-        super(props)
+        super(props);
         this.state = 
         {
             tick_time: props.tick_time,
             cell_size: props.cell_size,
             world: props.world,
-        }
+        };
         this.local_storage = window.localStorage;
         this.warned = "no";
-        this.auto_save()
+        this.auto_save();
     }
 
     update_world()
@@ -30,7 +33,7 @@ export default class WorldView extends React.Component
     componentDidMount()
     {
         this.world_interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
-        this.save_interval = setInterval(() => this.auto_save(), 30000);
+        this.save_interval = setInterval(() => this.auto_save(), 300000);
     }
 
     componentWillUnmount()
@@ -41,14 +44,14 @@ export default class WorldView extends React.Component
 
     auto_save()
     {
-        let save_string = JSON.stringify(this.state);
-        if (save_string.length < 5000000)
+        let save_string = LZString.compressToUTF16(JSON.stringify(this.state));
+        if (save_string.length < 500000000)
         {
-            this.local_storage.setItem("world_2.0", JSON.stringify(this.state));
+            localforage.setItem('world', save_string)
         }
         else if (this.warned === "no")
         {
-            alert("This world is currently too large to save in local storage. Every 30 seconds another save will be attempted, but this will be your only alert.");
+            alert("This world is currently too large to save locally. Every 5 minutes another save will be attempted, but this will be your only alert.");
             this.warned = "yes";
         }
     }
