@@ -65,11 +65,11 @@ export default class AboutView extends React.Component
             </div>
             <div>
                 <div style={footer_style}>
-                    <button style={button_style} onClick={() => this.props.setPage("Setup")}>
-                        Setup
-                    </button>
                     <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
                         Main Menu
+                    </button>
+                    <button style={button_style} onClick={() => this.props.setPage("Setup")}>
+                        Setup
                     </button>
                 </div>
             </div>

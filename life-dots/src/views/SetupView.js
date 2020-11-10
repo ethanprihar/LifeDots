@@ -847,14 +847,14 @@ export default class SetupView extends React.Component
                 <div style={warning_style}>
                     Pressing start will overwrite any existing local world saves.
                 </div>
-                <button form="config" style={button_style} type="submit" value="Submit">
-                    Start
+                <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
+                    Main Menu
                 </button>
                 <button style={button_style} onClick={() => this.props.setPage("About")}>
                     About
                 </button>
-                <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
-                    Main Menu
+                <button form="config" style={button_style} type="submit" value="Submit">
+                    Start
                 </button>
             </div>
         </div>
