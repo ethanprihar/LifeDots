@@ -75,11 +75,11 @@ export default class Genome
         }
         if (Math.floor(new_view) < Math.floor(this.view))
         {
-            new_weights = this.remove_view(new_view);
+            new_weights = this.remove_view();
         }
         else if (Math.floor(new_view) > Math.floor(this.view))
         {
-            new_weights = this.add_view(new_view);
+            new_weights = this.add_view();
         }
         if (new_weights === undefined)
         {
@@ -120,7 +120,7 @@ export default class Genome
         return gene + rand * this.max_mut_pct * range;
     }
 
-    remove_view(new_view: number): void
+    remove_view(): void
     {
         const old_dim: number = Math.floor(this.view) * 2 + 1;
         let new_weights: number[] = []
@@ -138,10 +138,10 @@ export default class Genome
         return ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
     }
 
-    add_view(new_view: number): any
+    add_view(): any
     {
         const old_dim: number = Math.floor(this.view) * 2 + 1
-        const new_dim: number =  Math.floor(new_view) * 2 + 1;
+        const new_dim: number =  old_dim + 2;
         let new_weights: number[] = new Array(new_dim * 50).fill(0);
         for(let r = 0; r < old_dim; r++)
         {
