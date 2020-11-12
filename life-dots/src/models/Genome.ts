@@ -53,11 +53,44 @@ export default class Genome
     mutate(): Genome | null
     {
         let new_max_size: number = this.pct_mut(this.max_size);
-        if (new_max_size <= 0) {return null;}
+        if (new_max_size <= 0)
+        {
+            return null;
+        }
         let new_split_frac: number = this.pct_mut(this.split_frac);
-        if ((new_split_frac <= 0) || (new_split_frac >= 1)) {return null;}
+        if ((new_split_frac <= 0) || (new_split_frac >= 1))
+        {
+            return null;
+        }
         let new_speed: number = this.pct_mut(this.speed);
-        if (new_speed <= 0) {return null;}
+        if (new_speed <= 0)
+        {
+            return null;
+        }
+        let new_weights: any;
+        let new_view: number = this.pct_mut(this.view);
+        if ((new_view <= 1) || (new_view >= 10))
+        {
+            return null;
+        }
+        if (Math.floor(new_view) < Math.floor(this.view))
+        {
+            new_weights = this.remove_view(new_view);
+        }
+        else if (Math.floor(new_view) > Math.floor(this.view))
+        {
+            new_weights = this.add_view(new_view);
+        }
+        if (new_weights === undefined)
+        {
+            new_weights = ndarray(new Float64Array(this.weights.size), this.weights.shape);
+        }
+        let rand: any = ndarray(new Float64Array(new_weights.size), new_weights.shape);
+        ops.assign(new_weights, new_weights);
+        ops.random(rand);
+        ops.subseq(rand, 0.5);
+        ops.mulseq(rand, 2 * this.max_mut_pct);
+        ops.addeq(new_weights, rand);
         let new_color: number[] = [];
         for (let c of this.color)
         {
@@ -65,19 +98,12 @@ export default class Genome
         }
         let new_max_mut_pct: number = this.pct_mut(this.max_mut_pct);
         let new_eat_ratio: number = Math.min(Math.max(this.fix_mut(this.eat_ratio, 1), 0), 1);
-        let new_weights: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
-        let rand: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
-        ops.assign(new_weights, this.weights);
-        ops.random(rand);
-        ops.subseq(rand, 0.5);
-        ops.mulseq(rand, 2 * this.max_mut_pct);
-        ops.addeq(new_weights, rand);
         return new Genome(new_color,
                           new_max_size, 
                           new_split_frac, 
                           new_eat_ratio, 
                           new_speed, 
-                          this.view, 
+                          new_view, 
                           new_weights, 
                           new_max_mut_pct);
     }
@@ -92,5 +118,60 @@ export default class Genome
     {
         let rand: number = Math.random() * 2 - 1;
         return gene + rand * this.max_mut_pct * range;
+    }
+
+    remove_view(new_view: number): void
+    {
+        let return_weights: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
+        ops.assign(return_weights, this.weights);
+        let old_dim: number = Math.floor(this.view) * 2 + 1;
+        for (let dv = 0; dv < Math.floor(this.view) - Math.floor(new_view); dv++)
+        {
+            let new_weights: number[] = []
+            for(let r = 1; r < old_dim - 1; r++)
+            {
+                for(let c = 1; c < old_dim - 1; c++)
+                {
+                    let starting_pos: number = (r * old_dim + c) * 50;
+                    for (let i = 0; i < 50; i++)
+                    {
+                        new_weights.push(return_weights.data[starting_pos + i]);
+                    }
+                }
+            }
+            return_weights = ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
+            old_dim -= 2;
+        }
+        return return_weights;
+    }
+
+    add_view(new_view: number): any
+    {
+        let return_weights: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
+        ops.assign(return_weights, this.weights);
+        let old_dim: number = Math.floor(this.view) * 2 + 1
+        let new_dim: number =  Math.floor(new_view) * 2 + 1;
+        for (let dv = 0; dv <  Math.floor(new_view) - Math.floor(this.view); dv++)
+        {
+            let new_weights: number[] = new Array(new_dim * 50).fill(0);
+            for(let r = 0; r < old_dim; r++)
+            {
+                new_weights = new_weights.concat(new Array(50).fill(0))
+                for(let c = 0; c < old_dim; c++)
+                {
+                    let starting_pos: number = (r * old_dim + c) * 50;
+                    for (let i = 0; i < 50; i++)
+                    {
+                        new_weights.push(return_weights.data[starting_pos + i]);
+                    }
+                }
+                new_weights = new_weights.concat(new Array(50).fill(0))
+            }
+            new_weights = new_weights.concat(new Array(new_dim * 50).fill(0));
+            return_weights = ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
+            old_dim += 2;
+            new_dim += 2;
+        }
+        return return_weights;
     }
 }

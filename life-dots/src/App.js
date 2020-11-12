@@ -25,7 +25,7 @@ export default class App extends React.Component
     super(props);
     this.state = 
     {
-      page: <AboutView setPage={this.setPage} />
+      page: <MainMenuView setPage={this.setPage} />
     }
   }
 

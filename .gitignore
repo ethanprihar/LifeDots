@@ -49,3 +49,4 @@ life-dots/.env.production.local
 life-dots/npm-debug.log*
 life-dots/yarn-debug.log*
 life-dots/yarn-error.log*
+life-dots/debug.log*

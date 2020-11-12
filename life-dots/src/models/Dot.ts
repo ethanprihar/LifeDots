@@ -31,7 +31,7 @@ export default class Dot
             let output: any = ndarray(new Float64Array(10), [1, 10]);
             gemm(output, input, this.genome.weights);
             this.signal = Math.min(Math.max(output.get(0,9), -1), 1);
-            this.size -= this.genome.max_size * Math.floor(this.genome.view) / 100;
+            this.size -= this.genome.max_size * Math.floor(this.genome.view) * Math.floor(this.genome.view) / 100;
             this.ticks_until_move = this.genome.speed;
             output = ndarray(output.data.subarray(0,9), [9]);
             let max_pos: number = ops.argmax(output);
