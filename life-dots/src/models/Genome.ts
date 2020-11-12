@@ -68,7 +68,7 @@ export default class Genome
             return null;
         }
         let new_weights: any;
-        let new_view: number = this.pct_mut(this.view);
+        let new_view: number = this.fix_mut(this.view, 1);
         if ((new_view <= 1) || (new_view >= 10))
         {
             return null;
@@ -122,56 +122,41 @@ export default class Genome
 
     remove_view(new_view: number): void
     {
-        let return_weights: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
-        ops.assign(return_weights, this.weights);
-        let old_dim: number = Math.floor(this.view) * 2 + 1;
-        for (let dv = 0; dv < Math.floor(this.view) - Math.floor(new_view); dv++)
+        const old_dim: number = Math.floor(this.view) * 2 + 1;
+        let new_weights: number[] = []
+        for(let r = 1; r < old_dim - 1; r++)
         {
-            let new_weights: number[] = []
-            for(let r = 1; r < old_dim - 1; r++)
+            for(let c = 1; c < old_dim - 1; c++)
             {
-                for(let c = 1; c < old_dim - 1; c++)
+                let starting_pos: number = (r * old_dim + c) * 50;
+                for (let i = 0; i < 50; i++)
                 {
-                    let starting_pos: number = (r * old_dim + c) * 50;
-                    for (let i = 0; i < 50; i++)
-                    {
-                        new_weights.push(return_weights.data[starting_pos + i]);
-                    }
+                    new_weights.push(this.weights.data[starting_pos + i]);
                 }
             }
-            return_weights = ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
-            old_dim -= 2;
         }
-        return return_weights;
+        return ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
     }
 
     add_view(new_view: number): any
     {
-        let return_weights: any = ndarray(new Float64Array(this.weights.size), this.weights.shape);
-        ops.assign(return_weights, this.weights);
-        let old_dim: number = Math.floor(this.view) * 2 + 1
-        let new_dim: number =  Math.floor(new_view) * 2 + 1;
-        for (let dv = 0; dv <  Math.floor(new_view) - Math.floor(this.view); dv++)
+        const old_dim: number = Math.floor(this.view) * 2 + 1
+        const new_dim: number =  Math.floor(new_view) * 2 + 1;
+        let new_weights: number[] = new Array(new_dim * 50).fill(0);
+        for(let r = 0; r < old_dim; r++)
         {
-            let new_weights: number[] = new Array(new_dim * 50).fill(0);
-            for(let r = 0; r < old_dim; r++)
+            new_weights = new_weights.concat(new Array(50).fill(0))
+            for(let c = 0; c < old_dim; c++)
             {
-                new_weights = new_weights.concat(new Array(50).fill(0))
-                for(let c = 0; c < old_dim; c++)
+                let starting_pos: number = (r * old_dim + c) * 50;
+                for (let i = 0; i < 50; i++)
                 {
-                    let starting_pos: number = (r * old_dim + c) * 50;
-                    for (let i = 0; i < 50; i++)
-                    {
-                        new_weights.push(return_weights.data[starting_pos + i]);
-                    }
+                    new_weights.push(this.weights.data[starting_pos + i]);
                 }
-                new_weights = new_weights.concat(new Array(50).fill(0))
             }
-            new_weights = new_weights.concat(new Array(new_dim * 50).fill(0));
-            return_weights = ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
-            old_dim += 2;
-            new_dim += 2;
+            new_weights = new_weights.concat(new Array(50).fill(0))
         }
-        return return_weights;
+        new_weights = new_weights.concat(new Array(new_dim * 50).fill(0));
+        return ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
     }
 }
