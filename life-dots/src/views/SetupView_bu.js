@@ -9,93 +9,59 @@ import World from "../models/World"
 const setup_style = 
 {
     textAlign: "center",
-    width: "100%",
-    height: "100%",
-    margin: "0",
-    padding: "0",
-    overflowX: "hidden"
-}
-
-const header_style = 
-{
-    color: "#b3b3b3",
-    backgroundColor: "#000000",
-    borderBottom: "0.25vh solid #b3b3b3",
-    position: "fixed",
-    top: "0",
-    width: "100%",
-    height: "22.8vh",
-    overflow: "auto",
+    paddingTop: "5vh",
+    marginBottom: "25vh",
 }
 
 const title_style = 
 {
     fontSize: "10vh",
-    marginBottom: "0",
-    marginTop: "0",
-}
-
-const header_flex_style = 
-{
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-}
-
-const header_button_style = 
-{
-    borderRadius: "1vh",
-    height: "7vh",
-    width: "20vh",
-    marginLeft: "1.25vh",
-    marginRight: "1.25vh",
-    marginBottom: "2.5vh",
-    color: "#b3b3b3",
-    backgroundColor: "#000000",
-    fontSize: "4vh",
-    border: "0.25vh solid #b3b3b3",
-}
-
-const form_style = 
-{
-    position: "center",
-    marginTop: "24vh",
-    marginBottom: "14vh",
-    fontSize: "100px",
 }
 
 const subtitle_style = 
 {
     fontSize: "5vh",
-    marginTop: "1vh",
-    marginBottom: "1vh",
+    marginBottom: "3vh",
 }
 
-const description_style = 
+const form_style = 
 {
-    fontSize: "20px",
-    marginLeft: "10%",
-    marginRight: "10%",
-    marginBottom: "2%",
-    textAlign: "justify",
+    marginBottom: "7vh",
+}
+
+const config_button_style = 
+{
+    borderRadius: "1vh",
+    height: "10vh",
+    width: "30vh",
+    marginLeft: "2vh",
+    marginRight: "2vh",
+    marginTop: "2vh",
+    color: "#b3b3b3",
+    backgroundColor: "#000000",
+    fontSize: "4vh",
+    border: "2px solid #b3b3b3",
 }
 
 const table_style = 
 {
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "center",
+    width: "90vw",
+    margin: "auto",
     fontSize: "20px",
 }
 
 const label_entry = 
 {
     textAlign: "right",
+    width: "25%",
+
 }
 
 const input_entry = 
 {
     textAlign: "left",
+    width: "25%",
+
 }
 
 const input_style = 
@@ -107,30 +73,42 @@ const input_style =
     width: "10vw"
 }
 
-const footer_style = 
-{
-    color: "#b3b3b3",
-    backgroundColor: "#000000",
-    borderTop: "0.25vh solid #b3b3b3",
-    position: "fixed",
-    bottom: "0",
-    width: "100%",
-    overflow: "auto",
-}
-
-const footer_button_style = 
+const button_style = 
 {
     borderRadius: "1vh",
-    height: "7vh",
-    width: "20vh",
-    marginLeft: "1.25vh",
-    marginRight: "1.25vh",
-    marginTop: "2.5vh",
+    height: "10vh",
+    width: "30vh",
+    marginLeft: "2.5vh",
+    marginRight: "2.5vh",
     marginBottom: "2.5vh",
     color: "#b3b3b3",
     backgroundColor: "#000000",
     fontSize: "4vh",
-    border: "0.25vh solid #b3b3b3",
+    border: "2px solid #b3b3b3",
+}
+
+const footer_style = 
+{
+    color: "#b3b3b3",
+    backgroundColor: "#000000",
+    borderTop: "2px solid #b3b3b3",
+    position: "fixed",
+    left: "0",
+    bottom: "0",
+    paddingTop: "1vh",
+    width: "100vw",
+    height: "18vh",
+    overflowY: "scroll",
+    overflowX: "auto",
+}
+
+const warning_style = 
+{
+    color: "#b3b3b3",
+    backgroundColor: "#000000",
+    fontSize: "3vh",
+    textAlign: "center",
+    paddingBottom: "1.5vh",
 }
 
 export default class SetupView extends React.Component
@@ -188,20 +166,11 @@ export default class SetupView extends React.Component
         this.change_input = this.change_input.bind(this);
     }
 
-    key_press(event)
-    {
-        // Do nothing when enter is pressed.
-        if (event.which === 13)
-        {
-            event.preventDefault();
-        }
-    }
-
     change_input(event)
     {
         const name = event.target.name;
         let value = event.target.valueAsNumber;
-        if (value === undefined)
+        if(value === undefined)
         {
             this.setState({[name]: event.target.value === "true"});
         }
@@ -218,45 +187,222 @@ export default class SetupView extends React.Component
             }
         }
     }
+
+    key_press(event)
+    {
+        // Do nothing when enter is pressed.
+        if (event.which === 13)
+        {
+            event.preventDefault();
+        }
+    }
+
+    gentle_rain = (event) =>
+    {
+        event.preventDefault()
+        this.setState(
+            {
+                dot_num: 100, 
+                min_max_size: 50, 
+                max_max_size: 200, 
+                min_split_frac: 0, 
+                max_split_frac: 1, 
+                min_eat_ratio: 0, 
+                max_eat_ratio: 1, 
+                min_speed: 1, 
+                max_speed: 10, 
+                min_view: 1, 
+                max_view: 1, 
+                min_max_mut_pct: 0.01, 
+                max_max_mut_pct: 0.1, 
+                reset_on_extinction: true,
+
+                funiform: false,
+                ticks_between_rain: 10, 
+                drops_per_rain: 20, 
+                min_drop_size: 1, 
+                max_drop_size: 1,
+                min_food_per_drop: 10, 
+                max_food_per_drop: 100, 
+                delta_ticks_between_rain: 0, 
+                delta_drops_per_rain: 0, 
+                delta_min_drop_size: 0, 
+                delta_max_drop_size: 0, 
+                delta_min_food_per_drop: 0, 
+                delta_max_food_per_drop: 0, 
+                phase_length: 0, 
+                will_cycle: false,
+
+                tuniform: true, 
+                trap_num: 5, 
+                min_trap_size: 3, 
+                max_trap_size: 3, 
+                min_trap_damage: 100, 
+                max_trap_damage: 100,
+
+                section_rows: 1, 
+                section_cols: 1, 
+                density: 0,
+            }
+        );
+    }
+
+    flash_flood = (event) =>
+    {
+        event.preventDefault()
+        this.setState(
+            {
+                dot_num: 100, 
+                min_max_size: 50, 
+                max_max_size: 200, 
+                min_split_frac: 0, 
+                max_split_frac: 1, 
+                min_eat_ratio: 0, 
+                max_eat_ratio: 1, 
+                min_speed: 1, 
+                max_speed: 10, 
+                min_view: 1, 
+                max_view: 1, 
+                min_max_mut_pct: 0.01, 
+                max_max_mut_pct: 0.1, 
+                reset_on_extinction: true,
+
+                funiform: true,
+                ticks_between_rain: 500, 
+                drops_per_rain: 1, 
+                min_drop_size: 100, 
+                max_drop_size: 100,
+                min_food_per_drop: 100, 
+                max_food_per_drop: 100, 
+                delta_ticks_between_rain: 0, 
+                delta_drops_per_rain: 0, 
+                delta_min_drop_size: 0, 
+                delta_max_drop_size: 0, 
+                delta_min_food_per_drop: 0, 
+                delta_max_food_per_drop: 0, 
+                phase_length: 0, 
+                will_cycle: false,
+
+                tuniform: true, 
+                trap_num: 5, 
+                min_trap_size: 1, 
+                max_trap_size: 5, 
+                min_trap_damage: 100, 
+                max_trap_damage: 100,
+
+                section_rows: 1, 
+                section_cols: 1, 
+                density: 1,
+            }
+        );
+    }
+
+    office_space = (event) =>
+    {
+        event.preventDefault()
+        this.setState(
+            {
+                dot_num: 100, 
+                min_max_size: 10, 
+                max_max_size: 1000, 
+                min_split_frac: 0, 
+                max_split_frac: 1, 
+                min_eat_ratio: 0, 
+                max_eat_ratio: 1, 
+                min_speed: 1, 
+                max_speed: 10, 
+                min_view: 1, 
+                max_view: 5, 
+                min_max_mut_pct: 0.01, 
+                max_max_mut_pct: 0.1, 
+                reset_on_extinction: true,
+
+                funiform: true,
+                ticks_between_rain: 10, 
+                drops_per_rain: 20, 
+                min_drop_size: 1, 
+                max_drop_size: 1,
+                min_food_per_drop: 1, 
+                max_food_per_drop: 10, 
+                delta_ticks_between_rain: 1, 
+                delta_drops_per_rain: -0.1, 
+                delta_min_drop_size: 0.1, 
+                delta_max_drop_size: 0.1, 
+                delta_min_food_per_drop: 1, 
+                delta_max_food_per_drop: 1, 
+                phase_length: 1000, 
+                will_cycle: false,
+
+                tuniform: true, 
+                trap_num: 10, 
+                min_trap_size: 2, 
+                max_trap_size: 5, 
+                min_trap_damage: 1, 
+                max_trap_damage: 1,
+
+                section_rows: 2, 
+                section_cols: 2, 
+                density: 0.9,
+            }
+        );
+    }
+    
+    submit = (event) =>
+    {   
+        event.preventDefault();
+        const rows = Math.floor(window.innerHeight / this.state.cell_size);
+        const cols = Math.floor(window.innerWidth / this.state.cell_size);
+        let dot_placer = new RandomDots(this.state.dot_num,  
+                                        this.state.min_max_size, 
+                                        this.state.max_max_size, 
+                                        this.state.min_split_frac, 
+                                        this.state.max_split_frac, 
+                                        this.state.min_eat_ratio, 
+                                        this.state.max_eat_ratio, 
+                                        this.state.min_speed, 
+                                        this.state.max_speed, 
+                                        this.state.min_view, 
+                                        this.state.max_view, 
+                                        this.state.min_max_mut_pct, 
+                                        this.state.max_max_mut_pct, 
+                                        this.state.reset_on_extinction);
+        let food_placer = new RandomFood(this.state.funiform,
+                                         this.state.ticks_between_rain, 
+                                         this.state.drops_per_rain, 
+                                         this.state.min_drop_size, 
+                                         this.state.max_drop_size,
+                                         this.state.min_food_per_drop, 
+                                         this.state.max_food_per_drop, 
+                                         this.state.delta_ticks_between_rain, 
+                                         this.state.delta_drops_per_rain, 
+                                         this.state.delta_min_drop_size, 
+                                         this.state.delta_max_drop_size, 
+                                         this.state.delta_min_food_per_drop, 
+                                         this.state.delta_max_food_per_drop, 
+                                         this.state.phase_length, 
+                                         this.state.will_cycle);
+        let trap_placer = new RandomTrap(this.state.tuniform, 
+                                         this.state.trap_num, 
+                                         this.state.min_trap_size, 
+                                         this.state.max_trap_size, 
+                                         this.state.min_trap_damage, 
+                                         this.state.max_trap_damage)
+        let wall_placer = new RandomWall(this.state.section_rows, 
+                                         this.state.section_cols, 
+                                         this.state.density);
+        let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer);
+        world.init();
+        this.props.setPage("Start", this.state.tick_time, this.state.cell_size, world);
+    }
     
     render()
     {
         return (
         <div style={setup_style}>
-            <div style={header_style}>
-                <span style={title_style}>
-                    World Builder
-                </span>
-                <div style={header_flex_style}>
-                    <div>
-                        <button style={header_button_style} onClick={this}>
-                            Save
-                        </button>
-                        <button style={header_button_style} onClick={this}>
-                            Load
-                        </button>
-                    </div>
-                    <div>
-                        <button style={header_button_style} onClick={this}>
-                            Import
-                        </button>
-                        <button style={header_button_style} onClick={this}>
-                            Export
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+            <span style={title_style}>World Setup</span>
+            <br></br>
             <form id="config" style={form_style} onChange={this.change_input} onKeyPress={this.key_press} onSubmit={this.submit}>
-                <div style={subtitle_style}>
-                    World Configuration
-                </div>
-                <div style={description_style}>
-                    The world will occupy the entire browser window when generated. The cell size specifies the 
-                    dimensions of each cell in the world. A larger cell size will result in fewer, larger cells. 
-                    The tick time of the world determines how fast the cells will update. Higher tick time 
-                    will result in less frequent updates.
-                </div>
+                <p style={subtitle_style}>World Configuration</p>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
@@ -268,8 +414,6 @@ export default class SetupView extends React.Component
                             value={this.state.cell_size} 
                             type="number" min="5" max="99999" required/>
                         </td>
-                    </tr>
-                    <tr>
                         <td style={label_entry}>
                             Minimum Tick Time (Milliseconds):
                         </td>
@@ -281,6 +425,17 @@ export default class SetupView extends React.Component
                         </td>
                     </tr>
                 </table>
+
+                <p style={subtitle_style}>Preset Configurations</p>
+                <button style={config_button_style} onClick={this.gentle_rain}>
+                    Gentle Rain
+                </button>
+                <button style={config_button_style} onClick={this.flash_flood}>
+                    Flash Flood
+                </button>
+                <button style={config_button_style} onClick={this.office_space}>
+                    Office Space
+                </button>
                 
                 <p style={subtitle_style}>Dot Configuration</p>
                 <table style={table_style}>
@@ -688,16 +843,19 @@ export default class SetupView extends React.Component
                     </tr>
                 </table>
             </form>
-
             <div style={footer_style}>
-                    <div>
-                        <button style={footer_button_style} onClick={this}>
-                            Menu
-                        </button>
-                        <button style={footer_button_style} onClick={this}>
-                            Start
-                        </button>
-                    </div>
+                <div style={warning_style}>
+                    Pressing start will overwrite any existing local world saves.
+                </div>
+                <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
+                    Main Menu
+                </button>
+                <button style={button_style} onClick={() => this.props.setPage("About")}>
+                    About
+                </button>
+                <button form="config" style={button_style} type="submit" value="Submit">
+                    Start
+                </button>
             </div>
         </div>
         );
