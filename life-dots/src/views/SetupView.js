@@ -711,8 +711,38 @@ export default class SetupView extends React.Component
                         </td>
                     </tr>
                 </table>
-
-                <p style={subtitle_style}>Trap Configuration</p>
+                <div style={subtitle_style}>
+                    Trap Configuration
+                </div>
+                <div style={description_style}>
+                    Food is added to the world in random locations and quantities on a fixed schedule. 
+                    The following parameters are used to control this schedule.
+                    <ul>
+                        <li>
+                            Distribution determines if food is added randomly using a uniform distribution 
+                            or a normal (gaussian) distribution.
+                        </li>
+                        <li>
+                            Food is added to the world in bursts. Ticks between bursts determines how many ticks 
+                            pass before more food is added to the world.
+                        </li>
+                        <li>
+                            Drops per burst determines how many clusters of food are added to the world during 
+                            a burst.
+                        </li>
+                        <li>
+                            Minimum and maximum drop size determines the range of sizes of the clusters of food 
+                            added durring a burst. Each cluster's size is chosen randomly within the specified range. 
+                            A drop size of 3 means that the drop will add food to a 3x3 square of cells in the world.
+                        </li>
+                        <li>
+                            Minimum and maximum food per drop determines the range of quantity of food added to each cell 
+                            of the world that was occupied by a drop. This quantity is the amount of food a dot will 
+                            comsume when entering the world cell. Each drop's food quantity is chosen randomly within 
+                            the specified range.
+                        </li>
+                    </ul>
+                </div>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
@@ -815,14 +845,14 @@ export default class SetupView extends React.Component
             </form>
 
             <div style={footer_style}>
-                    <div>
-                        <button style={footer_button_style} onClick={this}>
-                            Menu
-                        </button>
-                        <button style={footer_button_style} onClick={this}>
-                            Start
-                        </button>
-                    </div>
+                <div>
+                    <button style={footer_button_style} onClick={this}>
+                        Menu
+                    </button>
+                    <button style={footer_button_style} onClick={this}>
+                        Start
+                    </button>
+                </div>
             </div>
         </div>
         );
