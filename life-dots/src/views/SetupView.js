@@ -68,15 +68,15 @@ const subtitle_style =
 {
     fontSize: "5vh",
     marginTop: "1vh",
-    marginBottom: "1vh",
 }
 
 const description_style = 
 {
     fontSize: "20px",
-    marginLeft: "10%",
-    marginRight: "10%",
-    marginBottom: "2%",
+    marginLeft: "20%",
+    marginRight: "20%",
+    marginTop: "1%",
+    marginBottom: "1%",
     textAlign: "justify",
 }
 
@@ -91,11 +91,13 @@ const table_style =
 const label_entry = 
 {
     textAlign: "right",
+    width: "50%"
 }
 
 const input_entry = 
 {
     textAlign: "left",
+    width: "50%"
 }
 
 const input_style = 
@@ -252,15 +254,15 @@ export default class SetupView extends React.Component
                     World Configuration
                 </div>
                 <div style={description_style}>
-                    The world will occupy the entire browser window when generated. The cell size specifies the 
-                    dimensions of each cell in the world. A larger cell size will result in fewer, larger cells. 
-                    The tick time of the world determines how fast the cells will update. Higher tick time 
+                    The world will occupy the entire browser window when generated. "Cell Size" specifies the 
+                    pixel height of each cell in the world. A larger cell size will result in fewer, larger cells. 
+                    "Tick Time" determines how fast the cells will update, in milliseconds. Higher tick time 
                     will result in less frequent updates.
                 </div>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
-                            Cell Size (Pixel Width):
+                            Cell Size:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -271,7 +273,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Minimum Tick Time (Milliseconds):
+                            Tick Time:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -282,7 +284,14 @@ export default class SetupView extends React.Component
                     </tr>
                 </table>
                 
-                <p style={subtitle_style}>Dot Configuration</p>
+                <div style={subtitle_style}>
+                    Dot Configuration
+                </div>
+                <div style={description_style}>
+                    When a new world is generated, new dots with random genomes will be created. "Starting 
+                    Dots" determines how many random dots are generated. "Respawn If Extinct" will create 
+                    the same number of dots if all the dots in the world die.
+                </div>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
@@ -294,8 +303,10 @@ export default class SetupView extends React.Component
                             value={this.state.dot_num} 
                             type="number" min="1" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Spawn More Dots Upon Extinction:
+                            Respawn If Extinct:
                         </td>
                         <td style={input_entry}>
                             <select style={input_style}
@@ -306,6 +317,45 @@ export default class SetupView extends React.Component
                             </select>
                         </td>
                     </tr>
+                </table>
+                <div style={description_style}>
+                    The following minimum and maximum values bound the genomes of the 
+                    randomly generated dots. The initial dots offspring will not be 
+                    bounded by these limitations.
+                    <ul>
+                        <li>
+                            A dot's size determines how much energy it costs to move, 
+                            its chances of surviving an encouter with another dot, 
+                            how much food it can eat in one tick, 
+                            and how much energy it needs to accumulate before splitting.
+                        </li>
+                        <li>
+                            A dot's split percentage determines the size of the child dot 
+                            created when the parent dot splits relative to the parent dot's size.
+                        </li>
+                        <li>
+                            A dot's energy efficiency determines the percent of food 
+                            consumed by the dot that gets converted to energy. 
+                            (100 - energy efficiency) determines the percent of other dots' size 
+                            converted to energy when consumed.
+                        </li>
+                        <li>
+                            A dot's rest time determines how many ticks between the dot's moves. 
+                            A higher rest time means the dot will move less frequently.
+                        </li>
+                        <li>
+                            A dot's perception determines how many cells past its current cell 
+                            it can percieve. Whatever a dot can percieve can be used to determine 
+                            where to move. A perception of 2 means the dot can percieve a 5x5 square 
+                            of cells, with its own cell at the center of the square.
+                        </li>
+                        <li>
+                            A dot's mutation rate determines how much a dot's offspring's genome will 
+                            differ from its own, as a percentage of its own genetic values.
+                        </li>
+                    </ul>
+                </div>
+                <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
                             Minimum Dot Size:
@@ -316,6 +366,8 @@ export default class SetupView extends React.Component
                             value={this.state.min_max_size} 
                             type="number" min="0" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
                             Maximum Dot Size:
                         </td>
@@ -328,7 +380,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Minimum Split Fraction:
+                            Minimum Split Percent:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -336,8 +388,10 @@ export default class SetupView extends React.Component
                             value={this.state.min_split_frac} 
                             type="number" min="0" max="1" step="0.0001" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Maximum Split Fraction:
+                            Maximum Split Percent:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -348,7 +402,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Minimum Food Absorbtion:
+                            Minimum Energy Efficiency:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -356,8 +410,10 @@ export default class SetupView extends React.Component
                             value={this.state.min_eat_ratio} 
                             type="number" min="0" max="1" step="0.0001" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Maximum Food Absorbtion:
+                            Maximum Energy Efficiency:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -368,7 +424,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Minimum Speed:
+                            Minimum Rest Time:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -376,8 +432,10 @@ export default class SetupView extends React.Component
                             value={this.state.min_speed} 
                             type="number" min="1" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Maximum Speed:
+                            Maximum Rest Time:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -396,6 +454,8 @@ export default class SetupView extends React.Component
                             value={this.state.min_view} 
                             type="number" min="1" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
                             Maximum Perception:
                         </td>
@@ -416,6 +476,8 @@ export default class SetupView extends React.Component
                             value={this.state.min_max_mut_pct} 
                             type="number" min="0" max="99999" step="0.0001" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
                             Maximum Mutation Rate:
                         </td>
@@ -427,8 +489,38 @@ export default class SetupView extends React.Component
                         </td>
                     </tr>
                 </table>
-
-                <p style={subtitle_style}>Food Configuration</p>
+                <div style={subtitle_style}>
+                    Food Configuration
+                </div>
+                <div style={description_style}>
+                    Food is added to the world in random locations and quantities on a fixed schedule. 
+                    The following parameters are used to control this schedule.
+                    <ul>
+                        <li>
+                            Distribution determines if food is added randomly using a uniform distribution 
+                            or a normal (gaussian) distribution.
+                        </li>
+                        <li>
+                            Food is added to the world in bursts. Ticks between bursts determines how many ticks 
+                            pass before more food is added to the world.
+                        </li>
+                        <li>
+                            Drops per burst determines how many clusters of food are added to the world during 
+                            a burst.
+                        </li>
+                        <li>
+                            Minimum and maximum drop size determines the range of sizes of the clusters of food 
+                            added durring a burst. Each cluster's size is chosen randomly within the specified range. 
+                            A drop size of 3 means that the drop will add food to a 3x3 square of cells in the world.
+                        </li>
+                        <li>
+                            Minimum and maximum food per drop determines the range of quantity of food added to each cell 
+                            of the world that was occupied by a drop. This quantity is the amount of food a dot will 
+                            comsume when entering the world cell. Each drop's food quantity is chosen randomly within 
+                            the specified range.
+                        </li>
+                    </ul>
+                </div>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
@@ -442,6 +534,98 @@ export default class SetupView extends React.Component
                                 <option value={false}>Normal</option>
                             </select>
                         </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Ticks Between Bursts:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="ticks_between_rain" 
+                            value={this.state.ticks_between_rain} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Drops Per Burst:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="drops_per_rain" 
+                            value={this.state.drops_per_rain} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Minimum Drop Size:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="min_drop_size" 
+                            value={this.state.min_drop_size} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Maximum Drop Size:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="max_drop_size" 
+                            value={this.state.max_drop_size} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Minimum Food Per Drop:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="min_food_per_drop" 
+                            value={this.state.min_food_per_drop} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Maximum Food Per Drop:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="max_food_per_drop" 
+                            value={this.state.max_food_per_drop} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                </table>
+                <div style={description_style}>
+                    The food distribution schedule has the ability to change over time. 
+                    The length of time over which the food distribution schedule changes is called the phase. The phase 
+                    length is measured in number of bursts. For example, a phase length of 100 bursts means that 
+                    the food distribution schedule will change by a constant amount every burst for 100 bursts, 
+                    then it will remain constant. If instead, one desires the food distribution schedule to return 
+                    to its initial conditions after the end of the phase, then food distribution cycle can be 
+                    turned on, which will, over one phase length, reverse the changes to the food distribution schedule. 
+                    After the changes have been reversed, they will happen again, and continue to cycle for the duration 
+                    of the world.
+                </div>
+                <table style={table_style}>
+                    <tr>
+                        <td style={label_entry}>
+                            Phase Length:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="phase_length" 
+                            value={this.state.phase_length} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
                             Food Distribution Cycle:
                         </td>
@@ -454,80 +638,15 @@ export default class SetupView extends React.Component
                             </select>
                         </td>
                     </tr>
+                </table>
+                <div style={description_style}>
+                    The following parameters control the amount that the food distribution 
+                    schedule parameters change after each spawn during a phase.
+                </div>
+                <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
-                            Ticks Between Spawn:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="ticks_between_rain" 
-                            value={this.state.ticks_between_rain} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                        <td style={label_entry}>
-                            Drops Per Spawn:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="drops_per_rain" 
-                            value={this.state.drops_per_rain} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style={label_entry}>
-                            Minimum Spawn Size:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="min_drop_size" 
-                            value={this.state.min_drop_size} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                        <td style={label_entry}>
-                            Maximum Spawn Size:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="max_drop_size" 
-                            value={this.state.max_drop_size} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style={label_entry}>
-                            Minimum Food Per Spawn:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="min_food_per_drop" 
-                            value={this.state.min_food_per_drop} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                        <td style={label_entry}>
-                            Maximum Food Per Spawn:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="max_food_per_drop" 
-                            value={this.state.max_food_per_drop} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style={label_entry}>
-                            Spawns Per Phase:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="phase_length" 
-                            value={this.state.phase_length} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style={label_entry}>
-                            Ticks Between Spawn Change:
+                            Ticks Between Bursts Change:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -535,8 +654,10 @@ export default class SetupView extends React.Component
                             value={this.state.delta_ticks_between_rain} 
                             type="number" min="-99999" max="99999" step="0.0001" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Drops Per Spawn Change:
+                            Drops Per Burst Change:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -547,7 +668,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Minimum Spawn Size Change:
+                            Minimum Drop Size Change:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -555,8 +676,10 @@ export default class SetupView extends React.Component
                             value={this.state.delta_min_drop_size} 
                             type="number" min="-99999" max="99999" step="0.0001" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Maximum Spawn Size Change:
+                            Maximum Drop Size Change:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -567,7 +690,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Minimum Food Per Spawn Change:
+                            Minimum Food Per Drop Change:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -575,8 +698,10 @@ export default class SetupView extends React.Component
                             value={this.state.delta_min_food_per_drop} 
                             type="number" min="-99999" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Maximum Food Per Spawn Change:
+                            Maximum Food Per Drop Change:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
