@@ -14,6 +14,7 @@ const title_style =
     color: "#b3b3b3",
     fontSize: "30px",
     margin: "0",
+    marginBottom: "10px",
     padding: "0",
 }
 
@@ -61,17 +62,16 @@ const modal_style =
     },
 }
 
-export default class SaveView extends React.Component
+export default class SaveConfigView extends React.Component
 {
     constructor(props)
     {
         super(props);
         this.state = 
         {
-            name: "Untitled",
+            config_name: "Untitled",
             show_confirm: false,
             confirmed: false,
-            saving: false,
         };
         this.change_input = this.change_input.bind(this);
     }
@@ -87,7 +87,7 @@ export default class SaveView extends React.Component
 
     change_input(event)
     {
-        this.setState({name: event.target.value});
+        this.setState({config_name: event.target.value});
     }
 
     save = (event) =>
@@ -95,13 +95,13 @@ export default class SaveView extends React.Component
         event.preventDefault();
         let saves = localStorage.getItem("config_saves");
         saves = saves === null ? {} : JSON.parse(saves);
-        if (this.state.name in saves)
+        if (this.state.config_name in saves)
         {
             this.setState({show_confirm: true});
         }
         else
         {
-            saves[this.state.name] = this.props.config;
+            saves[this.state.config_name] = this.props.config;
             localStorage.setItem("config_saves", JSON.stringify(saves))
             this.props.close_save();
         }
@@ -112,7 +112,7 @@ export default class SaveView extends React.Component
         event.preventDefault();
         let saves = localStorage.getItem("config_saves");
         saves = saves === null ? {} : JSON.parse(saves);
-        saves.name = this.props.config;
+        saves[this.state.config_name] = this.props.config;
         localStorage.setItem("config_saves", JSON.stringify(saves));
         this.props.close_save();
     }
@@ -141,7 +141,7 @@ export default class SaveView extends React.Component
                 <div style={title_style}>
                     Configuration Name:
                 </div>
-                <input style={input_style} name="name" value={this.state.name} type="text" required/>
+                <input style={input_style} config_name="config_name" value={this.state.config_name} type="text" required/>
                 <br></br>
                 <button style={button_style} onClick={this.props.close_save}>
                     Close
