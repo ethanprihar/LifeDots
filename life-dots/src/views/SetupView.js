@@ -53,7 +53,7 @@ const header_style =
 
 const title_style = 
 {
-    fontSize: "10vh",
+    fontSize: "9.75vh",
     marginBottom: "0",
     marginTop: "0",
 }
@@ -89,7 +89,7 @@ const form_style =
 const subtitle_style = 
 {
     fontSize: "5vh",
-    marginTop: "1vh",
+    marginTop: "3vh",
 }
 
 const description_style = 
@@ -583,7 +583,7 @@ export default class SetupView extends React.Component
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
-                            Distribution:
+                            Food Distribution:
                         </td>
                         <td style={input_entry}>
                             <select style={input_style}
@@ -774,47 +774,34 @@ export default class SetupView extends React.Component
                     Trap Configuration
                 </div>
                 <div style={description_style}>
-                    Food is added to the world in random locations and quantities on a fixed schedule. 
-                    The following parameters are used to control this schedule.
+                    Traps are added to the world in random locations and quantities when the world is 
+                    generated, and remain a permanent part of the world. The following parameters contol 
+                    the generation of traps.
                     <ul>
                         <li>
-                            Distribution determines if food is added randomly using a uniform distribution 
-                            or a normal (gaussian) distribution.
+                            Trap distribution determines whether or not the traps will be added to the world 
+                            in a uniform distribution or a normal (gaussian) distribution.
                         </li>
                         <li>
-                            Food is added to the world in bursts. Ticks between bursts determines how many ticks 
-                            pass before more food is added to the world.
+                            Trap number determines the number of traps added to the world.
                         </li>
                         <li>
-                            Drops per burst determines how many clusters of food are added to the world during 
-                            a burst.
+                            Minimum and maximum trap size determine the range of trap size that each trap's size 
+                            will be randomly selected from. A trap size of 4 means that a 4x4 square of tiles 
+                            will be trapped, and that all 16 of those tiles will be associated with a single trap.
                         </li>
                         <li>
-                            Minimum and maximum drop size determines the range of sizes of the clusters of food 
-                            added durring a burst. Each cluster's size is chosen randomly within the specified range. 
-                            A drop size of 3 means that the drop will add food to a 3x3 square of cells in the world.
-                        </li>
-                        <li>
-                            Minimum and maximum food per drop determines the range of quantity of food added to each cell 
-                            of the world that was occupied by a drop. This quantity is the amount of food a dot will 
-                            comsume when entering the world cell. Each drop's food quantity is chosen randomly within 
-                            the specified range.
+                            Minimum and maximum trap damage determine the range of trap damage that each trap's 
+                            damage will be randomly selected from. Trap damage is subtrated from a dot's energy 
+                            every tick a dot is in a trapped cell. A high trap damage will more quickly kill a dot in 
+                            the trapped cell.
                         </li>
                     </ul>
                 </div>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
-                            Trap Number:
-                        </td>
-                        <td style={input_entry}>
-                            <input style={input_style} 
-                            name="trap_num" 
-                            value={this.state.config.trap_num} 
-                            type="number" min="0" max="99999" required/>
-                        </td>
-                        <td style={label_entry}>
-                            Distribution:
+                            Trap Distribution:
                         </td>
                         <td style={input_entry}>
                             <select style={input_style}
@@ -827,6 +814,17 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
+                            Trap Number:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} 
+                            name="trap_num" 
+                            value={this.state.config.trap_num} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
                             Minimum Trap Size:
                         </td>
                         <td style={input_entry}>
@@ -835,6 +833,8 @@ export default class SetupView extends React.Component
                             value={this.state.config.min_trap_size} 
                             type="number" min="0" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
                             Maximum Trap Size:
                         </td>
@@ -855,6 +855,8 @@ export default class SetupView extends React.Component
                             value={this.state.config.min_trap_damage} 
                             type="number" min="0" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
                             Maximum Trap Damage:
                         </td>
@@ -866,12 +868,25 @@ export default class SetupView extends React.Component
                         </td>
                     </tr>
                 </table>
+                <div style={subtitle_style}>
+                    Wall Configuration
+                </div>
+                <div style={description_style}>
+                    Walls are added to the world in a grid. The wall percentage determines what 
+                    percentage of the wall contains impassible world cells. A percentage of 0 means 
+                    that there will be no walls in the world. A wall percentage of 100 means that 
+                    the world will be walled into wall rows x wall columns areas that 
+                    have no way of being traveled between. For example, a density of 100 and wall rows 
+                    and columns of 1 means the world will have an impassable border around its 
+                    edge. A density of 100 and wall rows and columns of 2 means the world will be evenly divided into 
+                    four quandrants that dots cannot pass between. A density of 50 and wall rows and columns of 2 means 
+                    that dots will be able to move between quadrants as half of the wall blocks will not be present.
 
-                <p style={subtitle_style}>Wall Configuration</p>
+                </div>
                 <table style={table_style}>
                     <tr>
                         <td style={label_entry}>
-                            Wall Density:
+                            Wall Percentage:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -882,7 +897,7 @@ export default class SetupView extends React.Component
                     </tr>
                     <tr>
                         <td style={label_entry}>
-                            Partition Rows:
+                            Wall Rows:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 
@@ -890,8 +905,10 @@ export default class SetupView extends React.Component
                             value={this.state.config.section_rows} 
                             type="number" min="1" max="99999" required/>
                         </td>
+                    </tr>
+                    <tr>
                         <td style={label_entry}>
-                            Partition Columns:
+                            Wall Columns:
                         </td>
                         <td style={input_entry}>
                             <input style={input_style} 

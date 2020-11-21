@@ -51,9 +51,9 @@ const modal_style =
     {
         textAlign: "center",
         position: 'absolute',
-        top: '28%',
-        left: '23%',
-        right: '23%',
+        top: '27%',
+        left: '22%',
+        right: '22%',
         bottom: 'auto',
         border: "0.25vh solid #b3b3b3",
         backgroundColor: "#000000",
