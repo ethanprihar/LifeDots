@@ -14,7 +14,6 @@ import Genome from "../models/Genome";
 var ndarray = require("ndarray");
 var LZString = require("lz-string");
 var localforage = require("localforage");
-var JsonPorter = require('json-porter').default;
 
 const main_menu_style = 
 {
