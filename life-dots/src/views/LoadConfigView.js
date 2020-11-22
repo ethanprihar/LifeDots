@@ -150,7 +150,7 @@ export default class LoadConfigView extends React.Component
                         Delete Configuration?
                     </div>
                     <button style={button_style} onClick={this.no_confirm}>
-                        Go Back
+                        Back
                     </button>
                     <button style={button_style} onClick={this.confirm}>
                         Confirm

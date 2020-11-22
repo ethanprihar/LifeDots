@@ -130,7 +130,7 @@ export default class SaveConfigView extends React.Component
                     Overwrite Existing Save?
                 </div>
                 <button style={button_style} onClick={this.no_confirm}>
-                    Go Back
+                    Back
                 </button>
                 <button style={button_style} onClick={this.confirm}>
                     Confirm

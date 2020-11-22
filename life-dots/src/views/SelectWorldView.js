@@ -209,7 +209,7 @@ export default class SelectWorldView extends React.Component
                     Overwrite Existing World Save?
                 </div>
                 <button style={button_style} onClick={this.no_confirm}>
-                    Go Back
+                    Back
                 </button>
                 <button style={button_style} onClick={this.confirm}>
                     Confirm
@@ -224,7 +224,7 @@ export default class SelectWorldView extends React.Component
                 </select>
                 <br></br>
                 <button style={button_style} onClick={this.props.close_overlay}>
-                    Go Back
+                    Back
                 </button>
                 <button style={button_style} onClick={this.start}>
                     Start

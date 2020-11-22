@@ -94,7 +94,7 @@ export default class WorldOverlayView extends React.Component
                     Overwrite Existing World Save?
                 </div>
                 <button style={button_style} onClick={this.no_confirm}>
-                    Go Back
+                    Back
                 </button>
                 <button style={button_style} onClick={this.confirm}>
                     Confirm
@@ -113,6 +113,10 @@ export default class WorldOverlayView extends React.Component
                 <br></br>
                 <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
                     Menu
+                </button>
+                <br></br>
+                <button style={button_style} onClick={this.props.close_overlay}>
+                    Close
                 </button>
         </div>
         );
