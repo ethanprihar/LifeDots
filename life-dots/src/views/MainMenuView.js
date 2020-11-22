@@ -57,7 +57,7 @@ const disabled_style =
 
 const buffer =
 {
-    margin:"5vh"
+    margin:"10vh"
 }
 
 const disclamer =
