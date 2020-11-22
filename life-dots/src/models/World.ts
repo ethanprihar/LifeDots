@@ -102,16 +102,17 @@ export default class World
                  max_sizes: Record<string, number>, 
                  sizes: Record<string, number>) : void
     {
+        const max_size_squared = dot.genome.max_size * dot.genome.max_size
         if (pos in stacks)
         {
             stacks[pos].push(dot);
-            max_sizes[pos] += dot.genome.max_size;
+            max_sizes[pos] += max_size_squared;
             sizes[pos] += dot.size;
         }
         else
         {
             stacks[pos] = [dot];
-            max_sizes[pos] = dot.genome.max_size;
+            max_sizes[pos] = max_size_squared;
             sizes[pos] = dot.size;
         }
     }
@@ -201,14 +202,15 @@ export default class World
                 let sum: number = 0;
                 for (let dot of dot_stacks[pos])
                 {
-                    if ((lottery >= sum) && (lottery < (sum + dot.genome.max_size)))
+                    const max_size_squared = dot.genome.max_size * dot.genome.max_size
+                    if ((lottery >= sum) && (lottery < (sum + max_size_squared)))
                     {
                         // Reward the victor with sustinance.
                         dot.size += (stack_sizes[pos] - dot.size) * (1 - dot.genome.eat_ratio);
                         dot_stacks[pos] = [dot];
                         break;
                     }
-                    sum += dot.genome.max_size;
+                    sum += max_size_squared;
                 }
             }
             let dot: Dot = dot_stacks[pos][0];

@@ -1,4 +1,8 @@
 import React from "react";
+import ReactModal from 'react-modal';
+import BounceLoader from "react-spinners/BounceLoader";
+
+import WorldOverlayView from "./WorldOverlayView";
 
 import DotView from "./DotView";
 import FoodView from "./FoodView";
@@ -7,6 +11,38 @@ import WallView from "./WallView";
 
 var LZString = require("lz-string")
 var localforage = require("localforage")
+var JsonPorter = require('json-porter').default;
+
+const spinner_style =
+{
+    height: "100px",
+    width: "100px",
+    position: "fixed",
+    left: "50%",
+    marginLeft: "-15vh",
+    top: "50%",
+    marginTop: "-15vh",
+}
+
+const modal_style = 
+{
+    overlay: 
+    {
+        backgroundColor: 'rgba(255, 255, 255, 0.25)'
+    },
+    content: 
+    {
+        textAlign: "center",
+        position: 'absolute',
+        top: '25%',
+        left: '20%',
+        right: '20%',
+        bottom: 'auto',
+        border: "0.25vh solid #b3b3b3",
+        backgroundColor: "#000000",
+        borderRadius: "2vh",
+    },
+}
 
 export default class WorldView extends React.Component
 {   
@@ -18,15 +54,19 @@ export default class WorldView extends React.Component
             tick_time: props.tick_time,
             cell_size: props.cell_size,
             world: props.world,
+            warned: false,
+            waiting: false,
+            overlay: true,
         };
-        this.local_storage = window.localStorage;
-        this.warned = "no";
         this.auto_save();
     }
 
     update_world()
     {
-        this.state.world.update()
+        if (!this.state.overlay)
+        {
+            this.state.world.update()
+        }
         return this.state.world
     }
 
@@ -34,26 +74,46 @@ export default class WorldView extends React.Component
     {
         this.world_interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
         this.save_interval = setInterval(() => this.auto_save(), 300000);
+        document.addEventListener("keydown", this.open_overlay);
     }
 
     componentWillUnmount()
     {
         clearInterval(this.world_interval);
         clearInterval(this.save_interval);
+        document.removeEventListener("keydown", this.open_overlay);
     }
 
-    auto_save()
+    auto_save = () =>
     {
+        this.setState({waiting: true})
         let save_string = LZString.compressToUTF16(JSON.stringify(this.state));
         if (save_string.length < 500000000)
         {
             localforage.setItem('world', save_string)
         }
-        else if (this.warned === "no")
+        else if (!this.state.warned)
         {
             alert("This world is currently too large to save locally. Every 5 minutes another save will be attempted, but this will be your only alert.");
-            this.warned = "yes";
+            this.setState({warned: true});
         }
+        this.setState({waiting: false})
+    }
+
+    open_overlay = () =>
+    {
+        this.setState({overlay: true});
+    }
+
+    close_overlay = () =>
+    {
+        this.setState({overlay: false});
+    }
+
+    export = () =>
+    {
+        let jp = new JsonPorter();
+        jp.export(this.state.world, "lifedots-world.json");
     }
     
     render()
@@ -110,6 +170,15 @@ export default class WorldView extends React.Component
                                         cell_size={this.state.cell_size}
                                         key={"dot" + pos}/>);
         }
-        return (<div>{components}</div>);
+        return(
+        <div>
+            <div style={spinner_style}>
+                <BounceLoader size={"30vh"} color={"#b3b3b3"} loading={this.state.waiting}/>
+            </div>
+            <ReactModal style={modal_style} isOpen={this.state.overlay} ariaHideApp={false}>
+                <WorldOverlayView close_overlay={this.close_overlay} save={this.auto_save} export={this.export} setPage={this.props.setPage}/>
+            </ReactModal>
+            {components}
+        </div>);
     }
 }
