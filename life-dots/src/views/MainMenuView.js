@@ -14,6 +14,7 @@ import Genome from "../models/Genome";
 var ndarray = require("ndarray");
 var LZString = require("lz-string");
 var localforage = require("localforage");
+var JsonPorter = require('json-porter').default;
 
 const main_menu_style = 
 {
@@ -265,6 +266,12 @@ export default class MainMenuView extends React.Component
             localStorage.setItem("config_saves", JSON.stringify(saves))
         }
     }
+
+    componentDidMount()
+    {
+        this.setState({loading: "true"})
+        localforage.getItem('world', this.load_world);
+    }
     
     load_world(err, value)
     {
@@ -302,19 +309,13 @@ export default class MainMenuView extends React.Component
     {
         this.setState({overlay: false});
     }
-
-    componentDidMount()
-    {
-        this.setState({loading: "true"})
-        localforage.getItem('world', this.load_world);
-    }
     
     render()
     {
         return(
             <div style={main_menu_style}>
                 <ReactModal style={modal_style} isOpen={this.state.overlay} ariaHideApp={false}>
-                    <SelectWorldView close_overlay={this.close_overlay} setPage={this.props.setPage}/>
+                    <SelectWorldView close_overlay={this.close_overlay} setPage={this.props.setPage} import={this.import}/>
                 </ReactModal>
                 <div style={text_style}>
                     Life Dots

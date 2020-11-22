@@ -113,7 +113,9 @@ export default class WorldView extends React.Component
     export = () =>
     {
         let jp = new JsonPorter();
-        jp.export(this.state.world, "lifedots-world.json");
+        jp.export({cell_size: this.state.cell_size, 
+                   tick_time: this.state.tick_time, 
+                   world: this.state.world}, "lifedots-world.json");
     }
     
     render()

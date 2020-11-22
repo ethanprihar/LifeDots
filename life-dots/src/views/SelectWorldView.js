@@ -6,6 +6,11 @@ import RandomFood from "../models/placers/RandomFood"
 import RandomTrap from "../models/placers/RandomTrap"
 import RandomWall from "../models/placers/RandomWall"
 import World from "../models/World"
+import Dot from "../models/Dot";
+import Genome from "../models/Genome";
+
+var ndarray = require("ndarray");
+var JsonPorter = require('json-porter').default;
 
 const form_style = 
 {
@@ -81,6 +86,7 @@ export default class SelectWorldView extends React.Component
             show_confirm: false,
             confirmed: false,
             saves: saves,
+            pressed: ""
         };
     }
 
@@ -101,56 +107,86 @@ export default class SelectWorldView extends React.Component
     start = (event) =>
     {   
         event.preventDefault();
-        this.setState({show_confirm: true});
+        this.setState({pressed: "start", show_confirm: true});
+    }
+
+    import = (event) =>
+    {
+        event.preventDefault();
+        this.setState({pressed: "import", show_confirm: true});
+    }
+
+    set_world = (saved_state) =>
+    {
+        let world = Object.assign(new World(), saved_state.world);
+        world.dot_placer = Object.assign(new RandomDots(), world.dot_placer);
+        world.food_placer = Object.assign(new RandomFood(), world.food_placer);
+        world.trap_placer = Object.assign(new RandomTrap(), world.trap_placer);
+        world.wall_placer = Object.assign(new RandomWall(), world.wall_placer);
+        for (let pos in world.dot_map)
+        {
+            world.dot_map[pos] = Object.assign(new Dot(), world.dot_map[pos]);
+            world.dot_map[pos].genome = Object.assign(new Genome(), world.dot_map[pos].genome);
+            world.dot_map[pos].genome.weights = ndarray(new Float64Array(Object.values(world.dot_map[pos].genome.weights.data)), world.dot_map[pos].genome.weights.shape);
+        }
+        this.props.setPage("Start", saved_state.tick_time, saved_state.cell_size, world);
     }
 
     confirm = (event) =>
     {
         event.preventDefault()
-        let config = this.state.saves[this.state.selection];
-        const rows = Math.floor(window.innerHeight / config.cell_size);
-        const cols = Math.floor(window.innerWidth / config.cell_size);
-        let dot_placer = new RandomDots(config.dot_num,  
-                                        config.min_max_size, 
-                                        config.max_max_size, 
-                                        config.min_split_frac / 100, 
-                                        config.max_split_frac / 100, 
-                                        config.min_eat_ratio / 100, 
-                                        config.max_eat_ratio / 100, 
-                                        config.min_speed, 
-                                        config.max_speed, 
-                                        config.min_view, 
-                                        config.max_view, 
-                                        config.min_max_mut_pct / 100, 
-                                        config.max_max_mut_pct / 100, 
-                                        config.reset_on_extinction);
-        let food_placer = new RandomFood(config.funiform,
-                                        config.ticks_between_rain, 
-                                        config.drops_per_rain, 
-                                        config.min_drop_size, 
-                                        config.max_drop_size,
-                                        config.min_food_per_drop, 
-                                        config.max_food_per_drop, 
-                                        config.delta_ticks_between_rain, 
-                                        config.delta_drops_per_rain, 
-                                        config.delta_min_drop_size, 
-                                        config.delta_max_drop_size, 
-                                        config.delta_min_food_per_drop, 
-                                        config.delta_max_food_per_drop, 
-                                        config.phase_length, 
-                                        config.will_cycle);
-        let trap_placer = new RandomTrap(config.tuniform, 
-                                        config.trap_num, 
-                                        config.min_trap_size, 
-                                        config.max_trap_size, 
-                                        config.min_trap_damage, 
-                                        config.max_trap_damage)
-        let wall_placer = new RandomWall(config.section_rows, 
-                                        config.section_cols, 
-                                        config.density / 100);
-        let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer);
-        world.init()
-        this.props.setPage("Start", config.tick_time, config.cell_size, world);
+        if (this.state.pressed === "start")
+        {
+            let config = this.state.saves[this.state.selection];
+            const rows = Math.floor(window.innerHeight / config.cell_size);
+            const cols = Math.floor(window.innerWidth / config.cell_size);
+            let dot_placer = new RandomDots(config.dot_num,  
+                                            config.min_max_size, 
+                                            config.max_max_size, 
+                                            config.min_split_frac / 100, 
+                                            config.max_split_frac / 100, 
+                                            config.min_eat_ratio / 100, 
+                                            config.max_eat_ratio / 100, 
+                                            config.min_speed, 
+                                            config.max_speed, 
+                                            config.min_view, 
+                                            config.max_view, 
+                                            config.min_max_mut_pct / 100, 
+                                            config.max_max_mut_pct / 100, 
+                                            config.reset_on_extinction);
+            let food_placer = new RandomFood(config.funiform,
+                                            config.ticks_between_rain, 
+                                            config.drops_per_rain, 
+                                            config.min_drop_size, 
+                                            config.max_drop_size,
+                                            config.min_food_per_drop, 
+                                            config.max_food_per_drop, 
+                                            config.delta_ticks_between_rain, 
+                                            config.delta_drops_per_rain, 
+                                            config.delta_min_drop_size, 
+                                            config.delta_max_drop_size, 
+                                            config.delta_min_food_per_drop, 
+                                            config.delta_max_food_per_drop, 
+                                            config.phase_length, 
+                                            config.will_cycle);
+            let trap_placer = new RandomTrap(config.tuniform, 
+                                            config.trap_num, 
+                                            config.min_trap_size, 
+                                            config.max_trap_size, 
+                                            config.min_trap_damage, 
+                                            config.max_trap_damage)
+            let wall_placer = new RandomWall(config.section_rows, 
+                                            config.section_cols, 
+                                            config.density / 100);
+            let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer);
+            world.init()
+            this.props.setPage("Start", config.tick_time, config.cell_size, world);
+        }
+        else if (this.state.pressed === "import")
+        {
+            let jp = new JsonPorter();
+            jp.import().then(this.set_world);
+        }
     }
 
     no_confirm = (event) =>
@@ -192,6 +228,9 @@ export default class SelectWorldView extends React.Component
                 </button>
                 <button style={button_style} onClick={this.start}>
                     Start
+                </button>
+                <button style={button_style} onClick={this.import}>
+                    Import
                 </button>
             </form>
         </div>
