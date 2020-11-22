@@ -338,7 +338,8 @@ export default class MainMenuView extends React.Component
                     By using lifedots.net you agree to allow lifedots.net to save world content in 
                     your browser, to not monetize content from lifedots.net without explicit permission 
                     from the creator of lifedots.net, and to not hold the creator of lifedots.net 
-                    accountable for anything.
+                    accountable for anything. To contact the owner of lifedots.net, 
+                    please email lifedotssimulation@gmail.com.
                 </div>
             </div>
         );
