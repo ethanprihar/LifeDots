@@ -158,7 +158,7 @@ export default class LoadConfigView extends React.Component
                 </ReactModal>
                 <form style={form_style} onChange={this.change_input} onKeyPress={this.key_press}>
                     <div style={title_style}>
-                        Configuration Name:
+                        World Configuration:
                     </div>
                     <select style={input_style} onChange={() => {}} name="selection" value={this.state.selection}>
                         {Object.keys(this.state.saves).map(this.make_options)}

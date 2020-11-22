@@ -74,6 +74,16 @@ export default class WorldOverlayView extends React.Component
     {
         this.setState({show_confirm: false});
     }
+
+    componentDidMount()
+    {
+        document.addEventListener("keydown", this.props.close_overlay);
+    }
+
+    componentWillUnmount()
+    {
+        document.removeEventListener("keydown", this.props.close_overlay);
+    }
     
     render()
     {
@@ -81,7 +91,7 @@ export default class WorldOverlayView extends React.Component
         <div>
             <ReactModal style={modal_style} isOpen={this.state.show_confirm} ariaHideApp={false}>
                 <div style={title_style}>
-                    Overwrite Existing Save?
+                    Overwrite Existing World Save?
                 </div>
                 <button style={button_style} onClick={this.no_confirm}>
                     Go Back
@@ -91,7 +101,7 @@ export default class WorldOverlayView extends React.Component
                 </button>
             </ReactModal>
                 <div style={title_style}>
-                    Press any key to open this overlay again.
+                    Press any key to toggle this overlay.
                 </div>
                 <button style={button_style} onClick={this.save}>
                     Save
@@ -99,10 +109,6 @@ export default class WorldOverlayView extends React.Component
                 <br></br>
                 <button style={button_style} onClick={this.props.export}>
                     Export
-                </button>
-                <br></br>
-                <button style={button_style} onClick={this.props.close_overlay}>
-                    Resume
                 </button>
                 <br></br>
                 <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
