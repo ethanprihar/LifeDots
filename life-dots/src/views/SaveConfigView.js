@@ -73,10 +73,9 @@ export default class SaveConfigView extends React.Component
             show_confirm: false,
             confirmed: false,
         };
-        this.change_input = this.change_input.bind(this);
     }
 
-    key_press(event)
+    key_press = (event) =>
     {
         // Do nothing when enter is pressed.
         if (event.which === 13)
@@ -85,7 +84,7 @@ export default class SaveConfigView extends React.Component
         }
     }
 
-    change_input(event)
+    change_input = (event) =>
     {
         this.setState({config_name: event.target.value});
     }
@@ -141,7 +140,7 @@ export default class SaveConfigView extends React.Component
                 <div style={title_style}>
                     Configuration Name:
                 </div>
-                <input style={input_style} config_name="config_name" value={this.state.config_name} type="text" required/>
+                <input style={input_style} onChange={() => {}} config_name="config_name" value={this.state.config_name} type="text" required/>
                 <br></br>
                 <button style={button_style} onClick={this.props.close_save}>
                     Close

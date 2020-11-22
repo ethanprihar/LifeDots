@@ -1,5 +1,6 @@
 import React from "react";
 import ReactModal from 'react-modal';
+import BounceLoader from "react-spinners/BounceLoader";
 
 import SaveConfigView from "./SaveConfigView"
 import LoadConfigView from "./LoadConfigView"
@@ -9,6 +10,8 @@ import RandomFood from "../models/placers/RandomFood"
 import RandomTrap from "../models/placers/RandomTrap"
 import RandomWall from "../models/placers/RandomWall"
 import World from "../models/World"
+
+var JsonPorter = require('json-porter').default;
 
 const setup_style = 
 {
@@ -158,6 +161,17 @@ const footer_button_style =
     border: "0.25vh solid #b3b3b3",
 }
 
+const spinner_style =
+{
+    height: "100px",
+    width: "100px",
+    position: "fixed",
+    left: "50%",
+    marginLeft: "-15vh",
+    top: "50%",
+    marginTop: "-15vh",
+}
+
 export default class SetupView extends React.Component
 {   
     constructor(props)
@@ -171,16 +185,16 @@ export default class SetupView extends React.Component
             dot_num: 100, 
             min_max_size: 50, 
             max_max_size: 200, 
-            min_split_frac: 0, 
-            max_split_frac: 1, 
-            min_eat_ratio: 0, 
-            max_eat_ratio: 1, 
+            min_split_frac: 0, //divide
+            max_split_frac: 100, //divide
+            min_eat_ratio: 0, //divide
+            max_eat_ratio: 100, //divide
             min_speed: 1, 
             max_speed: 10, 
             min_view: 1, 
             max_view: 1, 
-            min_max_mut_pct: 0.01, 
-            max_max_mut_pct: 0.1, 
+            min_max_mut_pct: 1, //divide
+            max_max_mut_pct: 10, //divide
             reset_on_extinction: true,
 
             funiform: false,
@@ -208,7 +222,7 @@ export default class SetupView extends React.Component
 
             section_rows: 1, 
             section_cols: 1, 
-            density: 0,
+            density: 0, //divide
         };
         this.state = 
         {
@@ -216,13 +230,19 @@ export default class SetupView extends React.Component
             pressed_button: "",
             show_save: false,
             show_load: false,
+            making_world: false,
         };
-        this.change_input = this.change_input.bind(this);
     }
 
     set_save_button = () =>
     {
         this.setState({pressed_button: "save"})
+    }
+
+    set_start_button = () =>
+    {
+        this.setState({pressed_button: "start", 
+                       making_world: true})
     }
 
     save = () =>
@@ -253,12 +273,21 @@ export default class SetupView extends React.Component
         }
     }
 
-    import = (event) =>
+    import = () =>
     {
+        let jp = new JsonPorter();
+        jp.import().then(this.set_config);
     }
 
-    export = (event) =>
+    set_config = (c) =>
     {
+        this.setState({config: c});
+    }
+
+    export = () =>
+    {
+        let jp = new JsonPorter();
+        jp.export(this.state.config, "lifedots-config.json");
     }
 
     submit = (event) =>
@@ -268,9 +297,55 @@ export default class SetupView extends React.Component
         {
             this.save();
         }
+        else if (this.state.pressed_button === "start")
+        {
+            const rows = Math.floor(window.innerHeight / this.state.config.cell_size);
+            const cols = Math.floor(window.innerWidth / this.state.config.cell_size);
+            let dot_placer = new RandomDots(this.state.config.dot_num,  
+                                            this.state.config.min_max_size, 
+                                            this.state.config.max_max_size, 
+                                            this.state.config.min_split_frac / 100, 
+                                            this.state.config.max_split_frac / 100, 
+                                            this.state.config.min_eat_ratio / 100, 
+                                            this.state.config.max_eat_ratio / 100, 
+                                            this.state.config.min_speed, 
+                                            this.state.config.max_speed, 
+                                            this.state.config.min_view, 
+                                            this.state.config.max_view, 
+                                            this.state.config.min_max_mut_pct / 100, 
+                                            this.state.config.max_max_mut_pct / 100, 
+                                            this.state.config.reset_on_extinction);
+            let food_placer = new RandomFood(this.state.config.funiform,
+                                            this.state.config.ticks_between_rain, 
+                                            this.state.config.drops_per_rain, 
+                                            this.state.config.min_drop_size, 
+                                            this.state.config.max_drop_size,
+                                            this.state.config.min_food_per_drop, 
+                                            this.state.config.max_food_per_drop, 
+                                            this.state.config.delta_ticks_between_rain, 
+                                            this.state.config.delta_drops_per_rain, 
+                                            this.state.config.delta_min_drop_size, 
+                                            this.state.config.delta_max_drop_size, 
+                                            this.state.config.delta_min_food_per_drop, 
+                                            this.state.config.delta_max_food_per_drop, 
+                                            this.state.config.phase_length, 
+                                            this.state.config.will_cycle);
+            let trap_placer = new RandomTrap(this.state.config.tuniform, 
+                                            this.state.config.trap_num, 
+                                            this.state.config.min_trap_size, 
+                                            this.state.config.max_trap_size, 
+                                            this.state.config.min_trap_damage, 
+                                            this.state.config.max_trap_damage)
+            let wall_placer = new RandomWall(this.state.config.section_rows, 
+                                            this.state.config.section_cols, 
+                                            this.state.config.density / 100);
+            let world = new World(rows, cols, dot_placer, food_placer, trap_placer, wall_placer);
+            world.init()
+            this.props.setPage("Start", this.state.config.tick_time, this.state.config.cell_size, world);
+        }
     }
 
-    key_press(event)
+    key_press = (event) =>
     {
         // Do nothing when enter is pressed.
         if (event.which === 13)
@@ -279,7 +354,7 @@ export default class SetupView extends React.Component
         }
     }
 
-    change_input(event)
+    change_input = (event) =>
     {
         const name = event.target.name;
         const number_value = event.target.valueAsNumber;
@@ -308,6 +383,9 @@ export default class SetupView extends React.Component
     {
         return (
         <div style={setup_style}>
+            <div style={spinner_style}>
+                <BounceLoader size={"30vh"} color={"#b3b3b3"} loading={this.state.making_world}/>
+            </div>
             <ReactModal style={modal_style} isOpen={this.state.show_save} ariaHideApp={false}>
                 <SaveConfigView close_save={this.close_save} config={JSON.parse(JSON.stringify(this.state.config))}/>
             </ReactModal>
@@ -320,11 +398,11 @@ export default class SetupView extends React.Component
                 </span>
                 <div style={header_flex_style}>
                     <div>
-                        <button style={header_button_style} type="submit" form="config" onClick={this.set_save_button}>
-                            Save
-                        </button>
                         <button style={header_button_style} onClick={this.load}>
                             Load
+                        </button>
+                        <button style={header_button_style} type="submit" form="config" onClick={this.set_save_button}>
+                            Save
                         </button>
                     </div>
                     <div>
@@ -475,7 +553,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="min_split_frac" 
                             value={this.state.config.min_split_frac} 
-                            type="number" min="0" max="1" step="0.0001" required/>
+                            type="number" min="0" max="100" step="0.0001" required/>
                         </td>
                     </tr>
                     <tr>
@@ -486,7 +564,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="max_split_frac" 
                             value={this.state.config.max_split_frac} 
-                            type="number" min="0" max="1" step="0.0001" required/>
+                            type="number" min="0" max="100" step="0.0001" required/>
                         </td>
                     </tr>
                     <tr>
@@ -497,7 +575,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="min_eat_ratio" 
                             value={this.state.config.min_eat_ratio} 
-                            type="number" min="0" max="1" step="0.0001" required/>
+                            type="number" min="0" max="100" step="0.0001" required/>
                         </td>
                     </tr>
                     <tr>
@@ -508,7 +586,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="max_eat_ratio" 
                             value={this.state.config.max_eat_ratio} 
-                            type="number" min="0" max="1" step="0.0001" required/>
+                            type="number" min="0" max="100" step="0.0001" required/>
                         </td>
                     </tr>
                     <tr>
@@ -530,7 +608,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="max_speed" 
                             value={this.state.config.max_speed} 
-                            type="number" min="0" max="99999" required/>
+                            type="number" min="1" max="99999" required/>
                         </td>
                     </tr>
                     <tr>
@@ -861,7 +939,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="min_trap_size" 
                             value={this.state.config.min_trap_size} 
-                            type="number" min="0" max="99999" required/>
+                            type="number" min="1" max="99999" required/>
                         </td>
                     </tr>
                     <tr>
@@ -872,7 +950,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="max_trap_size" 
                             value={this.state.config.max_trap_size} 
-                            type="number" min="0" max="99999" required/>
+                            type="number" min="1" max="99999" required/>
                         </td>
                     </tr>
                     <tr>
@@ -883,7 +961,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="min_trap_damage" 
                             value={this.state.config.min_trap_damage} 
-                            type="number" min="0" max="99999" required/>
+                            type="number" min="1" max="99999" required/>
                         </td>
                     </tr>
                     <tr>
@@ -894,7 +972,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="max_trap_damage" 
                             value={this.state.config.max_trap_damage} 
-                            type="number" min="0" max="99999" required/>
+                            type="number" min="1" max="99999" required/>
                         </td>
                     </tr>
                 </tbody></table>
@@ -922,7 +1000,7 @@ export default class SetupView extends React.Component
                             <input style={input_style} onChange={() => {}} 
                             name="density" 
                             value={this.state.config.density} 
-                            type="number" min="0" max="1" step="0.0001" required/>
+                            type="number" min="0" max="100" step="0.0001" required/>
                         </td>
                     </tr>
                     <tr>
@@ -952,10 +1030,10 @@ export default class SetupView extends React.Component
 
             <div style={footer_style}>
                 <div>
-                    <button style={footer_button_style} onClick={this}>
+                    <button style={footer_button_style} onClick={() => this.props.setPage("MainMenu")}>
                         Menu
                     </button>
-                    <button style={footer_button_style}  type="submit" form="config" onClick={this}>
+                    <button style={footer_button_style} type="submit" form="config" onClick={this.set_start_button}>
                         Start
                     </button>
                 </div>

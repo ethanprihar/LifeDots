@@ -112,12 +112,10 @@ export default class LoadConfigView extends React.Component
         localStorage.setItem("config_saves", JSON.stringify(new_saves))
         if (Object.keys(new_saves).length === 0)
         {
-            console.log("none")
             this.props.close_load(undefined);
         }
         else
         {
-            console.log("morethan0")
             this.setState({selection: Object.keys(new_saves)[0], 
                            saves: new_saves, 
                            show_confirm: false});
@@ -162,7 +160,7 @@ export default class LoadConfigView extends React.Component
                     <div style={title_style}>
                         Configuration Name:
                     </div>
-                    <select style={input_style} name="selection" value={this.state.selection}>
+                    <select style={input_style} onChange={() => {}} name="selection" value={this.state.selection}>
                         {Object.keys(this.state.saves).map(this.make_options)}
                     </select>
                     <br></br>

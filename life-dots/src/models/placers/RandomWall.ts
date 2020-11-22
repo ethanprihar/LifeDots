@@ -36,7 +36,7 @@ export default class RandomWall extends Placer
                         map[(rows-1) + "," + c] = 1;
                     }
                 }
-                r += (rows - 1) / this.section_rows;
+                r += rows / this.section_rows;
             }
         }
         // Add the vertical bars.
@@ -53,7 +53,7 @@ export default class RandomWall extends Placer
                         map[r + "," + (cols-1)] = 1;
                     }
                 }
-                c += (cols - 1) / this.section_cols;
+                c += cols / this.section_cols;
             }
         }
         return map;
