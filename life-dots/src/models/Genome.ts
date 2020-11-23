@@ -53,7 +53,7 @@ export default class Genome
     mutate(): Genome | null
     {
         let new_max_size: number = this.pct_mut(this.max_size);
-        if (new_max_size <= 0)
+        if (new_max_size < 1)
         {
             return null;
         }
