@@ -115,7 +115,7 @@ export default class WorldOverlayView extends React.Component
                     Menu
                 </button>
                 <br></br>
-                <button style={button_style} onClick={this.props.close_overlay}>
+                <button style={button_style} onClick={this.props.close_overlay_button}>
                     Close
                 </button>
         </div>

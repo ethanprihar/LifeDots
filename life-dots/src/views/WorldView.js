@@ -118,6 +118,11 @@ export default class WorldView extends React.Component
         }
     }
 
+    close_overlay_button = () =>
+    {
+        this.setState({overlay: false});
+    }
+
     export = () =>
     {
         let jp = new JsonPorter();
@@ -186,7 +191,7 @@ export default class WorldView extends React.Component
                 <BounceLoader size={"30vh"} color={"#b3b3b3"} loading={this.state.waiting}/>
             </div>
             <ReactModal style={modal_style} isOpen={this.state.overlay} ariaHideApp={false}>
-                <WorldOverlayView close_overlay={this.close_overlay} save={this.auto_save} export={this.export} setPage={this.props.setPage}/>
+                <WorldOverlayView close_overlay={this.close_overlay} close_overlay_button={this.close_overlay_button} save={this.auto_save} export={this.export} setPage={this.props.setPage}/>
             </ReactModal>
             {components}
         </div>);
