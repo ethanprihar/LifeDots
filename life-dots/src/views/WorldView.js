@@ -100,14 +100,22 @@ export default class WorldView extends React.Component
         this.setState({waiting: false})
     }
 
-    open_overlay = () =>
+    open_overlay = (event) =>
     {
-        this.setState({overlay: true});
+        event.preventDefault();
+        if (event.which === 32) //space
+        {
+            this.setState({overlay: true});
+        }
     }
 
-    close_overlay = () =>
+    close_overlay = (event) =>
     {
-        this.setState({overlay: false});
+        event.preventDefault();
+        if (event.which === 32) //space
+        {
+            this.setState({overlay: false});
+        }
     }
 
     export = () =>

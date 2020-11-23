@@ -101,7 +101,7 @@ export default class WorldOverlayView extends React.Component
                 </button>
             </ReactModal>
                 <div style={title_style}>
-                    Press any key to toggle this overlay.
+                    Press the space bar to toggle this overlay.
                 </div>
                 <button style={button_style} onClick={this.save}>
                     Save
