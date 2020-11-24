@@ -67,9 +67,14 @@ export default class Genome
         {
             return null;
         }
+        let new_max_mut_pct: number = this.pct_mut(this.max_mut_pct);
+        if ((new_max_mut_pct < 0) || (new_max_mut_pct > 1))
+        {
+            return null;
+        }
         let new_weights: any;
         let new_view: number = this.fix_mut(this.view, 1);
-        if ((new_view <= 1) || (new_view >= 10))
+        if (new_view < 1)
         {
             return null;
         }
@@ -96,7 +101,6 @@ export default class Genome
         {
             new_color.push(Math.min(Math.max(this.fix_mut(c, 205), 50), 255));
         }
-        let new_max_mut_pct: number = this.pct_mut(this.max_mut_pct);
         let new_eat_ratio: number = Math.min(Math.max(this.fix_mut(this.eat_ratio, 1), 0), 1);
         return new Genome(new_color,
                           new_max_size, 
