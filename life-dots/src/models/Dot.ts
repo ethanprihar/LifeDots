@@ -29,7 +29,14 @@ export default class Dot
         {
             let input = ndarray(new Float64Array(raw_input), [1, raw_input.length])
             let output: any = ndarray(new Float64Array(10), [1, 10]);
-            gemm(output, input, this.genome.weights);
+            try
+            {
+                gemm(output, input, this.genome.weights);
+            }
+            catch
+            {
+                
+            }
             this.signal = Math.min(Math.max(output.get(0,9), -1), 1);
             this.size -= this.genome.max_size * Math.floor(this.genome.view) / 100;
             this.ticks_until_move = this.genome.speed;
