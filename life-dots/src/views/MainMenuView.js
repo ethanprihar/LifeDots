@@ -161,7 +161,7 @@ export default class MainMenuView extends React.Component
 
                 section_rows: 1,
                 section_cols: 1,
-                density: 100,
+                density: 0,
             };
             saves["Cycle Rain"] = cr_config;
         }
