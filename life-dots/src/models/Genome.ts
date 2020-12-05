@@ -68,7 +68,7 @@ export default class Genome
             return null;
         }
         let new_max_mut_pct: number = this.pct_mut(this.max_mut_pct);
-        if ((new_max_mut_pct < 0) || (new_max_mut_pct > 1))
+        if ((new_max_mut_pct < -1) || (new_max_mut_pct > 1))
         {
             return null;
         }

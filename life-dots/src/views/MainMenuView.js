@@ -114,61 +114,64 @@ export default class MainMenuView extends React.Component
     {
         let saves = localStorage.getItem("config_saves");
         saves = saves === null ? {} : JSON.parse(saves);
-        if (Object.keys(saves).length === 0)
+        if (!("Cycle Rain" in Object.keys(saves)))
         {
-            let gr_config = 
+            let cr_config = 
             {
                 cell_size: 15,
-                tick_time: 100,
-                
-                dot_num: 100, 
-                min_max_size: 50, 
-                max_max_size: 200, 
-                min_split_frac: 0, 
-                max_split_frac: 100, 
-                min_eat_ratio: 0, 
-                max_eat_ratio: 100, 
-                min_speed: 1, 
-                max_speed: 10, 
-                min_view: 1, 
-                max_view: 1, 
-                min_max_mut_pct: 1, 
-                max_max_mut_pct: 10, 
+                tick_time: 33,
+
+                dot_num: 100,
+                min_max_size: 50,
+                max_max_size: 200,
+                min_split_frac: 0,
+                max_split_frac: 100,
+                min_eat_ratio: 0,
+                max_eat_ratio: 100,
+                min_speed: 1,
+                max_speed: 10,
+                min_view: 1,
+                max_view: 3,
+                min_max_mut_pct: 1,
+                max_max_mut_pct: 10,
                 reset_on_extinction: true,
 
                 funiform: false,
-                ticks_between_rain: 10, 
-                drops_per_rain: 20, 
-                min_drop_size: 1, 
+                ticks_between_rain: 10,
+                drops_per_rain: 300,
+                min_drop_size: 1,
                 max_drop_size: 1,
-                min_food_per_drop: 10, 
-                max_food_per_drop: 100, 
-                delta_ticks_between_rain: 0, 
-                delta_drops_per_rain: 0, 
-                delta_min_drop_size: 0, 
-                delta_max_drop_size: 0, 
-                delta_min_food_per_drop: 0, 
-                delta_max_food_per_drop: 0, 
-                phase_length: 0, 
-                will_cycle: false,
+                min_food_per_drop: 10,
+                max_food_per_drop: 100,
+                delta_ticks_between_rain: 0,
+                delta_drops_per_rain: -5,
+                delta_min_drop_size: 0,
+                delta_max_drop_size: 0,
+                delta_min_food_per_drop: 0,
+                delta_max_food_per_drop: 0,
+                phase_length: 80,
+                will_cycle: true,
 
-                tuniform: true, 
-                trap_num: 5, 
-                min_trap_size: 3, 
-                max_trap_size: 3, 
-                min_trap_damage: 100, 
+                tuniform: true,
+                trap_num: 0,
+                min_trap_size: 3,
+                max_trap_size: 3,
+                min_trap_damage: 100,
                 max_trap_damage: 100,
 
-                section_rows: 1, 
-                section_cols: 1, 
-                density: 0,
+                section_rows: 1,
+                section_cols: 1,
+                density: 100,
             };
-            saves["Gentle Rain"] = gr_config;
-            
+            saves["Cycle Rain"] = cr_config;
+        }
+
+        if (!("Flash Flood" in Object.keys(saves)))
+        { 
             let ff_config =
             {
                 cell_size: 15,
-                tick_time: 100,
+                tick_time: 33,
                 
                 dot_num: 100, 
                 min_max_size: 50, 
@@ -202,7 +205,7 @@ export default class MainMenuView extends React.Component
                 will_cycle: false,
 
                 tuniform: true, 
-                trap_num: 5, 
+                trap_num: 0, 
                 min_trap_size: 1, 
                 max_trap_size: 5, 
                 min_trap_damage: 100, 
@@ -213,55 +216,56 @@ export default class MainMenuView extends React.Component
                 density: 100,
             }
             saves["Flash Flood"] = ff_config;
-
-            let os_config = 
+        }
+        if (!("Cell Block" in Object.keys(saves)))
+        {
+            let cb_config = 
             {
                 cell_size: 15,
-                tick_time: 100,
-                
-                dot_num: 100, 
-                min_max_size: 10, 
-                max_max_size: 1000, 
-                min_split_frac: 0, 
-                max_split_frac: 100, 
-                min_eat_ratio: 0, 
-                max_eat_ratio: 100, 
-                min_speed: 1, 
-                max_speed: 10, 
-                min_view: 1, 
-                max_view: 5, 
-                min_max_mut_pct: 1, 
-                max_max_mut_pct: 10, 
+                tick_time: 33,
+                dot_num: 100,
+                min_max_size: 50,
+                max_max_size: 200,
+                min_split_frac: 0,
+                max_split_frac: 100,
+                min_eat_ratio: 0,
+                max_eat_ratio: 100,
+                min_speed: 1,
+                max_speed: 10,
+                min_view: 1,
+                max_view: 1,
+                min_max_mut_pct: 1,
+                max_max_mut_pct: 10,
                 reset_on_extinction: true,
 
                 funiform: true,
-                ticks_between_rain: 10, 
-                drops_per_rain: 20, 
-                min_drop_size: 1, 
-                max_drop_size: 1,
-                min_food_per_drop: 1, 
-                max_food_per_drop: 10, 
-                delta_ticks_between_rain: 1, 
-                delta_drops_per_rain: -0.1, 
-                delta_min_drop_size: 0.1, 
-                delta_max_drop_size: 0.1, 
-                delta_min_food_per_drop: 1, 
-                delta_max_food_per_drop: 1, 
-                phase_length: 1000, 
+                ticks_between_rain: 100,
+                drops_per_rain: 5,
+                min_drop_size: 5,
+                max_drop_size: 10,
+                min_food_per_drop: 1000,
+                max_food_per_drop: 1000,
+                delta_ticks_between_rain: 0,
+                delta_drops_per_rain: 0,
+                delta_min_drop_size: 0,
+                delta_max_drop_size: 0,
+                delta_min_food_per_drop: 0,
+                delta_max_food_per_drop: 0,
+                phase_length: 0,
                 will_cycle: false,
 
-                tuniform: true, 
-                trap_num: 10, 
-                min_trap_size: 2, 
-                max_trap_size: 5, 
-                min_trap_damage: 1, 
-                max_trap_damage: 1,
+                tuniform: true,
+                trap_num: 0,
+                min_trap_size: 3,
+                max_trap_size: 3,
+                min_trap_damage: 100,
+                max_trap_damage: 100,
 
-                section_rows: 4, 
-                section_cols: 7, 
-                density: 90,
+                section_rows: 4,
+                section_cols: 7,
+                density: 90
             }
-            saves["Office Space"] = os_config;
+            saves["Cell Block"] = cb_config;
             localStorage.setItem("config_saves", JSON.stringify(saves))
         }
     }
