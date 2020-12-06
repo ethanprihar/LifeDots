@@ -13,7 +13,8 @@ const title_style =
 {
     color: "#b3b3b3",
     fontSize: "30px",
-    margin: "0",
+    marginLeft: "10%",
+    marginRight: "10%",
     marginBottom: "10px",
     padding: "0",
 }
@@ -158,7 +159,7 @@ export default class LoadConfigView extends React.Component
                 </ReactModal>
                 <form style={form_style} onChange={this.change_input} onKeyPress={this.key_press}>
                     <div style={title_style}>
-                        World Configuration:
+                        Select which configuration to load into the World Builder.
                     </div>
                     <select style={input_style} onChange={() => {}} name="selection" value={this.state.selection}>
                         {Object.keys(this.state.saves).map(this.make_options)}

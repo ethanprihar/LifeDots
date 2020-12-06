@@ -1,6 +1,5 @@
 import React from "react";
 import ReactModal from 'react-modal';
-import BounceLoader from "react-spinners/BounceLoader";
 
 import WorldOverlayView from "./WorldOverlayView";
 
@@ -13,17 +12,6 @@ var LZString = require("lz-string")
 var localforage = require("localforage")
 var JsonPorter = require('json-porter').default;
 
-const spinner_style =
-{
-    height: "100px",
-    width: "100px",
-    position: "fixed",
-    left: "50%",
-    marginLeft: "-15vh",
-    top: "50%",
-    marginTop: "-15vh",
-}
-
 const modal_style = 
 {
     overlay: 
@@ -35,8 +23,8 @@ const modal_style =
         textAlign: "center",
         position: 'absolute',
         top: '25%',
-        left: '20%',
-        right: '20%',
+        left: '10%',
+        right: '10%',
         bottom: 'auto',
         border: "0.25vh solid #b3b3b3",
         backgroundColor: "#000000",
@@ -49,6 +37,24 @@ export default class WorldView extends React.Component
     constructor(props)
     {
         super(props);
+        let stats = {};
+        stats.dot_num =  Object.keys(props.world.dot_map).length
+        stats.avg_size = 0;
+        stats.avg_split = 0;
+        stats.avg_energy = 0;
+        stats.avg_rest = 0;
+        stats.avg_perc = 0;
+        stats.avg_mut = 0;
+        for (let key in props.world.dot_map)
+        {
+            stats.avg_size += props.world.dot_map[key].genome.max_size / stats.dot_num;
+            console.log(stats.avg_size)
+            stats.avg_split += props.world.dot_map[key].genome.split_frac / stats.dot_num;
+            stats.avg_energy += props.world.dot_map[key].genome.eat_ratio / stats.dot_num;
+            stats.avg_rest += props.world.dot_map[key].genome.speed / stats.dot_num;
+            stats.avg_perc += props.world.dot_map[key].genome.view / stats.dot_num;
+            stats.avg_mut += props.world.dot_map[key].genome.max_mut_pct / stats.dot_num;
+        }
         this.state = 
         {
             tick_time: props.tick_time,
@@ -57,6 +63,7 @@ export default class WorldView extends React.Component
             warned: false,
             waiting: false,
             overlay: true,
+            stats: stats,
         };
         this.auto_save();
     }
@@ -103,9 +110,27 @@ export default class WorldView extends React.Component
     open_overlay = (event) =>
     {
         event.preventDefault();
+        let stats = {};
+        stats.dot_num =  Object.keys(this.state.world.dot_map).length
+        stats.avg_size = 0;
+        stats.avg_split = 0;
+        stats.avg_energy = 0;
+        stats.avg_rest = 0;
+        stats.avg_perc = 0;
+        stats.avg_mut = 0;
+        for (let key in this.state.world.dot_map)
+        {
+            stats.avg_size += this.state.world.dot_map[key].genome.max_size / stats.dot_num;
+            console.log(stats.avg_size)
+            stats.avg_split += this.state.world.dot_map[key].genome.split_frac / stats.dot_num;
+            stats.avg_energy += this.state.world.dot_map[key].genome.eat_ratio / stats.dot_num;
+            stats.avg_rest += this.state.world.dot_map[key].genome.speed / stats.dot_num;
+            stats.avg_perc += this.state.world.dot_map[key].genome.view / stats.dot_num;
+            stats.avg_mut += this.state.world.dot_map[key].genome.max_mut_pct / stats.dot_num;
+        }
         if (event.which === 32) //space
         {
-            this.setState({overlay: true});
+            this.setState({overlay: true, stats: stats});
         }
     }
 
@@ -187,11 +212,8 @@ export default class WorldView extends React.Component
         }
         return(
         <div>
-            <div style={spinner_style}>
-                <BounceLoader size={"30vh"} color={"#b3b3b3"} loading={this.state.waiting}/>
-            </div>
             <ReactModal style={modal_style} isOpen={this.state.overlay} ariaHideApp={false}>
-                <WorldOverlayView close_overlay={this.close_overlay} close_overlay_button={this.close_overlay_button} save={this.auto_save} export={this.export} setPage={this.props.setPage}/>
+                <WorldOverlayView stats={this.state.stats} close_overlay={this.close_overlay} close_overlay_button={this.close_overlay_button} save={this.auto_save} export={this.export} setPage={this.props.setPage}/>
             </ReactModal>
             {components}
         </div>);

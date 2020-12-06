@@ -1,6 +1,5 @@
 import React from "react";
 import ReactModal from 'react-modal';
-import BounceLoader from "react-spinners/BounceLoader";
 
 import SaveConfigView from "./SaveConfigView"
 import LoadConfigView from "./LoadConfigView"
@@ -161,17 +160,6 @@ const footer_button_style =
     border: "0.25vh solid #b3b3b3",
 }
 
-const spinner_style =
-{
-    height: "100px",
-    width: "100px",
-    position: "fixed",
-    left: "50%",
-    marginLeft: "-15vh",
-    top: "50%",
-    marginTop: "-15vh",
-}
-
 export default class SetupView extends React.Component
 {   
     constructor(props)
@@ -180,49 +168,49 @@ export default class SetupView extends React.Component
         let default_config = 
         {
             cell_size: 15,
-            tick_time: 100,
-            
-            dot_num: 100, 
-            min_max_size: 50, 
-            max_max_size: 200, 
-            min_split_frac: 0, //divide
-            max_split_frac: 100, //divide
-            min_eat_ratio: 0, //divide
-            max_eat_ratio: 100, //divide
-            min_speed: 1, 
-            max_speed: 10, 
-            min_view: 1, 
-            max_view: 1, 
-            min_max_mut_pct: 1, //divide
-            max_max_mut_pct: 10, //divide
-            reset_on_extinction: true,
+                tick_time: 33,
 
-            funiform: false,
-            ticks_between_rain: 10, 
-            drops_per_rain: 20, 
-            min_drop_size: 1, 
-            max_drop_size: 1,
-            min_food_per_drop: 10, 
-            max_food_per_drop: 100, 
-            delta_ticks_between_rain: 0, 
-            delta_drops_per_rain: 0, 
-            delta_min_drop_size: 0, 
-            delta_max_drop_size: 0, 
-            delta_min_food_per_drop: 0, 
-            delta_max_food_per_drop: 0, 
-            phase_length: 0, 
-            will_cycle: false,
+                dot_num: 100,
+                min_max_size: 50,
+                max_max_size: 200,
+                min_split_frac: 0,
+                max_split_frac: 100,
+                min_eat_ratio: 0,
+                max_eat_ratio: 100,
+                min_speed: 1,
+                max_speed: 10,
+                min_view: 1,
+                max_view: 3,
+                min_max_mut_pct: 1,
+                max_max_mut_pct: 10,
+                reset_on_extinction: true,
 
-            tuniform: true, 
-            trap_num: 5, 
-            min_trap_size: 3, 
-            max_trap_size: 3, 
-            min_trap_damage: 100, 
-            max_trap_damage: 100,
+                funiform: false,
+                ticks_between_rain: 10,
+                drops_per_rain: 300,
+                min_drop_size: 1,
+                max_drop_size: 1,
+                min_food_per_drop: 10,
+                max_food_per_drop: 100,
+                delta_ticks_between_rain: 0,
+                delta_drops_per_rain: -5,
+                delta_min_drop_size: 0,
+                delta_max_drop_size: 0,
+                delta_min_food_per_drop: 0,
+                delta_max_food_per_drop: 0,
+                phase_length: 80,
+                will_cycle: true,
 
-            section_rows: 1, 
-            section_cols: 1, 
-            density: 0, //divide
+                tuniform: true,
+                trap_num: 0,
+                min_trap_size: 3,
+                max_trap_size: 3,
+                min_trap_damage: 100,
+                max_trap_damage: 100,
+
+                section_rows: 1,
+                section_cols: 1,
+                density: 0,
         };
         this.state = 
         {
@@ -230,7 +218,6 @@ export default class SetupView extends React.Component
             pressed_button: "",
             show_save: false,
             show_load: false,
-            making_world: false,
         };
     }
 
@@ -241,8 +228,7 @@ export default class SetupView extends React.Component
 
     set_start_button = () =>
     {
-        this.setState({pressed_button: "start", 
-                       making_world: true})
+        this.setState({pressed_button: "start"})
     }
 
     save = () =>
@@ -383,9 +369,6 @@ export default class SetupView extends React.Component
     {
         return (
         <div style={setup_style}>
-            <div style={spinner_style}>
-                <BounceLoader size={"30vh"} color={"#b3b3b3"} loading={this.state.making_world}/>
-            </div>
             <ReactModal style={modal_style} isOpen={this.state.show_save} ariaHideApp={false}>
                 <SaveConfigView close_save={this.close_save} config={JSON.parse(JSON.stringify(this.state.config))}/>
             </ReactModal>

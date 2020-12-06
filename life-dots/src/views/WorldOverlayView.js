@@ -1,6 +1,15 @@
 import React from "react";
 import ReactModal from 'react-modal';
 
+const toggle_style = 
+{
+    color: "#b3b3b3",
+    fontSize: "20px",
+    margin: "0",
+    marginBottom: "10px",
+    padding: "0",
+}
+
 const title_style = 
 {
     color: "#b3b3b3",
@@ -8,6 +17,36 @@ const title_style =
     margin: "0",
     marginBottom: "10px",
     padding: "0",
+}
+
+const table_style = 
+{
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: "10px",
+    textAlign: "center",
+    fontSize: "20px",
+    color: "#b3b3b3",
+    border: "2px solid #b3b3b3",
+    borderCollapse: "collapse",
+}
+
+const label_entry = 
+{
+    textAlign: "right",
+    width: "50%",
+    border: "1px solid #b3b3b3",
+    paddingLeft: "5px",
+    paddingRight: "5px",
+}
+
+const input_entry = 
+{
+    textAlign: "left",
+    width: "50%",
+    border: "1px solid #b3b3b3",
+    paddingLeft: "5px",
+    paddingRight: "5px",
 }
 
 const button_style = 
@@ -87,6 +126,7 @@ export default class WorldOverlayView extends React.Component
     
     render()
     {
+        console.log(this.props)
         return (
         <div>
             <ReactModal style={modal_style} isOpen={this.state.show_confirm} ariaHideApp={false}>
@@ -100,23 +140,82 @@ export default class WorldOverlayView extends React.Component
                     Confirm
                 </button>
             </ReactModal>
-                <div style={title_style}>
+                <div style={toggle_style}>
                     Press the space bar to toggle this overlay.
                 </div>
+                <div style={title_style}>
+                    Statistics:
+                </div>
+                <table style={table_style}><tbody>
+                    <tr>
+                        <td style={label_entry}>
+                            Total Dots:
+                        </td>
+                        <td style={input_entry}>
+                            {this.props.stats.dot_num}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Average Dot Size:
+                        </td>
+                        <td style={input_entry}>
+                            {this.props.stats.avg_size.toFixed(2)}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Average Dot Split Percent:
+                        </td>
+                        <td style={input_entry}>
+                            {(this.props.stats.avg_split * 100).toFixed(2)} Percent
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Average Dot Energy Efficiency:
+                        </td>
+                        <td style={input_entry}>
+                            {(this.props.stats.avg_energy * 100).toFixed(2)} Percent
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Average Dot Rest Time:
+                        </td>
+                        <td style={input_entry}>
+                            {this.props.stats.avg_rest.toFixed(2)} Ticks
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Average Dot Perception Radius:
+                        </td>
+                        <td style={input_entry}>
+                            {this.props.stats.avg_perc.toFixed(2)} Cells
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Average Dot Mutation Rate:
+                        </td>
+                        <td style={input_entry}>
+                            {(this.props.stats.avg_mut * 100).toFixed(2)} Percent
+                        </td>
+                    </tr>
+                </tbody></table>
                 <button style={button_style} onClick={this.save}>
                     Save
+                </button>
+                <button style={button_style} onClick={this.props.close_overlay_button}>
+                    Close
                 </button>
                 <br></br>
                 <button style={button_style} onClick={this.props.export}>
                     Export
                 </button>
-                <br></br>
                 <button style={button_style} onClick={() => this.props.setPage("MainMenu")}>
                     Menu
-                </button>
-                <br></br>
-                <button style={button_style} onClick={this.props.close_overlay_button}>
-                    Close
                 </button>
         </div>
         );
