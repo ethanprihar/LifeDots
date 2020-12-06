@@ -48,7 +48,6 @@ export default class WorldView extends React.Component
         for (let key in props.world.dot_map)
         {
             stats.avg_size += props.world.dot_map[key].genome.max_size / stats.dot_num;
-            console.log(stats.avg_size)
             stats.avg_split += props.world.dot_map[key].genome.split_frac / stats.dot_num;
             stats.avg_energy += props.world.dot_map[key].genome.eat_ratio / stats.dot_num;
             stats.avg_rest += props.world.dot_map[key].genome.speed / stats.dot_num;
@@ -94,15 +93,18 @@ export default class WorldView extends React.Component
     auto_save = () =>
     {
         this.setState({waiting: true})
-        let save_string = LZString.compressToUTF16(JSON.stringify(this.state));
-        if (save_string.length < 500000000)
+        try
         {
+            let save_string = LZString.compressToUTF16(JSON.stringify(this.state));
             localforage.setItem('world', save_string)
         }
-        else if (!this.state.warned)
+        catch
         {
-            alert("This world is currently too large to save locally. Every 5 minutes another save will be attempted, but this will be your only alert.");
-            this.setState({warned: true});
+            if (!this.state.warned)
+            {
+                alert("This world is currently too large to save locally. Every 5 minutes another save will be attempted, but this will be your only alert.");
+                this.setState({warned: true});
+            }
         }
         this.setState({waiting: false})
     }
@@ -121,7 +123,6 @@ export default class WorldView extends React.Component
         for (let key in this.state.world.dot_map)
         {
             stats.avg_size += this.state.world.dot_map[key].genome.max_size / stats.dot_num;
-            console.log(stats.avg_size)
             stats.avg_split += this.state.world.dot_map[key].genome.split_frac / stats.dot_num;
             stats.avg_energy += this.state.world.dot_map[key].genome.eat_ratio / stats.dot_num;
             stats.avg_rest += this.state.world.dot_map[key].genome.speed / stats.dot_num;
