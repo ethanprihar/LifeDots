@@ -126,7 +126,6 @@ export default class WorldOverlayView extends React.Component
     
     render()
     {
-        console.log(this.props)
         return (
         <div>
             <ReactModal style={modal_style} isOpen={this.state.show_confirm} ariaHideApp={false}>
