@@ -53,7 +53,7 @@ export default class WorldView extends React.Component
             stats.avg_energy += props.world.dot_map[key].genome.eat_ratio / stats.dot_num;
             stats.avg_rest += props.world.dot_map[key].genome.speed / stats.dot_num;
             stats.avg_perc += props.world.dot_map[key].genome.view / stats.dot_num;
-            stats.avg_mut += props.world.dot_map[key].genome.max_mut_pct / stats.dot_num;
+            stats.avg_mut += Math.abs(props.world.dot_map[key].genome.max_mut_pct) / stats.dot_num;
         }
         this.state = 
         {
@@ -126,7 +126,7 @@ export default class WorldView extends React.Component
             stats.avg_energy += this.state.world.dot_map[key].genome.eat_ratio / stats.dot_num;
             stats.avg_rest += this.state.world.dot_map[key].genome.speed / stats.dot_num;
             stats.avg_perc += this.state.world.dot_map[key].genome.view / stats.dot_num;
-            stats.avg_mut += this.state.world.dot_map[key].genome.max_mut_pct / stats.dot_num;
+            stats.avg_mut += Math.abs(this.state.world.dot_map[key].genome.max_mut_pct) / stats.dot_num;
         }
         if (event.which === 32) //space
         {
