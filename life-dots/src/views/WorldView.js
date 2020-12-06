@@ -38,7 +38,8 @@ export default class WorldView extends React.Component
     {
         super(props);
         let stats = {};
-        stats.dot_num =  Object.keys(props.world.dot_map).length
+        stats.ticks = props.world.total_ticks;
+        stats.dot_num =  Object.keys(props.world.dot_map).length;
         stats.avg_size = 0;
         stats.avg_split = 0;
         stats.avg_energy = 0;
@@ -113,7 +114,8 @@ export default class WorldView extends React.Component
     {
         event.preventDefault();
         let stats = {};
-        stats.dot_num =  Object.keys(this.state.world.dot_map).length
+        stats.ticks = this.state.world.total_ticks;
+        stats.dot_num =  Object.keys(this.state.world.dot_map).length;
         stats.avg_size = 0;
         stats.avg_split = 0;
         stats.avg_energy = 0;

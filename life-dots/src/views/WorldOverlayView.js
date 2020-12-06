@@ -148,6 +148,14 @@ export default class WorldOverlayView extends React.Component
                 <table style={table_style}><tbody>
                     <tr>
                         <td style={label_entry}>
+                            Age of the World:
+                        </td>
+                        <td style={input_entry}>
+                            {this.props.stats.ticks} Ticks
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
                             Total Dots:
                         </td>
                         <td style={input_entry}>

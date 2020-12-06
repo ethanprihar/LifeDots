@@ -23,6 +23,8 @@ export default class World
     trap_map: Record<string, number> = {};
     // The wall map for the world.
     wall_map: Record<string, number> = {};
+    // Total world ticks
+    total_ticks: number = 0;
     
     constructor(rows: number, 
                 cols: number, 
@@ -64,6 +66,8 @@ export default class World
         // Simulate combat for all dots, reward the victors with nourishment, remove resulting dead dots, 
         // consume food, and split.
         this.fight_feed(this.move_trap_split());
+        // Incriment total world ticks
+        this.total_ticks++;
     }
 
     remove_objects_in_walls()
