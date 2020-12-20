@@ -158,6 +158,12 @@ export default class RandomFood extends Placer
         }
     }
 
+    brush(map: Record<string, any>, row: number, col: number): void
+    {
+        const food_amount: number = Math.random() * (this.max_food_per_drop - this.min_food_per_drop) + this.min_food_per_drop;
+        map[row + "," + col] = food_amount;
+    }
+
     get_new_pos(r: number, c: number): string
     {
         if (r < 0)

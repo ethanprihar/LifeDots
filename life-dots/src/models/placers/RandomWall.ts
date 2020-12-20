@@ -58,4 +58,9 @@ export default class RandomWall extends Placer
         }
         return map;
     }
+
+    brush(map: Record<string, any>, row: number, col: number): void
+    {
+        map[row + "," + col] = 1;
+    }
 }

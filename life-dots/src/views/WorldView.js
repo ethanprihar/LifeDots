@@ -1,5 +1,5 @@
 import React from "react";
-import ReactModal from 'react-modal';
+import ReactModal from "react-modal";
 
 import WorldOverlayView from "./WorldOverlayView";
 
@@ -10,22 +10,22 @@ import WallView from "./WallView";
 
 var LZString = require("lz-string")
 var localforage = require("localforage")
-var JsonPorter = require('json-porter').default;
+var JsonPorter = require("json-porter").default;
 
 const modal_style = 
 {
     overlay: 
     {
-        backgroundColor: 'rgba(255, 255, 255, 0.25)'
+        backgroundColor: "rgba(255, 255, 255, 0.25)"
     },
     content: 
     {
         textAlign: "center",
-        position: 'absolute',
-        top: '25%',
-        left: '10%',
-        right: '10%',
-        bottom: 'auto',
+        position: "absolute",
+        top: "10%",
+        left: "10%",
+        right: "10%",
+        bottom: "10%",
         border: "0.25vh solid #b3b3b3",
         backgroundColor: "#000000",
         borderRadius: "2vh",
@@ -61,20 +61,13 @@ export default class WorldView extends React.Component
             cell_size: props.cell_size,
             world: props.world,
             warned: false,
-            waiting: false,
             overlay: true,
+            brush_type: "none",
+            brush_active: false,
             stats: stats,
+
         };
         this.auto_save();
-    }
-
-    update_world()
-    {
-        if (!this.state.overlay)
-        {
-            this.state.world.update()
-        }
-        return this.state.world
     }
 
     componentDidMount()
@@ -97,13 +90,27 @@ export default class WorldView extends React.Component
         document.removeEventListener("mouseup", this.handle_click);
     }
 
+    update_world()
+    {
+        if (!this.state.overlay && !this.state.brush_active)
+        {
+            this.state.world.update()
+        }
+        return this.state.world
+    }
+
+    brush_world(brush_type, row, col)
+    {
+        this.state.world.brush(brush_type, row, col);
+        return this.state.world
+    }
+
     auto_save = () =>
     {
-        this.setState({waiting: true})
         try
         {
             let save_string = LZString.compressToUTF16(JSON.stringify(this.state));
-            localforage.setItem('world', save_string)
+            localforage.setItem("world", save_string);
         }
         catch
         {
@@ -113,7 +120,11 @@ export default class WorldView extends React.Component
                 this.setState({warned: true});
             }
         }
-        this.setState({waiting: false})
+    }
+
+    set_brush = (event) =>
+    {
+        this.setState({brush_type: event.target.value});
     }
 
     open_overlay = (event) =>
@@ -145,7 +156,27 @@ export default class WorldView extends React.Component
 
     handle_click = (event) =>
     {
-        console.log(event)
+        if (!this.state.overlay)
+        {
+            event.preventDefault();
+            if (event.button === 0)
+            {
+                if (event.type === "mousedown")
+                {
+                    this.setState({brush_active: true})
+                }
+                else if (event.type === "mouseup")
+                {
+                    this.setState({brush_active: false})
+                }
+                if (this.state.brush_active)
+                {
+                    const row = Math.floor(event.clientY / this.state.cell_size);
+                    const col = Math.floor(event.clientX / this.state.cell_size);
+                    this.setState({world: this.brush_world(this.state.brush_type, row, col)})
+                }
+            }
+        }
     }
 
     close_overlay = (event) =>
@@ -227,7 +258,14 @@ export default class WorldView extends React.Component
         return(
         <div>
             <ReactModal style={modal_style} isOpen={this.state.overlay} ariaHideApp={false}>
-                <WorldOverlayView stats={this.state.stats} close_overlay={this.close_overlay} close_overlay_button={this.close_overlay_button} save={this.auto_save} export={this.export} setPage={this.props.setPage}/>
+                <WorldOverlayView stats={this.state.stats} 
+                                  close_overlay={this.close_overlay} 
+                                  close_overlay_button={this.close_overlay_button} 
+                                  save={this.auto_save} 
+                                  export={this.export} 
+                                  set_brush={this.set_brush} 
+                                  brush_type={this.state.brush_type}
+                                  setPage={this.props.setPage}/>
             </ReactModal>
             {components}
         </div>);

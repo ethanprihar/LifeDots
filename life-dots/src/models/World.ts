@@ -70,6 +70,35 @@ export default class World
         this.total_ticks++;
     }
 
+    brush(brush_type: string, row: number, col: number)
+    {
+        switch(brush_type)
+        {
+            case "wall":
+                this.wall_placer.brush(this.wall_map, row, col);
+            break;
+            case "trap":
+                this.trap_placer.brush(this.trap_map, row, col);
+            break;
+            case "food":
+                this.food_placer.brush(this.food_map, row, col);
+            break;
+            case "dot":
+                this.dot_placer.brush(this.dot_map, row, col);
+            break;
+            case "erase":
+                console.log('erasing')
+                const pos = row + "," + col
+                delete this.wall_map[pos]
+                delete this.trap_map[pos]
+                delete this.food_map[pos]
+                delete this.dot_map[pos]
+            break;
+            default:
+            break;
+        }
+    }
+
     remove_objects_in_walls()
     {
         for (let pos in this.wall_map)

@@ -55,12 +55,18 @@ export default class RandomTrap extends Placer
                 for (let dc: number = 0; dc < trap_size; dc++)
                 {
                     const pos: string = this.get_new_pos(rows, cols, r + dr, c + dc);
-                    const food_amount: number = Math.random() * (this.max_trap_damage - this.min_trap_damage) + this.min_trap_damage;
-                    map[pos] = pos in map ? map[pos] + food_amount : food_amount;
+                    const trap_amount: number = Math.random() * (this.max_trap_damage - this.min_trap_damage) + this.min_trap_damage;
+                    map[pos] = pos in map ? map[pos] + trap_amount : trap_amount;
                 }
             }
         }
         return map;
+    }
+
+    brush(map: Record<string, any>, row: number, col: number): void
+    {
+        const trap_amount: number = Math.random() * (this.max_trap_damage - this.min_trap_damage) + this.min_trap_damage;
+        map[row + "," + col] = trap_amount;
     }
 
     get_new_pos(rows: number, cols: number, r: number, c: number): string

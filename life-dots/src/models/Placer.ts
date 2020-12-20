@@ -6,4 +6,6 @@ export default class Placer
     }
 
     update(map: Record<string, any>): void {}
+
+    brush(map: Record<string, any>, row: number, col: number): void {}
 }

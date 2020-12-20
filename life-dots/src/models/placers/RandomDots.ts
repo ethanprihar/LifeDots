@@ -103,6 +103,12 @@ export default class RandomDots extends Placer
         }
     }
 
+    brush(map: Record<string, any>, row: number, col: number): void
+    {
+        let genome: Genome = this.rand_genome();
+        map[row + "," + col] = new Dot(genome.max_size, genome);
+    }
+
     rand_genome(): Genome
     {
         let color = null;

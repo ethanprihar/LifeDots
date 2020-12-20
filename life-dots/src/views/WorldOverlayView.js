@@ -31,6 +31,17 @@ const table_style =
     borderCollapse: "collapse",
 }
 
+const brush_style = 
+{
+    marginLeft: "auto",
+    marginRight: "auto",
+    marginBottom: "10px",
+    textAlign: "center",
+    fontSize: "30px",
+    color: "#b3b3b3",
+    borderCollapse: "collapse",
+}
+
 const label_entry = 
 {
     textAlign: "right",
@@ -47,6 +58,15 @@ const input_entry =
     border: "1px solid #b3b3b3",
     paddingLeft: "5px",
     paddingRight: "5px",
+}
+
+const input_style = 
+{
+    color: '#b3b3b3',
+    backgroundColor: "#000000",
+    border: "2px solid #b3b3b3",
+    borderRadius: "3px",
+    fontSize: '30px'
 }
 
 const button_style = 
@@ -140,7 +160,18 @@ export default class WorldOverlayView extends React.Component
                 </button>
             </ReactModal>
                 <div style={toggle_style}>
-                    Press the space bar to toggle this overlay.
+                    Press the space bar or press close to toggle this overlay.
+                </div>
+                <div style={brush_style}>
+                <span>Brush Select: </span>
+                    <select style={input_style} onChange={this.props.set_brush} name="brush_type" value={this.props.brush_type}>
+                        <option value={"none"}>None</option>
+                        <option value={"wall"}>Wall</option>
+                        <option value={"trap"}>Trap</option>
+                        <option value={"food"}>Food</option>
+                        <option value={"dot"}>Dot</option>
+                        <option value={"erase"}>Erase</option>
+                    </select>
                 </div>
                 <div style={title_style}>
                     Statistics:

@@ -91,14 +91,11 @@ export default class Genome
             new_weights = ndarray(new Float64Array(this.weights.size), this.weights.shape);
             ops.assign(new_weights, this.weights);
         }
-        if (this.max_mut_pct !== 0)
-        {
-            let rand: any = ndarray(new Float64Array(new_weights.size), new_weights.shape);
-            ops.random(rand);
-            ops.subseq(rand, 0.5);
-            ops.mulseq(rand, 2 * this.max_mut_pct);
-            ops.addeq(new_weights, rand);
-        }
+        let rand: any = ndarray(new Float64Array(new_weights.size), new_weights.shape);
+        ops.random(rand);
+        ops.subseq(rand, 0.5);
+        ops.mulseq(rand, 2 * this.max_mut_pct);
+        ops.addeq(new_weights, rand);
         let new_color: number[] = [];
         for (let c of this.color)
         {
