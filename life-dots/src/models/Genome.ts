@@ -15,8 +15,10 @@ export default class Genome
     speed: number;
     // The view radius a dot has of its surroundings.
     view: number;
-    // The weight matrix used of the multi-regression.
-    weights: any;
+    // The weights between the input and hidden layer.
+    weights1: any;
+    // The weights between the hidden and output layer.
+    weights2: any;
     // The max mutation percentage for the genes.
     max_mut_pct: number;
 
@@ -26,7 +28,8 @@ export default class Genome
                 eat_ratio: number, 
                 speed: number, 
                 view: number, 
-                weights: any, 
+                weights1: any, 
+                weights2: any, 
                 max_mut_pct: number)
     {
         this.color = color == null ? this.initColor() : color;
@@ -35,7 +38,8 @@ export default class Genome
         this.eat_ratio = eat_ratio;
         this.speed = speed;
         this.view = view;
-        this.weights = weights;
+        this.weights1 = weights1;
+        this.weights2 = weights2;
         this.max_mut_pct = max_mut_pct;
     }
 
@@ -77,25 +81,34 @@ export default class Genome
         {
             return null;
         }
-        let new_weights: any;
+        let new_weights1: any;
         if (Math.floor(new_view) < Math.floor(this.view))
         {
-            new_weights = this.remove_view();
+            new_weights1 = this.remove_view();
         }
         else if (Math.floor(new_view) > Math.floor(this.view))
         {
-            new_weights = this.add_view();
+            new_weights1 = this.add_view();
         }
         else
         {
-            new_weights = ndarray(new Float64Array(this.weights.size), this.weights.shape);
-            ops.assign(new_weights, this.weights);
+            new_weights1 = ndarray(new Float64Array(this.weights1.size), this.weights1.shape);
+            ops.assign(new_weights1, this.weights1);
         }
-        let rand: any = ndarray(new Float64Array(new_weights.size), new_weights.shape);
-        ops.random(rand);
-        ops.subseq(rand, 0.5);
-        ops.mulseq(rand, 2 * this.max_mut_pct);
-        ops.addeq(new_weights, rand);
+        let rand1: any = ndarray(new Float64Array(new_weights1.size), new_weights1.shape);
+        ops.random(rand1);
+        ops.subseq(rand1, 0.5);
+        ops.mulseq(rand1, 2 * this.max_mut_pct);
+        ops.addeq(new_weights1, rand1);
+
+        let new_weights2 = ndarray(new Float64Array(this.weights2.size), this.weights2.shape);
+        ops.assign(new_weights2, this.weights2);
+        let rand2: any = ndarray(new Float64Array(new_weights2.size), new_weights2.shape);
+        ops.random(rand2);
+        ops.subseq(rand2, 0.5);
+        ops.mulseq(rand2, 2 * this.max_mut_pct);
+        ops.addeq(new_weights2, rand2);
+
         let new_color: number[] = [];
         for (let c of this.color)
         {
@@ -108,7 +121,8 @@ export default class Genome
                           new_eat_ratio, 
                           new_speed, 
                           new_view, 
-                          new_weights, 
+                          new_weights1, 
+                          new_weights2, 
                           new_max_mut_pct);
     }
 
@@ -127,7 +141,7 @@ export default class Genome
     remove_view(): void
     {
         const old_dim: number = Math.floor(this.view) * 2 + 1;
-        let new_weights: number[] = []
+        let new_weights1: number[] = []
         for(let r = 1; r < old_dim - 1; r++)
         {
             for(let c = 1; c < old_dim - 1; c++)
@@ -135,32 +149,32 @@ export default class Genome
                 let starting_pos: number = (r * old_dim + c) * 50;
                 for (let i = 0; i < 50; i++)
                 {
-                    new_weights.push(this.weights.data[starting_pos + i]);
+                    new_weights1.push(this.weights1.data[starting_pos + i]);
                 }
             }
         }
-        return ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
+        return ndarray(new Float64Array(new_weights1), [new_weights1.length / 10, 10]);
     }
 
     add_view(): any
     {
         const old_dim: number = Math.floor(this.view) * 2 + 1
         const new_dim: number =  old_dim + 2;
-        let new_weights: number[] = new Array(new_dim * 50).fill(0);
+        let new_weights1: number[] = new Array(new_dim * 50).fill(0);
         for(let r = 0; r < old_dim; r++)
         {
-            new_weights = new_weights.concat(new Array(50).fill(0))
+            new_weights1 = new_weights1.concat(new Array(50).fill(0))
             for(let c = 0; c < old_dim; c++)
             {
                 let starting_pos: number = (r * old_dim + c) * 50;
                 for (let i = 0; i < 50; i++)
                 {
-                    new_weights.push(this.weights.data[starting_pos + i]);
+                    new_weights1.push(this.weights1.data[starting_pos + i]);
                 }
             }
-            new_weights = new_weights.concat(new Array(50).fill(0))
+            new_weights1 = new_weights1.concat(new Array(50).fill(0))
         }
-        new_weights = new_weights.concat(new Array(new_dim * 50).fill(0));
-        return ndarray(new Float64Array(new_weights), [new_weights.length / 10, 10]);
+        new_weights1 = new_weights1.concat(new Array(new_dim * 50).fill(0));
+        return ndarray(new Float64Array(new_weights1), [new_weights1.length / 10, 10]);
     }
 }

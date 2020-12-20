@@ -120,10 +120,14 @@ export default class RandomDots extends Placer
         let max_mut_pct: number = Math.random() * (this.max_max_mut_pct - this.min_max_mut_pct) + this.min_max_mut_pct;
         let view_dim: number = Math.floor(view) * 2 + 1;
         let weight_dim: number = view_dim * view_dim * 5;
-        let weights: any = ndarray(new Float64Array(weight_dim * 10), [weight_dim, 10]);
-        ops.random(weights);
-        ops.subseq(weights, 0.5);
-        ops.mulseq(weights, 2);
-        return new Genome(color, max_size, split_frac, eat_ratio, speed, view, weights, max_mut_pct);
+        let weights1: any = ndarray(new Float64Array(weight_dim * 10), [weight_dim, 10]);
+        ops.random(weights1);
+        ops.subseq(weights1, 0.5);
+        ops.mulseq(weights1, 2);
+        let weights2: any = ndarray(new Float64Array(100), [10, 10]);
+        ops.random(weights2);
+        ops.subseq(weights2, 0.5);
+        ops.mulseq(weights2, 2);
+        return new Genome(color, max_size, split_frac, eat_ratio, speed, view, weights1, weights2, max_mut_pct);
     }
 }
