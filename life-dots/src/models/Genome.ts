@@ -86,7 +86,7 @@ export default class Genome
         {
             new_weights = this.add_view();
         }
-        if (new_weights === undefined)
+        else
         {
             new_weights = ndarray(new Float64Array(this.weights.size), this.weights.shape);
             ops.assign(new_weights, this.weights);
