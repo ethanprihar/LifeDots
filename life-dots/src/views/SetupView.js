@@ -200,6 +200,10 @@ export default class SetupView extends React.Component
                 delta_max_food_per_drop: 0,
                 phase_length: 80,
                 will_cycle: true,
+                hotspot_radius: 0,
+                hotspot_food: 0,
+                hotspot_ticks: 0,
+                hotspot_drift: true,
 
                 tuniform: true,
                 trap_num: 0,
@@ -315,7 +319,11 @@ export default class SetupView extends React.Component
                                             this.state.config.delta_min_food_per_drop, 
                                             this.state.config.delta_max_food_per_drop, 
                                             this.state.config.phase_length, 
-                                            this.state.config.will_cycle);
+                                            this.state.config.will_cycle,
+                                            this.state.config.hotspot_radius,
+                                            this.state.config.hotspot_food,
+                                            this.state.config.hotspot_ticks,
+                                            this.state.config.hotspot_drift);
             let trap_placer = new RandomTrap(this.state.config.tuniform, 
                                             this.state.config.trap_num, 
                                             this.state.config.min_trap_size, 
@@ -640,10 +648,10 @@ export default class SetupView extends React.Component
                     </tr>
                 </tbody></table>
                 <div style={subtitle_style}>
-                    Food Configuration
+                    Food Rain Configuration
                 </div>
                 <div style={description_style}>
-                    Food is added to the world in random locations and quantities on a fixed schedule. 
+                    Food can be added to the world in random locations and quantities on a fixed schedule. 
                     The following parameters are used to control this schedule.
                     <ul>
                         <li>
@@ -858,6 +866,79 @@ export default class SetupView extends React.Component
                             name="delta_max_food_per_drop" 
                             value={this.state.config.delta_max_food_per_drop} 
                             type="number" min="-99999" max="99999" required/>
+                        </td>
+                    </tr>
+                </tbody></table>
+                <div style={subtitle_style}>
+                    Food Hotspot Configuration
+                </div>
+                <div style={description_style}>
+                    Food can be added to the world as a hotspot that either teleports or drifts 
+                    around the world to random positions. Food in a hotspot never dissapears, and will 
+                    continue to nourish dots as long as they stay within the bounds of the hotspot. 
+                    <ul>
+                        <li>
+                            Hotspot Type determines if the hotspot will teleport or drift around the world.
+                        </li>
+                        <li>
+                            Hotspot Radius determines the radius of the hotspot, a larger radius creates a 
+                            larger hotspot.
+                        </li>
+                        <li>
+                            Hotspot Food determines how much food a dot recieves every tick it remains in the 
+                            hotspot.
+                        </li>
+                        <li>
+                            Hotspot Move Ticks determines how many ticks it takes for the hotspot to drift 
+                            or teleport to a new position.
+                        </li>
+                    </ul>
+                </div>
+                <table style={table_style}><tbody>
+                    <tr>
+                        <td style={label_entry}>
+                            Hotspot Type:
+                        </td>
+                        <td style={input_entry}>
+                            <select style={input_style} onChange={() => {}}
+                            name="hotspot_drift" 
+                            value={this.state.config.hotspot_drift}>
+                                <option value={true}>Drift</option>
+                                <option value={false}>Teleport</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Hotspot Radius:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} onChange={() => {}} 
+                            name="hotspot_radius" 
+                            value={this.state.config.hotspot_radius} 
+                            type="number" min="0" max="99999" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Hotspot Food:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} onChange={() => {}} 
+                            name="hotspot_food" 
+                            value={this.state.config.hotspot_food} 
+                            type="number" min="0" max="99999" step="0.0001" required/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style={label_entry}>
+                            Hotspot Move Ticks:
+                        </td>
+                        <td style={input_entry}>
+                            <input style={input_style} onChange={() => {}} 
+                            name="hotspot_ticks" 
+                            value={this.state.config.hotspot_ticks} 
+                            type="number" min="0" max="99999" required/>
                         </td>
                     </tr>
                 </tbody></table>

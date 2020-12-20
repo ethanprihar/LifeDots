@@ -168,7 +168,11 @@ export default class SelectWorldView extends React.Component
                                             config.delta_min_food_per_drop, 
                                             config.delta_max_food_per_drop, 
                                             config.phase_length, 
-                                            config.will_cycle);
+                                            config.will_cycle,
+                                            config.hotspot_radius,
+                                            config.hotspot_food,
+                                            config.hotspot_ticks,
+                                            config.hotspot_drift);
             let trap_placer = new RandomTrap(config.tuniform, 
                                             config.trap_num, 
                                             config.min_trap_size, 

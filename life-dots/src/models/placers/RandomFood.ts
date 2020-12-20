@@ -6,6 +6,7 @@ export default class RandomFood extends Placer
     rows: number = -1;
     // The number of columns in the world
     cols: number = -1;
+
     // Whether to distribute dots uniformly or normally.
     uniform: boolean;
     // The number of ticks between rains of food.
@@ -43,6 +44,25 @@ export default class RandomFood extends Placer
     // The current phase side
     phase_side: number = 1;
 
+    // The radius of the hot spot
+    hotspot_radius: number;
+    // The amount of food in every cell of the hot spot
+    hotspot_food: number;
+    // How many ticks for the hotspot to move to a new position
+    hotspot_ticks: number;
+    // Whether the hotspot drifts or teleports
+    hotspot_drift: boolean;
+    // Hotspot current row
+    hotspot_current_row: number = -1;
+    // Hotspot current column
+    hotspot_current_col: number = -1;
+    // Hotspot next row
+    hotspot_next_row: number = -1;
+    // Hotspot next column
+    hotspot_next_col: number = -1;
+    // Hotspot current tick count
+    hotspot_count: number = 0;
+
     constructor(uniform: boolean,
                 ticks_between_rain: number, 
                 drops_per_rain: number, 
@@ -57,7 +77,11 @@ export default class RandomFood extends Placer
                 delta_min_food_per_drop: number, 
                 delta_max_food_per_drop: number, 
                 phase_length: number, 
-                will_cycle: boolean)
+                will_cycle: boolean,
+                hotspot_radius: number,
+                hotspot_food: number,
+                hotspot_ticks: number,
+                hotspot_drift: boolean)
     {
         super();
         this.uniform = uniform;
@@ -75,6 +99,10 @@ export default class RandomFood extends Placer
         this.delta_max_food_per_drop = delta_max_food_per_drop;
         this.phase_length = phase_length;
         this.will_cycle = will_cycle;
+        this.hotspot_radius = hotspot_radius;
+        this.hotspot_food = hotspot_food;
+        this.hotspot_ticks = hotspot_ticks;
+        this.hotspot_drift = hotspot_drift;
     }
 
     init(rows: number, cols: number): Record<string, number>
@@ -82,6 +110,10 @@ export default class RandomFood extends Placer
         this.rows = rows;
         this.cols = cols;
         let map: Record<string, number> = {};
+        this.hotspot_current_row = Math.floor(Math.random() * rows);
+        this.hotspot_current_col = Math.floor(Math.random() * cols);
+        this.hotspot_next_row = Math.floor(Math.random() * rows);
+        this.hotspot_next_col = Math.floor(Math.random() * cols);
         this.update(map);
         return map;
     }
@@ -155,6 +187,129 @@ export default class RandomFood extends Placer
             }
             // Reset the rain tick count and increment the phase
             this.ticks_until_rain = this.ticks_between_rain;
+        }
+        if ((this.hotspot_radius !== 0) && (this.hotspot_food !== 0))
+        {
+            if (this.hotspot_drift)
+            {
+                // Determine hotspot position
+                let row = Math.floor(this.hotspot_current_row + (this.hotspot_next_row - this.hotspot_current_row) * this.hotspot_count / this.hotspot_ticks)
+                let col = Math.floor(this.hotspot_current_col + (this.hotspot_next_col - this.hotspot_current_col) * this.hotspot_count / this.hotspot_ticks)
+                // Determine hotspot size
+                let d = this.hotspot_radius;
+                // Place hotspot
+                for (let r = row - d; r <= row + d; r++)
+                {
+                    for (let c = col - d; c <= col + d; c++)
+                    {
+                        if (Math.sqrt((r - row) * (r - row) + (c - col) * (c - col)) <= (this.hotspot_radius + 0.25))
+                        {
+                            const pos: string = this.get_new_pos(r, c);
+                            delete map[pos];
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Determine hotspot position
+                let r1 = this.hotspot_current_row;
+                let c1 = this.hotspot_current_col;
+                let r2 = this.hotspot_next_row;
+                let c2 = this.hotspot_next_col;
+                // Determine hotspot size
+                let d2 = Math.floor(this.hotspot_radius * this.hotspot_count / this.hotspot_ticks);
+                let d1 = this.hotspot_radius - d2;
+                // Place hotspot
+                for (let r = r1 - d1; r <= r1 + d1; r++)
+                {
+                    for (let c = c1 - d1; c <= c1 + d1; c++)
+                    {
+                        if (Math.sqrt((r - r1) * (r - r1) + (c - c1) * (c - c1)) <= (d1 + 0.25))
+                        {
+                            const pos: string = this.get_new_pos(r, c);
+                            delete map[pos];
+                        }
+                    }
+                }
+                for (let r = r2 - d2; r <= r2 + d2; r++)
+                {
+                    for (let c = c2 - d2; c <= c2 + d2; c++)
+                    {
+                        if (Math.sqrt((r - r2) * (r - r2) + (c - c2) * (c - c2)) <= (d2 + 0.25))
+                        {
+                            const pos: string = this.get_new_pos(r, c);
+                            delete map[pos];
+                        }
+                    }
+                }
+            }
+            if (this.hotspot_count === this.hotspot_ticks)
+            {
+                this.hotspot_current_row = this.hotspot_next_row;
+                this.hotspot_current_col = this.hotspot_next_col;
+                this.hotspot_next_row = Math.floor(Math.random() * this.rows);
+                this.hotspot_next_col = Math.floor(Math.random() * this.cols);
+                this.hotspot_count = 0;
+            }
+            else
+            {
+                this.hotspot_count++;
+            }
+            if (this.hotspot_drift)
+            {
+                // Determine hotspot position
+                let row = Math.floor(this.hotspot_current_row + (this.hotspot_next_row - this.hotspot_current_row) * this.hotspot_count / this.hotspot_ticks)
+                let col = Math.floor(this.hotspot_current_col + (this.hotspot_next_col - this.hotspot_current_col) * this.hotspot_count / this.hotspot_ticks)
+                // Determine hotspot size
+                let d = this.hotspot_radius;
+                // Place hotspot
+                for (let r = row - d; r <= row + d; r++)
+                {
+                    for (let c = col - d; c <= col + d; c++)
+                    {
+                        if (Math.sqrt((r - row) * (r - row) + (c - col) * (c - col)) <= (this.hotspot_radius + 0.25))
+                        {
+                            const pos: string = this.get_new_pos(r, c);
+                            map[pos] = this.hotspot_food;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Determine hotspot position
+                let r1 = this.hotspot_current_row;
+                let c1 = this.hotspot_current_col;
+                let r2 = this.hotspot_next_row;
+                let c2 = this.hotspot_next_col;
+                // Determine hotspot size
+                let d2 = Math.floor(this.hotspot_radius * this.hotspot_count / this.hotspot_ticks);
+                let d1 = this.hotspot_radius - d2;
+                // Place hotspot
+                for (let r = r1 - d1; r <= r1 + d1; r++)
+                {
+                    for (let c = c1 - d1; c <= c1 + d1; c++)
+                    {
+                        if (Math.sqrt((r - r1) * (r - r1) + (c - c1) * (c - c1)) <= (d1 + 0.25))
+                        {
+                            const pos: string = this.get_new_pos(r, c);
+                            map[pos] = this.hotspot_food;
+                        }
+                    }
+                }
+                for (let r = r2 - d2; r <= r2 + d2; r++)
+                {
+                    for (let c = c2 - d2; c <= c2 + d2; c++)
+                    {
+                        if (Math.sqrt((r - r2) * (r - r2) + (c - c2) * (c - c2)) <= (d2 + 0.25))
+                        {
+                            const pos: string = this.get_new_pos(r, c);
+                            map[pos] = this.hotspot_food;
+                        }
+                    }
+                }
+            }
         }
     }
 

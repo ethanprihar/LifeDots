@@ -15,6 +15,8 @@ var ndarray = require("ndarray");
 var LZString = require("lz-string");
 var localforage = require("localforage");
 
+const RELEASE_NAME = "hotspots"
+
 const main_menu_style = 
 {
     textAlign: "center",
@@ -113,8 +115,9 @@ export default class MainMenuView extends React.Component
     check_configs()
     {
         let saves = localStorage.getItem("config_saves");
-        saves = saves === null ? {} : JSON.parse(saves);
-        if (!("Cycle Rain" in Object.keys(saves)))
+        let release = localStorage.getItem("release");
+        saves = ((saves === null) || (release !== RELEASE_NAME)) ? {} : JSON.parse(saves);
+        if (!("Cycle Rain" in saves))
         {
             let cr_config = 
             {
@@ -151,6 +154,10 @@ export default class MainMenuView extends React.Component
                 delta_max_food_per_drop: 0,
                 phase_length: 80,
                 will_cycle: true,
+                hotspot_radius: 0,
+                hotspot_food: 0,
+                hotspot_ticks: 0,
+                hotspot_drift: true,
 
                 tuniform: true,
                 trap_num: 0,
@@ -166,7 +173,7 @@ export default class MainMenuView extends React.Component
             saves["Cycle Rain"] = cr_config;
         }
 
-        if (!("Flash Flood" in Object.keys(saves)))
+        if (!("Flash Flood" in saves))
         { 
             let ff_config =
             {
@@ -203,6 +210,10 @@ export default class MainMenuView extends React.Component
                 delta_max_food_per_drop: 0, 
                 phase_length: 0, 
                 will_cycle: false,
+                hotspot_radius: 0,
+                hotspot_food: 0,
+                hotspot_ticks: 0,
+                hotspot_drift: true,
 
                 tuniform: true, 
                 trap_num: 0, 
@@ -217,7 +228,8 @@ export default class MainMenuView extends React.Component
             }
             saves["Flash Flood"] = ff_config;
         }
-        if (!("Cell Block" in Object.keys(saves)))
+
+        if (!("Cell Block" in saves))
         {
             let cb_config = 
             {
@@ -253,6 +265,10 @@ export default class MainMenuView extends React.Component
                 delta_max_food_per_drop: 0,
                 phase_length: 0,
                 will_cycle: false,
+                hotspot_radius: 0,
+                hotspot_food: 0,
+                hotspot_ticks: 0,
+                hotspot_drift: true,
 
                 tuniform: true,
                 trap_num: 0,
@@ -268,6 +284,64 @@ export default class MainMenuView extends React.Component
             saves["Cell Block"] = cb_config;
             localStorage.setItem("config_saves", JSON.stringify(saves))
         }
+
+        if (!("Lion Turtle" in saves))
+        {
+            let lt_config = 
+            {
+                cell_size: 15,
+                tick_time: 33,
+                dot_num: 100,
+                min_max_size: 50,
+                max_max_size: 200,
+                min_split_frac: 0,
+                max_split_frac: 100,
+                min_eat_ratio: 0,
+                max_eat_ratio: 100,
+                min_speed: 1,
+                max_speed: 10,
+                min_view: 1,
+                max_view: 1,
+                min_max_mut_pct: 1,
+                max_max_mut_pct: 10,
+                reset_on_extinction: true,
+
+                funiform: true,
+                ticks_between_rain: 100,
+                drops_per_rain: 0,
+                min_drop_size: 5,
+                max_drop_size: 10,
+                min_food_per_drop: 1000,
+                max_food_per_drop: 1000,
+                delta_ticks_between_rain: 0,
+                delta_drops_per_rain: 0,
+                delta_min_drop_size: 0,
+                delta_max_drop_size: 0,
+                delta_min_food_per_drop: 0,
+                delta_max_food_per_drop: 0,
+                phase_length: 0,
+                will_cycle: false,
+                hotspot_radius: 10,
+                hotspot_food: 10,
+                hotspot_ticks: 300,
+                hotspot_drift: true,
+
+                tuniform: true,
+                trap_num: 0,
+                min_trap_size: 3,
+                max_trap_size: 3,
+                min_trap_damage: 100,
+                max_trap_damage: 100,
+
+                section_rows: 1,
+                section_cols: 1,
+                density: 0
+            }
+            saves["Lion Turtle"] = lt_config;
+            localStorage.setItem("config_saves", JSON.stringify(saves))
+        }
+
+        localStorage.setItem("release", RELEASE_NAME)
     }
 
     componentDidMount()
@@ -290,7 +364,8 @@ export default class MainMenuView extends React.Component
             {
                 world.dot_map[pos] = Object.assign(new Dot(), world.dot_map[pos]);
                 world.dot_map[pos].genome = Object.assign(new Genome(), world.dot_map[pos].genome);
-                world.dot_map[pos].genome.weights = ndarray(new Float64Array(Object.values(world.dot_map[pos].genome.weights.data)), world.dot_map[pos].genome.weights.shape);
+                world.dot_map[pos].genome.weights1 = ndarray(new Float64Array(Object.values(world.dot_map[pos].genome.weights1.data)), world.dot_map[pos].genome.weights1.shape);
+                world.dot_map[pos].genome.weights2 = ndarray(new Float64Array(Object.values(world.dot_map[pos].genome.weights2.data)), world.dot_map[pos].genome.weights2.shape);
             }
             this.setState({loading: "complete",
                            tick_time: saved_state.tick_time, 

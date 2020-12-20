@@ -38,9 +38,6 @@ export default class Dot
                     hidden.set(1, i, 0)
                 }
             }
-            console.log(output)
-            console.log(hidden)
-            console.log(this.genome.weights2)
             gemm(output, hidden, this.genome.weights2);
             this.signal = Math.min(Math.max(output.get(0,9), -1), 1);
             this.size -= this.genome.max_size * Math.floor(this.genome.view) / 100;
