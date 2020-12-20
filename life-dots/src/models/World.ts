@@ -87,7 +87,6 @@ export default class World
                 this.dot_placer.brush(this.dot_map, row, col);
             break;
             case "erase":
-                console.log('erasing')
                 const pos = row + "," + col
                 delete this.wall_map[pos]
                 delete this.trap_map[pos]
