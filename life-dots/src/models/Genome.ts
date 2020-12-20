@@ -72,12 +72,12 @@ export default class Genome
         {
             return null;
         }
-        let new_weights: any;
         let new_view: number = this.fix_mut(this.view, 1);
         if (new_view < 1)
         {
             return null;
         }
+        let new_weights: any;
         if (Math.floor(new_view) < Math.floor(this.view))
         {
             new_weights = this.remove_view();
@@ -89,13 +89,16 @@ export default class Genome
         if (new_weights === undefined)
         {
             new_weights = ndarray(new Float64Array(this.weights.size), this.weights.shape);
+            ops.assign(new_weights, this.weights);
         }
-        let rand: any = ndarray(new Float64Array(new_weights.size), new_weights.shape);
-        ops.assign(new_weights, new_weights);
-        ops.random(rand);
-        ops.subseq(rand, 0.5);
-        ops.mulseq(rand, 2 * this.max_mut_pct);
-        ops.addeq(new_weights, rand);
+        if (this.max_mut_pct !== 0)
+        {
+            let rand: any = ndarray(new Float64Array(new_weights.size), new_weights.shape);
+            ops.random(rand);
+            ops.subseq(rand, 0.5);
+            ops.mulseq(rand, 2 * this.max_mut_pct);
+            ops.addeq(new_weights, rand);
+        }
         let new_color: number[] = [];
         for (let c of this.color)
         {

@@ -82,6 +82,9 @@ export default class WorldView extends React.Component
         this.world_interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
         this.save_interval = setInterval(() => this.auto_save(), 300000);
         document.addEventListener("keydown", this.open_overlay);
+        document.addEventListener("mousedown", this.handle_click);
+        document.addEventListener("mousemove", this.handle_click);
+        document.addEventListener("mouseup", this.handle_click);
     }
 
     componentWillUnmount()
@@ -89,6 +92,9 @@ export default class WorldView extends React.Component
         clearInterval(this.world_interval);
         clearInterval(this.save_interval);
         document.removeEventListener("keydown", this.open_overlay);
+        document.removeEventListener("mousedown", this.handle_click);
+        document.removeEventListener("mousemove", this.handle_click);
+        document.removeEventListener("mouseup", this.handle_click);
     }
 
     auto_save = () =>
@@ -112,36 +118,41 @@ export default class WorldView extends React.Component
 
     open_overlay = (event) =>
     {
-        event.preventDefault();
-        let stats = {};
-        stats.ticks = this.state.world.total_ticks;
-        stats.dot_num =  Object.keys(this.state.world.dot_map).length;
-        stats.avg_size = 0;
-        stats.avg_split = 0;
-        stats.avg_energy = 0;
-        stats.avg_rest = 0;
-        stats.avg_perc = 0;
-        stats.avg_mut = 0;
-        for (let key in this.state.world.dot_map)
-        {
-            stats.avg_size += this.state.world.dot_map[key].genome.max_size / stats.dot_num;
-            stats.avg_split += this.state.world.dot_map[key].genome.split_frac / stats.dot_num;
-            stats.avg_energy += this.state.world.dot_map[key].genome.eat_ratio / stats.dot_num;
-            stats.avg_rest += this.state.world.dot_map[key].genome.speed / stats.dot_num;
-            stats.avg_perc += this.state.world.dot_map[key].genome.view / stats.dot_num;
-            stats.avg_mut += Math.abs(this.state.world.dot_map[key].genome.max_mut_pct) / stats.dot_num;
-        }
         if (event.which === 32) //space
         {
+            event.preventDefault();
+            let stats = {};
+            stats.ticks = this.state.world.total_ticks;
+            stats.dot_num =  Object.keys(this.state.world.dot_map).length;
+            stats.avg_size = 0;
+            stats.avg_split = 0;
+            stats.avg_energy = 0;
+            stats.avg_rest = 0;
+            stats.avg_perc = 0;
+            stats.avg_mut = 0;
+            for (let key in this.state.world.dot_map)
+            {
+                stats.avg_size += this.state.world.dot_map[key].genome.max_size / stats.dot_num;
+                stats.avg_split += this.state.world.dot_map[key].genome.split_frac / stats.dot_num;
+                stats.avg_energy += this.state.world.dot_map[key].genome.eat_ratio / stats.dot_num;
+                stats.avg_rest += this.state.world.dot_map[key].genome.speed / stats.dot_num;
+                stats.avg_perc += this.state.world.dot_map[key].genome.view / stats.dot_num;
+                stats.avg_mut += Math.abs(this.state.world.dot_map[key].genome.max_mut_pct) / stats.dot_num;
+            }
             this.setState({overlay: true, stats: stats});
         }
     }
 
+    handle_click = (event) =>
+    {
+        console.log(event)
+    }
+
     close_overlay = (event) =>
     {
-        event.preventDefault();
         if (event.which === 32) //space
         {
+            event.preventDefault();
             this.setState({overlay: false});
         }
     }
