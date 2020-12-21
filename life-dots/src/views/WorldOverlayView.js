@@ -6,6 +6,8 @@ const toggle_style =
     color: "#b3b3b3",
     fontSize: "20px",
     margin: "0",
+    marginLeft: "5%",
+    marginRight: "5%",
     marginBottom: "10px",
     padding: "0",
 }
@@ -160,8 +162,10 @@ export default class WorldOverlayView extends React.Component
                 </button>
             </ReactModal>
                 <div style={toggle_style}>
-                    Press the space bar or press close to toggle this overlay.
+                    Press the space bar or close button to toggle this overlay. 
+                    To manually edit the world, select a brush, then left click on the world.
                 </div>
+                <br></br>
                 <div style={brush_style}>
                 <span>Brush Select: </span>
                     <select style={input_style} onChange={this.props.set_brush} name="brush_type" value={this.props.brush_type}>
@@ -173,8 +177,9 @@ export default class WorldOverlayView extends React.Component
                         <option value={"erase"}>Erase</option>
                     </select>
                 </div>
+                <br></br>
                 <div style={title_style}>
-                    Statistics:
+                    Dot Statistics for the Curious:
                 </div>
                 <table style={table_style}><tbody>
                     <tr>
@@ -242,6 +247,7 @@ export default class WorldOverlayView extends React.Component
                         </td>
                     </tr>
                 </tbody></table>
+                <br></br>
                 <button style={button_style} onClick={this.save}>
                     Save
                 </button>

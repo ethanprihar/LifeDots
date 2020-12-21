@@ -72,29 +72,42 @@ export default class World
 
     brush(brush_type: string, row: number, col: number)
     {
-        switch(brush_type)
+        if ((row < this.rows) && (col < this.cols))
         {
-            case "wall":
-                this.wall_placer.brush(this.wall_map, row, col);
-            break;
-            case "trap":
-                this.trap_placer.brush(this.trap_map, row, col);
-            break;
-            case "food":
-                this.food_placer.brush(this.food_map, row, col);
-            break;
-            case "dot":
-                this.dot_placer.brush(this.dot_map, row, col);
-            break;
-            case "erase":
-                const pos = row + "," + col
-                delete this.wall_map[pos]
-                delete this.trap_map[pos]
-                delete this.food_map[pos]
-                delete this.dot_map[pos]
-            break;
-            default:
-            break;
+            const pos = row + "," + col
+            switch(brush_type)
+            {
+                case "wall":
+                    delete this.trap_map[pos]
+                    delete this.food_map[pos]
+                    delete this.dot_map[pos]
+                    this.wall_placer.brush(this.wall_map, row, col);
+                break;
+                case "trap":
+                    delete this.wall_map[pos]
+                    this.trap_placer.brush(this.trap_map, row, col);
+                break;
+                case "food":
+                    if (!(pos in this.wall_map))
+                    {
+                        this.food_placer.brush(this.food_map, row, col);
+                    }
+                break;
+                case "dot":
+                    if (!(pos in this.wall_map))
+                    {    
+                        this.dot_placer.brush(this.dot_map, row, col);
+                    }
+                break;
+                case "erase":
+                    delete this.wall_map[pos]
+                    delete this.trap_map[pos]
+                    delete this.food_map[pos]
+                    delete this.dot_map[pos]
+                break;
+                default:
+                break;
+            }
         }
     }
 
