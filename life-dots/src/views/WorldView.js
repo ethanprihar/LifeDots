@@ -73,7 +73,7 @@ export default class WorldView extends React.Component
     componentDidMount()
     {
         this.world_interval = setInterval(() => this.setState({world: this.update_world()}), this.state.tick_time);
-        this.save_interval = setInterval(() => this.auto_save(), 300000);
+        this.save_interval = setInterval(() => this.auto_save(), 3600000);
         document.addEventListener("keydown", this.open_overlay);
         document.addEventListener("mousedown", this.handle_click);
         document.addEventListener("mousemove", this.handle_click);
