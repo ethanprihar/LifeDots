@@ -66,7 +66,8 @@ export default class Genome
         {
             return null;
         }
-        let new_speed: number = this.pct_mut(this.speed);
+        //let new_speed: number = this.pct_mut(this.speed);
+        let new_speed: number = this.speed;
         if (new_speed <= 0)
         {
             return null;
