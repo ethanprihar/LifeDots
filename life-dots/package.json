@@ -8,7 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/ndarray": "^1.0.8",
     "@types/ndarray-ops": "^1.2.0",
-    "dexie": "^3.0.2",
+    "dexie": "^3.2.2",
     "json-porter": "^1.0.7",
     "localforage": "^1.9.0",
     "lz-string": "^1.4.4",
